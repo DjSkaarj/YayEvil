@@ -62,6 +62,7 @@ void YE_Renderer()
     glClearColor(stmap.ARcolor, stmap.AGcolor, stmap.ABcolor, 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
 
+
     glBlendFunc(GL_ONE, GL_ONE);
     glBindTexture(GL_TEXTURE_2D, Textures["light.png"]);
     //render player's light
@@ -71,10 +72,7 @@ void YE_Renderer()
 
     for(int i = 0; i < stmap.Lights.size(); i++)
     {
-        /*float x = stmap.Lights[i].X;
-        float y = stmap.Lights[i].Y;
-        float rad = stmap.Lights[i].Radius;
-        if( (((x+rad)>=xmin) && ((x-rad)<=xmax)) || (((y+rad)>=ymin) && ((y-rad)<=ymax)) )*/
+        if (stmap.Lights[i].Rect().intersects(YE_VisibleWorld()))
             stmap.Lights[i].Draw();
     }
 
