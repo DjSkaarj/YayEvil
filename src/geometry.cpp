@@ -95,3 +95,19 @@ bool RectF::contains(RectF inner) const
 {
     return intersect(inner) == inner;
 }
+
+
+void RectIFillIterator::operator++()
+{
+    mX++;
+    if (mX == mRect->xMax)
+    {
+        mX = 0;
+        mY++;
+    }
+}
+
+bool operator!=(const RectIFillIterator &a, const RectIFillIterator &b)
+{
+    return a.mY != a.mRect->yMax;
+}

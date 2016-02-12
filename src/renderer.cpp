@@ -40,12 +40,11 @@ void YE_Renderer()
     glColor3f(stmap.Rcolor, stmap.Gcolor, stmap.Bcolor);
     /*render tiles*/
     RectI vistiles = YE_VisibleTiles();
-    for(int x = vistiles.xMin; x < vistiles.xMax; x++)
-    for(int y = vistiles.yMin; y < vistiles.yMax; y++)
+    for (Vector2i pos : YE_VisibleTiles())
     {
-        index = YE_Index2D(x, y, stmap.Width);
+        index = YE_Index2D(pos.x, pos.y, stmap.Width);
         if((strcmp(stmap.Tiles[index].Texture, "none")!=0))
-            stmap.Tiles[index].Draw(x, y);
+            stmap.Tiles[index].Draw(pos.x, pos.y);
     }
 
     glEnable(GL_BLEND);

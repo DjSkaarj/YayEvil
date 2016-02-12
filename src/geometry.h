@@ -154,6 +154,34 @@ Vector2f operator-(Vector2i a, Vector2f b);
 Vector2f operator*(Vector2i a, Vector2f b);
 Vector2f operator/(Vector2i a, Vector2f b);
 
+struct RectI;
+
+struct RectIFillIterator
+{
+public:
+    RectIFillIterator(const RectI *rect, int x, int y)
+    {
+        mRect = rect;
+        mX = x;
+        mY = y;
+    }
+
+    Vector2i operator*()
+    {
+        return Vector2i(mX, mY);
+    }
+
+    void operator++();
+
+    friend bool operator!=(const RectIFillIterator &a, const RectIFillIterator &b);
+
+private:
+    const RectI *mRect;
+    int mX;
+    int mY;
+};
+
+bool operator!=(const RectIFillIterator &a, const RectIFillIterator &b);
 
 struct RectI
 {
@@ -209,6 +237,16 @@ public:
     bool isImaginary() const
     {
         return isNull();
+    }
+
+    RectIFillIterator begin() const
+    {
+        return RectIFillIterator(this, xMin, yMin);
+    }
+
+    RectIFillIterator end() const
+    {
+        return RectIFillIterator(this, xMin, yMax);
     }
 
     Vector2i size() const
