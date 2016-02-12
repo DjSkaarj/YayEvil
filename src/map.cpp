@@ -4,7 +4,6 @@
 
 YE_Map::YE_Map()
 {
-
     Rcolor = 1.0;
     Gcolor = 1.0;
     Bcolor = 1.0;

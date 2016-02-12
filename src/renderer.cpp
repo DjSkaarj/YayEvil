@@ -38,12 +38,13 @@ void YE_Renderer()
     glTranslatef(-cam_x+half_width, -cam_y+half_height, 0.0f);
 
     glColor3f(stmap.Rcolor, stmap.Gcolor, stmap.Bcolor);
-    /*render tiles*/
+
+    //render tiles
     RectI vistiles = YE_VisibleTiles();
     for (Vector2i pos : YE_VisibleTiles())
     {
-        index = YE_Index2D(pos.x, pos.y, stmap.Width);
-        if((strcmp(stmap.Tiles[index].Texture, "none")!=0))
+        int index = YE_Index2D(pos.x, pos.y, stmap.Width);
+        if(YE_CheckTile(pos.x, pos.y))
             stmap.Tiles[index].Draw(pos.x, pos.y);
     }
 
@@ -52,10 +53,20 @@ void YE_Renderer()
     glColor3f(stmap.Rcolor, stmap.Gcolor, stmap.Bcolor);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    /*render player*/
+    //render player
     player->Draw();
 
-    /*render lights*/
+    glBlendFunc(GL_DST_COLOR, GL_ZERO);
+
+    //draw fake AO
+    for(int x = xmin; x <= xmax; x++)
+    for(int y = ymin; y <= ymax; y++)
+    {
+        if(YE_CheckIfSolid(x, y))
+            YE_DrawAO(x, y);
+    }
+
+    //render lights
     //turn on FBO
     glBindFramebuffer(GL_FRAMEBUFFER, Lightbuffer);
     glClearColor(stmap.ARcolor, stmap.AGcolor, stmap.ABcolor, 1.0);
@@ -64,11 +75,13 @@ void YE_Renderer()
 
     glBlendFunc(GL_ONE, GL_ONE);
     glBindTexture(GL_TEXTURE_2D, Textures["light.png"]);
+
     //render player's light
     player->DLight->X = player->X; // <-|--- !REMOVE THIS CRAP!
     player->DLight->Y = player->Y; // <-|
     player->DLight->Draw();
 
+    //draw map lights
     for (Light &light : stmap.Lights)
     {
         if (light.Rect().intersects(YE_VisibleWorld()))
@@ -76,10 +89,12 @@ void YE_Renderer()
     }
 
     glColor3f(1.0f, 1.0f, 1.0f);
+
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glBlendFunc(GL_DST_COLOR, GL_ZERO);
     glBindTexture(GL_TEXTURE_2D, Lightbuffer);
 
+    //render lightmap
     glBegin(GL_QUADS);
     glTexCoord2f(0.0, 0.0);
     glVertex2f(cam_x-half_width, cam_y-half_height);

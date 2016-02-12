@@ -6,6 +6,7 @@
 
 #define screen_width_min 640
 #define screen_height_min 480
+#define YE_Caption "Yay Evil 2.0 - NOW WITH FAKE AO!!!"
 
 int screen_width = 1024;
 int screen_height = 768;
@@ -73,7 +74,7 @@ void YE_Init (void)
     }
 
     time1=SDL_GetTicks();
-    SDL_WM_SetCaption("Yay Evil 2 - Now with logger!", NULL);
+    SDL_WM_SetCaption(YE_Caption, NULL);
     YE_LoadTextures();
 }
 
