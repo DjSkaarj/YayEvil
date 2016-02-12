@@ -74,13 +74,13 @@ void YE_Renderer()
     glBindTexture(GL_TEXTURE_2D, Lightbuffer);
 
     glBegin(GL_QUADS);
-    glTexCoord2f(1.0, 1.0);
-    glVertex2f(cam_x-half_width, cam_y-half_height);
-    glTexCoord2f(1.0, 0.0);
-    glVertex2f(cam_x-half_width, cam_y+half_height);
     glTexCoord2f(0.0, 0.0);
-    glVertex2f(cam_x+half_width, cam_y+half_height);
+    glVertex2f(cam_x-half_width, cam_y-half_height);
     glTexCoord2f(0.0, 1.0);
+    glVertex2f(cam_x-half_width, cam_y+half_height);
+    glTexCoord2f(1.0, 1.0);
+    glVertex2f(cam_x+half_width, cam_y+half_height);
+    glTexCoord2f(1.0, 0.0);
     glVertex2f(cam_x+half_width, cam_y-half_height);
     glEnd();
 
