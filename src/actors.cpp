@@ -21,7 +21,7 @@ void Actor::Draw()
 
 Light::Light()
 {
-    Radius = 5.0;
+    Radius = 2.0;
     RColor = 1.0;
     GColor = 1.0;
     BColor = 1.0;
