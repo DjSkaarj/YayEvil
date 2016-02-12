@@ -70,10 +70,10 @@ void YE_Renderer()
     player->DLight->Y = player->Y; // <-|
     player->DLight->Draw();
 
-    for(int i = 0; i < stmap.Lights.size(); i++)
+    for (Light &light : stmap.Lights)
     {
-        if (stmap.Lights[i].Rect().intersects(YE_VisibleWorld()))
-            stmap.Lights[i].Draw();
+        if (light.Rect().intersects(YE_VisibleWorld()))
+            light.Draw();
     }
 
     glColor3f(1.0f, 1.0f, 1.0f);
