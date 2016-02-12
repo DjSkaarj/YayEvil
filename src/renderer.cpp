@@ -3,7 +3,7 @@
 #include "geometry.h"
 
 float tiles_width, tiles_height, half_width, half_height;
-int xmin, ymin, xmax, ymax, index;
+int index;
 
 RectF YE_VisibleWorld()
 {
@@ -59,11 +59,10 @@ void YE_Renderer()
     glBlendFunc(GL_DST_COLOR, GL_ZERO);
 
     //draw fake AO
-    for(int x = xmin; x <= xmax; x++)
-    for(int y = ymin; y <= ymax; y++)
+    for (Vector2i pos : YE_VisibleTiles())
     {
-        if(YE_CheckIfSolid(x, y))
-            YE_DrawAO(x, y);
+        if(YE_CheckIfSolid(pos.x, pos.y))
+            YE_DrawAO(pos.x, pos.y);
     }
 
     //render lights
