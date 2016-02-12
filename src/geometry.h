@@ -1,7 +1,7 @@
 #ifndef GEOMETRY_H_INCLUDED
 #define GEOMETRY_H_INCLUDED
 
-#include "common.h"
+#include <algorithm>
 
 struct Vector2i
 {
@@ -136,106 +136,69 @@ struct Vector2f
     }
 };
 
-bool operator==(Vector2i a, Vector2i b)
-{
-    return a.x == b.x && a.y == b.y;
-}
 
-bool operator==(Vector2f a, Vector2f b)
-{
-    return a.x == b.x && a.y == b.y;
-}
+bool operator==(Vector2i a, Vector2i b);
+bool operator==(Vector2f a, Vector2f b);
+Vector2i operator+(Vector2i a, Vector2i b);
+Vector2i operator-(Vector2i a, Vector2i b);
+Vector2i operator*(Vector2i a, Vector2i b);
+Vector2i operator/(Vector2i a, Vector2i b);
+Vector2i operator%(Vector2i a, Vector2i b);
+Vector2f operator+(Vector2f a, Vector2f b);
+Vector2f operator-(Vector2f a, Vector2f b);
+Vector2f operator*(Vector2f a, Vector2f b);
+Vector2f operator/(Vector2f a, Vector2f b);
 
-Vector2i operator+(Vector2i a, Vector2i b)
-{
-    return Vector2i(a.x + b.x, a.y + b.y);
-}
-
-Vector2i operator-(Vector2i a, Vector2i b)
-{
-    return Vector2i(a.x - b.x, a.y - b.y);
-}
-
-Vector2i operator*(Vector2i a, Vector2i b)
-{
-    return Vector2i(a.x * b.x, a.y * b.y);
-}
-
-Vector2i operator/(Vector2i a, Vector2i b)
-{
-    return Vector2i(a.x / b.x, a.y / b.y);
-}
-
-Vector2i operator%(Vector2i a, Vector2i b)
-{
-    return Vector2i(a.x % b.x, a.y % b.y);
-}
-
-Vector2f operator+(Vector2f a, Vector2f b)
-{
-    return Vector2f(a.x + b.x, a.y + b.y);
-}
-
-Vector2f operator-(Vector2f a, Vector2f b)
-{
-    return Vector2f(a.x - b.x, a.y - b.y);
-}
-
-Vector2f operator*(Vector2f a, Vector2f b)
-{
-    return Vector2f(a.x * b.x, a.y * b.y);
-}
-
-Vector2f operator/(Vector2f a, Vector2f b)
-{
-    return Vector2f(a.x / b.x, a.y / b.y);
-}
+Vector2f operator+(Vector2i a, Vector2f b);
+Vector2f operator-(Vector2i a, Vector2f b);
+Vector2f operator*(Vector2i a, Vector2f b);
+Vector2f operator/(Vector2i a, Vector2f b);
 
 
-Vector2f operator+(Vector2i a, Vector2f b)
-{
-    return Vector2i(float(a.x) + b.x, float(a.y) + b.y);
-}
-
-Vector2f operator-(Vector2i a, Vector2f b)
-{
-    return Vector2i(float(a.x) - b.x, float(a.y) - b.y);
-}
-
-Vector2f operator*(Vector2i a, Vector2f b)
-{
-    return Vector2i(float(a.x) * b.x, float(a.y) * b.y);
-}
-
-Vector2f operator/(Vector2i a, Vector2f b)
-{
-    return Vector2i(float(a.x) / b.x, float(a.y) / b.y);
-}
-
-class RectI
+struct RectI
 {
 public:
+    int xMin;
+    int xMax;
+    int yMin;
+    int yMax;
+
     RectI() {}
 
-    RectI(int minX, int maxX, int minY, int maxY)
-    {
-        mMinX = minX;
-        mMaxX = maxX;
-        mMinY = minY;
-        mMaxY = maxY;
-    }
+    RectI(int xMin, int xMax, int yMin, int yMax):
+        xMin(xMin),
+        xMax(xMax),
+        yMin(yMin),
+        yMax(yMax)
+    {}
 
     RectI(Vector2i a, Vector2i b)
     {
-        mMinX = min(a.x, b.x);
-        mMaxX = max(a.x, b.x);
-        mMinY = min(a.y, b.y);
-        mMaxY = max(a.y, b.y);
+        xMin = std::min(a.x, b.x);
+        xMax = std::max(a.x, b.x);
+        yMin = std::min(a.y, b.y);
+        yMax = std::max(a.y, b.y);
+    }
+
+    RectI(int width, int height)
+    {
+        xMin = 0;
+        xMax = width;
+        yMin = 0;
+        yMax = height;
+    }
+
+    RectI(Vector2i size)
+    {
+        xMin = 0;
+        xMax = size.x;
+        yMin = 0;
+        yMax = size.y;
     }
 
     bool isNull() const
     {
-        return minX() > maxX() || minY() > maxY();
+        return xMin >= xMax || yMin >= yMax;
     }
 
     bool isValid() const
@@ -248,29 +211,9 @@ public:
         return isNull();
     }
 
-    int minX() const
-    {
-        return mMinX;
-    }
-
-    int maxX() const
-    {
-        return mMaxX;
-    }
-
-    int minY() const
-    {
-        return mMinY;
-    }
-
-    int maxY() const
-    {
-        return mMaxY;
-    }
-
     Vector2i size() const
     {
-        return Vector2i(maxX() - minX() + 1, maxY() - minY() + 1);
+        return Vector2i(xMax - xMin, yMax - yMin);
     }
 
     int area() const
@@ -280,25 +223,25 @@ public:
 
     bool contains(Vector2i point) const
     {
-        return point.x >= minX() && point.x <= maxX() && point.y >= minY() && point.y <= maxY();
+        return point.x >= xMin && point.x < xMax && point.y >= yMin && point.y < yMax;
     }
 
     RectI unite(RectI rhs) const
     {
         return RectI(
-                    min(minX(), rhs.minX()),
-                    max(maxX(), rhs.maxX()),
-                    min(minY(), rhs.minY()),
-                    max(maxY(), rhs.maxY()));
+                    std::min(xMin, rhs.xMin),
+                    std::max(xMax, rhs.xMax),
+                    std::min(yMin, rhs.yMin),
+                    std::max(yMax, rhs.yMax));
     }
 
     RectI intersect(RectI rhs) const
     {
         return RectI(
-                    max(minX(), rhs.minX()),
-                    min(maxX(), rhs.maxX()),
-                    max(minY(), rhs.minY()),
-                    min(maxY(), rhs.maxY()));
+                    std::max(xMin, rhs.xMin),
+                    std::min(xMax, rhs.xMax),
+                    std::max(yMin, rhs.yMin),
+                    std::min(yMax, rhs.yMax));
     }
 
     bool intersects(RectI rhs) const
@@ -307,48 +250,53 @@ public:
     }
 
     bool contains(RectI inner) const;
-
-private:
-    int mMinX;
-    int mMaxX;
-    int mMinY;
-    int mMaxY;
 };
 
-bool operator==(RectI a, RectI b)
-{
-    return a.minX() == b.minX() && a.maxX() == b.maxX() && a.minY() == b.minY() && a.maxY() == b.maxY();
-}
+bool operator==(RectI a, RectI b);
 
-bool RectI::contains(RectI inner) const
+struct RectF
 {
-    return intersect(inner) == inner;
-}
+    float xMin;
+    float xMax;
+    float yMin;
+    float yMax;
 
-class RectF
-{
-public:
     RectF() {}
 
-    RectF(float minX, float maxX, float minY, float maxY)
-    {
-        mMinX = minX;
-        mMaxX = maxX;
-        mMinY = minY;
-        mMaxY = maxY;
-    }
+    RectF(float xMin, float xMax, float yMin, float yMax):
+        xMin(xMin),
+        xMax(xMax),
+        yMin(yMin),
+        yMax(yMax)
+    {}
 
     RectF(Vector2i a, Vector2i b)
     {
-        mMinX = min(a.x, b.x);
-        mMaxX = max(a.x, b.x);
-        mMinY = min(a.y, b.y);
-        mMaxY = max(a.y, b.y);
+        xMin = std::min(a.x, b.x);
+        xMax = std::max(a.x, b.x);
+        yMin = std::min(a.y, b.y);
+        yMax = std::max(a.y, b.y);
+    }
+
+    RectF(float width, float height)
+    {
+        xMin = 0;
+        xMax = width;
+        yMin = 0;
+        yMax = height;
+    }
+
+    RectF(Vector2f size)
+    {
+        xMin = 0;
+        xMax = size.x;
+        yMin = 0;
+        yMax = size.y;
     }
 
     bool isNull() const
     {
-        return minX() > maxX() || minY() > maxY();
+        return xMin >= xMax || yMin >= yMax;
     }
 
     bool isValid() const
@@ -361,29 +309,9 @@ public:
         return isNull();
     }
 
-    float minX() const
+    Vector2f size() const
     {
-        return mMinX;
-    }
-
-    float maxX() const
-    {
-        return mMaxX;
-    }
-
-    float minY() const
-    {
-        return mMinY;
-    }
-
-    float maxY() const
-    {
-        return mMaxY;
-    }
-
-    Vector2i size() const
-    {
-        return Vector2i(maxX() - minX() + 1, maxY() - minY() + 1);
+        return Vector2f(xMax - xMin, yMax - yMin);
     }
 
     float area() const
@@ -393,25 +321,25 @@ public:
 
     bool contains(Vector2i point) const
     {
-        return point.x >= minX() && point.x <= maxX() && point.y >= minY() && point.y <= maxY();
+        return point.x >= xMin && point.x < xMax && point.y >= yMin && point.y < yMax;
     }
 
     RectF unite(RectF rhs) const
     {
         return RectF(
-                    min(minX(), rhs.minX()),
-                    max(maxX(), rhs.maxX()),
-                    min(minY(), rhs.minY()),
-                    max(maxY(), rhs.maxY()));
+                    std::min(xMin, rhs.xMin),
+                    std::max(xMax, rhs.xMax),
+                    std::min(yMin, rhs.yMin),
+                    std::max(yMax, rhs.yMax));
     }
 
     RectF intersect(RectF rhs) const
     {
         return RectF(
-                    max(minX(), rhs.minX()),
-                    min(maxX(), rhs.maxX()),
-                    max(minY(), rhs.minY()),
-                    min(maxY(), rhs.maxY()));
+                    std::max(xMin, rhs.xMin),
+                    std::min(xMax, rhs.xMax),
+                    std::max(yMin, rhs.yMin),
+                    std::min(yMax, rhs.yMax));
     }
 
     bool intersects(RectF rhs) const
@@ -420,23 +348,9 @@ public:
     }
 
     bool contains(RectF inner) const;
-
-private:
-    float mMinX;
-    float mMaxX;
-    float mMinY;
-    float mMaxY;
 };
 
-bool operator==(RectF a, RectF b)
-{
-    return a.minX() == b.minX() && a.maxX() == b.maxX() && a.minY() == b.minY() && a.maxY() == b.maxY();
-}
-
-bool RectF::contains(RectF inner) const
-{
-    return intersect(inner) == inner;
-}
+bool operator==(RectF a, RectF b);
 
 namespace std
 {

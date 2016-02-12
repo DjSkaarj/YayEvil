@@ -5,6 +5,20 @@
 float tiles_width, tiles_height, half_width, half_height;
 int xmin, ymin, xmax, ymax, index;
 
+RectF YE_VisibleWorld()
+{
+    return RectF(cam_x - half_width,
+                 cam_x + half_width,
+                 cam_y - half_height,
+                 cam_y + half_height);
+}
+
+RectI YE_VisibleTiles()
+{
+    RectF w = YE_VisibleWorld();
+    return RectI(floor(w.xMin), ceil(w.xMax), floor(w.yMin), ceil(w.yMax)).intersect(stmap.Rect());
+}
+
 void YE_Renderer()
 {
     glClearColor(stmap.BGRcolor, stmap.BGGcolor, stmap.BGBcolor, 1.0f);
@@ -23,22 +37,11 @@ void YE_Renderer()
     glOrtho(0, tiles_width, 0, tiles_height, -1, 1);
     glTranslatef(-cam_x+half_width, -cam_y+half_height, 0.0f);
 
-    //calculate size of visible map part in tiles
-    xmin = floor(cam_x-half_width);
-    xmax = ceil(cam_x+half_width);
-    ymin = floor(cam_y-half_height);
-    ymax = ceil(cam_y+half_height);
-
-    //check calculated values
-    if(xmin<0) xmin=0;
-    if(xmax>stmap.Width-1) xmax = stmap.Width-1;
-    if(ymin<0) ymin=0;
-    if(ymax>stmap.Height-1) ymax = stmap.Height-1;
-
     glColor3f(stmap.Rcolor, stmap.Gcolor, stmap.Bcolor);
     /*render tiles*/
-    for(int x = xmin; x <= xmax; x++)
-    for(int y = ymin; y <= ymax; y++)
+    RectI vistiles = YE_VisibleTiles();
+    for(int x = vistiles.xMin; x < vistiles.xMax; x++)
+    for(int y = vistiles.yMin; y < vistiles.yMax; y++)
     {
         index = YE_Index2D(x, y, stmap.Width);
         if((strcmp(stmap.Tiles[index].Texture, "none")!=0))

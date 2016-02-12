@@ -1,6 +1,8 @@
 #ifndef MAP_H_INCLUDED
 #define MAP_H_INCLUDED
 
+#include "geometry.h"
+
 class YE_Map
 {
  public:
@@ -11,6 +13,8 @@ class YE_Map
      Tile* Tiles;
      std::vector<Actor*> Actors;
      std::vector<Light> Lights;
+
+     RectI Rect() { return RectI(Width, Height); }
 };
 
 extern YE_Map stmap;
