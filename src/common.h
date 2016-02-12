@@ -7,8 +7,10 @@
 #include <SDL/SDL.h>
 #include "SDL_image.h"
 
-#include <stdio.h>
-#include <math.h>
+#include <cstdio>
+#include <cmath>
+
+#include <algorithm>
 #include <iostream>
 #include <map>
 #include <vector>
@@ -20,5 +22,8 @@
 #include "strings.h"
 #include "tinydir.h"
 #include "log.h"
+
+using std::min;
+using std::max;
 
 #endif // COMMON_H_INCLUDED
