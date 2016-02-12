@@ -43,8 +43,13 @@ void YE_Renderer()
             stmap.Tiles[index].Draw(x, y);
     }
 
-
     glEnable(GL_BLEND);
+
+    glColor3f(stmap.Rcolor, stmap.Gcolor, stmap.Bcolor);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    /*render player*/
+    player->Draw();
 
     /*render lights*/
     //turn on FBO
@@ -84,10 +89,5 @@ void YE_Renderer()
     glVertex2f(cam_x+half_width, cam_y-half_height);
     glEnd();
 
-    glColor3f(stmap.Rcolor, stmap.Gcolor, stmap.Bcolor);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    /*render player*/
-    player->Draw();
     glDisable(GL_BLEND);
 }
