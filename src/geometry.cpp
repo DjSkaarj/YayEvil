@@ -146,7 +146,7 @@ void RectIFillIterator::operator++()
     mX++;
     if (mX == mRect->xMax)
     {
-        mX = 0;
+        mX = mRect->xMin;
         mY++;
     }
 }
