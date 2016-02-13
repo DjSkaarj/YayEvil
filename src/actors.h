@@ -3,6 +3,9 @@
 
 #include "Geometry.h"
 
+extern bool YE_Shadows;
+extern int YE_ShadowQuality;
+
 class Light
 {
 public:
@@ -19,8 +22,10 @@ class Actor
 public:
     Actor();
     void Draw();
+    void DrawSprite(float scale, float saturation, float alpha);
 
     int Solid, HP;
+    bool Shadow;
     float X, Y, Alpha, Speed, Width, Height;
     Light* DLight = new Light;
     char Sprite[255];
