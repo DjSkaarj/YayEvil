@@ -25,9 +25,12 @@ void Tile::Draw(int x, int y)
 bool YE_CheckTile(int x, int y)
 {
     int index = YE_Index2D(x, y, stmap.Width);
-    if((strcmp(stmap.Tiles[index].Texture, "none")!=0) && !(x < 0 || x >= stmap.Width || y < 0 || y >= stmap.Height))
+    if(!(x < 0 || x >= stmap.Width || y < 0 || y >= stmap.Height))
+    {
+        if (strcmp(stmap.Tiles[index].Texture, "none")!=0)
         return true;
-    else return false;
+    }
+    return false;
 }
 
 bool YE_CheckIfSolid(int x, int y)
