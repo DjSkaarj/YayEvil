@@ -9,13 +9,13 @@ void Actor::Draw()
 {
     if(Shadow && YE_Shadows)
     {
-        float YE_ShadowScale = YE_ShadowScale*shadow_scalefactor;
+        float YE_ShadowScale = YE_ShadowScaleA*shadow_scalefactor;
         float alpha = YE_ShadowIntensity / YE_ShadowQuality;
 
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         for (int i = 0; i < YE_ShadowQuality; i++)
         {
-            float ssize = std::max(Width, Height)+lerp(shadowminsize, YE_ShadowScale, float((i + 0.5) / YE_ShadowQuality));
+            float ssize = lerp(shadowminsize, YE_ShadowScale, float((i + 0.5) / YE_ShadowQuality));
             DrawSprite(ssize, 0.0f, alpha);
         }
     }

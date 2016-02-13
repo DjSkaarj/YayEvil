@@ -6,7 +6,7 @@
 extern bool YE_Shadows;
 extern int YE_ShadowQuality;
 extern float YE_ShadowIntensity;
-extern float YE_ShadowScale;
+extern float YE_ShadowScaleA;
 
 class Light
 {
