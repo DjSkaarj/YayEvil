@@ -48,14 +48,9 @@ void YE_Renderer()
             stmap.Tiles[index].Draw(pos.x, pos.y);
     }
 
+    //draw fake AO
     glEnable(GL_BLEND);
-
-    glColor3f(stmap.Rcolor, stmap.Gcolor, stmap.Bcolor);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    //render player
-    player->Draw();
-
+    glDisable(GL_TEXTURE_2D);
     glBlendFunc(GL_DST_COLOR, GL_ZERO);
 
     //draw fake AO
@@ -64,6 +59,12 @@ void YE_Renderer()
         if(YE_CheckIfSolid(pos.x, pos.y))
             YE_DrawAO(pos.x, pos.y);
     }
+
+    //render player
+    glEnable(GL_TEXTURE_2D);
+    glColor3f(stmap.Rcolor, stmap.Gcolor, stmap.Bcolor);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    player->Draw();
 
     //render lights
     //turn on FBO
