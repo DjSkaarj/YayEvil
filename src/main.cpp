@@ -91,7 +91,7 @@ void YE_Init (void)
 }
 
 int YE_Events (void)
-{        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+{
     SDL_Event event;
     while (SDL_PollEvent(&event))
     {
