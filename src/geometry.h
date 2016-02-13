@@ -259,9 +259,14 @@ public:
         return size().area();
     }
 
+    bool contains(int x, int y) const
+    {
+        return x >= xMin && x < xMax && y >= yMin && y < yMax;
+    }
+
     bool contains(Vector2i point) const
     {
-        return point.x >= xMin && point.x < xMax && point.y >= yMin && point.y < yMax;
+        return contains(point.x, point.y);
     }
 
     RectI unite(RectI rhs) const
