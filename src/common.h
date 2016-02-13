@@ -22,6 +22,7 @@
 #include "strings.h"
 #include "tinydir.h"
 #include "log.h"
+#include "geometry.h"
 
 using std::min;
 using std::max;
