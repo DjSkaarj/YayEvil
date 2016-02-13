@@ -10,6 +10,7 @@
 
 int screen_width = 1024;
 int screen_height = 768;
+int multisample = 0;
 GLuint Lightbuffer = 0;
 SDL_Surface *screen;
 
@@ -36,6 +37,12 @@ void YE_Init (void)
     }
 
     atexit(SDL_Quit);
+
+    if (multisample != 0)
+    {
+        SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+        SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, multisample);
+    }
 
     screen = SDL_SetVideoMode(screen_width, screen_height, 24, SDL_OPENGL);
     if (!screen)
@@ -159,6 +166,9 @@ int main (int argc, char *argv[])
 
     if(YE_CheckArg("-h", argv, p))
         screen_height = atoi(argv[p+1]);
+
+    if(YE_CheckArg("-multisample", argv, p))
+        multisample = atoi(argv[p+1]);
 
     screen_width = std::max(screen_width_min, screen_width);
     screen_height = std::max(screen_height_min, screen_height);
