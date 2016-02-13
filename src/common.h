@@ -18,6 +18,8 @@
 
 #include "tinydir.h"
 
+#define UNUSED(expr) do { (void)(expr); } while (0)
+
 using std::min;
 using std::max;
 
