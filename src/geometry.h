@@ -280,11 +280,14 @@ public:
 
     RectI intersect(RectI rhs) const
     {
-        return RectI(
+        RectI rect = RectI(
                     std::max(xMin, rhs.xMin),
                     std::min(xMax, rhs.xMax),
                     std::max(yMin, rhs.yMin),
                     std::min(yMax, rhs.yMax));
+        if (rect.isValid())
+            return rect;
+        return RectI(0, 0, 0, 0);
     }
 
     bool intersects(RectI rhs) const
@@ -378,11 +381,15 @@ struct RectF
 
     RectF intersect(RectF rhs) const
     {
-        return RectF(
+        RectF rect = RectF(
                     std::max(xMin, rhs.xMin),
                     std::min(xMax, rhs.xMax),
                     std::max(yMin, rhs.yMin),
                     std::min(yMax, rhs.yMax));
+
+        if (rect.isValid())
+            return rect;
+        return RectF(0, 0, 0, 0);
     }
 
     bool intersects(RectF rhs) const
