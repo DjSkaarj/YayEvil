@@ -139,7 +139,7 @@ GLuint YE_LoadImage(const char *filename)
     switch (bpp)
     {
     case 4:
-        gpuformat = GL_RGBA8; //GPUs don't like 24-bit colors
+        gpuformat = GL_RGBA8;
 
         if (rmask == 0x000000ff)
             origformat = GL_RGBA;
@@ -148,7 +148,7 @@ GLuint YE_LoadImage(const char *filename)
         break;
 
     case 3:
-        gpuformat = GL_RGBA8;
+        gpuformat = GL_RGBA8; // GPUs don't like 24-bit colors
 
         if (rmask == 0x000000ff)
             origformat = GL_RGB;
