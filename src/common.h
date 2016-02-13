@@ -23,6 +23,7 @@
 #include "tinydir.h"
 #include "log.h"
 #include "geometry.h"
+#include "math.h"
 
 using std::min;
 using std::max;

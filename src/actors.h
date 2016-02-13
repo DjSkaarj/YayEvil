@@ -1,10 +1,12 @@
 #ifndef ACTORS_H_INCLUDED
 #define ACTORS_H_INCLUDED
 
-#include "Geometry.h"
+#include "geometry.h"
 
 extern bool YE_Shadows;
 extern int YE_ShadowQuality;
+extern float YE_ShadowIntensity;
+extern float YE_ShadowScale;
 
 class Light
 {

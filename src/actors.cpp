@@ -1,6 +1,6 @@
 #include "common.h"
-#define YE_Shadow_Scale 1.12f
-#define YE_Shadow_Alpha 0.6f
+#define shadow_scalefactor 1.5f
+#define shadowminsize 1.1f
 
 Actor::Actor()
 {}
@@ -9,8 +9,15 @@ void Actor::Draw()
 {
     if(Shadow && YE_Shadows)
     {
+        float YE_ShadowScale = YE_ShadowScale*shadow_scalefactor;
+        float alpha = YE_ShadowIntensity / YE_ShadowQuality;
+
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        DrawSprite(YE_Shadow_Scale, 0.0f, YE_Shadow_Alpha);
+        for (int i = 0; i < YE_ShadowQuality; i++)
+        {
+            float ssize = lerp(shadowminsize, YE_ShadowScale, float((i + 0.5) / YE_ShadowQuality));
+            DrawSprite(ssize, 0.0f, alpha);
+        }
     }
 
     DrawSprite(1.0f, 1.0f, 1.0f);

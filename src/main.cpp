@@ -15,7 +15,9 @@ GLuint Lightbuffer = 0;
 SDL_Surface *screen;
 
 bool YE_Shadows = 1;
-int YE_ShadowsQuality = 3;
+int YE_ShadowQuality = 10;
+float YE_ShadowIntensity = 0.6;
+float YE_ShadowScaleA = 1.0;
 
 YE_Map stmap;
 std::map<std::string, GLuint> Textures;
@@ -171,13 +173,19 @@ int main (int argc, char *argv[])
         screen_height = atoi(argv[p+1]);
 
     if(YE_CheckArg("-multisample", argv, p))
-        multisample = atoi(argv[p+1]);
+        multisample = clip(atoi(argv[p+1]), 0, 1);
 
     if(YE_CheckArg("-shadows", argv, p))
         YE_Shadows = atoi(argv[p+1]);
 
-    if(YE_CheckArg("-shadows", argv, p))
-        YE_ShadowsQuality = atoi(argv[p+1]);
+    if(YE_CheckArg("-shadowquality", argv, p))
+        YE_ShadowQuality = clip(atoi(argv[p+1]), 1, 15);
+
+    if(YE_CheckArg("-shadowintensity", argv, p))
+        YE_ShadowIntensity = clip(atof(argv[p+1]), 0.1, 1.0);
+
+    if(YE_CheckArg("-shadowscale", argv, p))
+        YE_ShadowScaleA = clip(atof(argv[p+1]), 1.0, 3.0);
 
     screen_width = std::max(screen_width_min, screen_width);
     screen_height = std::max(screen_height_min, screen_height);
