@@ -30,6 +30,7 @@ bool YE_CheckTile(int x, int y)
     int index = YE_Index2D(x, y, stmap.Width);
     if (!strcmp(stmap.Tiles[index].Texture, "none"))
         return false;
+
     return true;
 }
 
