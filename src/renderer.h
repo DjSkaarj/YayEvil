@@ -1,6 +1,8 @@
 #ifndef RENDERER_H_INCLUDED
 #define RENDERER_H_INCLUDED
 
+#include "map.h"
+
 extern float cam_x, cam_y;
 extern int screen_width, screen_height;
 extern YE_Map stmap;

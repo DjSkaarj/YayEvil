@@ -1,6 +1,7 @@
 #include "common.h"
 
 #include "geometry.h"
+#include "renderer.h"
 
 float tiles_width, tiles_height, half_width, half_height;
 int index;

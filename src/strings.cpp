@@ -1,5 +1,7 @@
 #include "common.h"
 
+#include "log.h"
+
 FILE* file;
 
 bool YE_EndsWith(const char *str, const char *ending)

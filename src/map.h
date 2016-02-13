@@ -1,7 +1,9 @@
 #ifndef MAP_H_INCLUDED
 #define MAP_H_INCLUDED
 
+#include "actors.h"
 #include "geometry.h"
+#include "tiles.h"
 
 class YE_Map
 {

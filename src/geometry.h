@@ -1,7 +1,7 @@
 #ifndef GEOMETRY_H_INCLUDED
 #define GEOMETRY_H_INCLUDED
 
-#include <algorithm>
+#include "common.h"
 
 struct Vector2i
 {
@@ -9,6 +9,20 @@ struct Vector2i
     int y;
 
     Vector2i() {}
+
+#ifdef QT_VERSION
+    Vector2i(QPoint point)
+    {
+        x = point.x();
+        y = point.y();
+    }
+#endif // QT_VERSION
+
+    Vector2i(int n)
+    {
+        x = n;
+        y = n;
+    }
 
     Vector2i(int x, int y):
         x(x),
@@ -68,6 +82,20 @@ struct Vector2f
     float y;
 
     Vector2f() {}
+
+#ifdef QT_VERSION
+    Vector2f(QPointF point)
+    {
+        x = point.x();
+        y = point.y();
+    }
+#endif // QT_VERSION
+
+    Vector2f(float n)
+    {
+        x = n;
+        y = n;
+    }
 
     Vector2f(float x, float y):
         x(x),
@@ -137,23 +165,6 @@ struct Vector2f
 };
 
 
-bool operator==(Vector2i a, Vector2i b);
-bool operator==(Vector2f a, Vector2f b);
-Vector2i operator+(Vector2i a, Vector2i b);
-Vector2i operator-(Vector2i a, Vector2i b);
-Vector2i operator*(Vector2i a, Vector2i b);
-Vector2i operator/(Vector2i a, Vector2i b);
-Vector2i operator%(Vector2i a, Vector2i b);
-Vector2f operator+(Vector2f a, Vector2f b);
-Vector2f operator-(Vector2f a, Vector2f b);
-Vector2f operator*(Vector2f a, Vector2f b);
-Vector2f operator/(Vector2f a, Vector2f b);
-
-Vector2f operator+(Vector2i a, Vector2f b);
-Vector2f operator-(Vector2i a, Vector2f b);
-Vector2f operator*(Vector2i a, Vector2f b);
-Vector2f operator/(Vector2i a, Vector2f b);
-
 struct RectI;
 
 struct RectIFillIterator
@@ -183,6 +194,8 @@ private:
 
 bool operator!=(const RectIFillIterator &a, const RectIFillIterator &b);
 
+struct RectF;
+
 struct RectI
 {
 public:
@@ -202,10 +215,10 @@ public:
 
     RectI(Vector2i a, Vector2i b)
     {
-        xMin = std::min(a.x, b.x);
-        xMax = std::max(a.x, b.x);
-        yMin = std::min(a.y, b.y);
-        yMax = std::max(a.y, b.y);
+        xMin = min(a.x, b.x);
+        xMax = max(a.x, b.x);
+        yMin = min(a.y, b.y);
+        yMax = max(a.y, b.y);
     }
 
     RectI(int width, int height)
@@ -272,19 +285,19 @@ public:
     RectI unite(RectI rhs) const
     {
         return RectI(
-                    std::min(xMin, rhs.xMin),
-                    std::max(xMax, rhs.xMax),
-                    std::min(yMin, rhs.yMin),
-                    std::max(yMax, rhs.yMax));
+                    min(xMin, rhs.xMin),
+                    max(xMax, rhs.xMax),
+                    min(yMin, rhs.yMin),
+                    max(yMax, rhs.yMax));
     }
 
     RectI intersect(RectI rhs) const
     {
         RectI rect = RectI(
-                    std::max(xMin, rhs.xMin),
-                    std::min(xMax, rhs.xMax),
-                    std::max(yMin, rhs.yMin),
-                    std::min(yMax, rhs.yMax));
+                    max(xMin, rhs.xMin),
+                    min(xMax, rhs.xMax),
+                    max(yMin, rhs.yMin),
+                    min(yMax, rhs.yMax));
         if (rect.isValid())
             return rect;
         return RectI(0, 0, 0, 0);
@@ -298,8 +311,6 @@ public:
     bool contains(RectI inner) const;
 };
 
-bool operator==(RectI a, RectI b);
-
 struct RectF
 {
     float xMin;
@@ -308,6 +319,8 @@ struct RectF
     float yMax;
 
     RectF() {}
+
+    RectF(RectI rect);
 
     RectF(float xMin, float xMax, float yMin, float yMax):
         xMin(xMin),
@@ -318,10 +331,10 @@ struct RectF
 
     RectF(Vector2i a, Vector2i b)
     {
-        xMin = std::min(a.x, b.x);
-        xMax = std::max(a.x, b.x);
-        yMin = std::min(a.y, b.y);
-        yMax = std::max(a.y, b.y);
+        xMin = min(a.x, b.x);
+        xMax = max(a.x, b.x);
+        yMin = min(a.y, b.y);
+        yMax = max(a.y, b.y);
     }
 
     RectF(float width, float height)
@@ -373,19 +386,19 @@ struct RectF
     RectF unite(RectF rhs) const
     {
         return RectF(
-                    std::min(xMin, rhs.xMin),
-                    std::max(xMax, rhs.xMax),
-                    std::min(yMin, rhs.yMin),
-                    std::max(yMax, rhs.yMax));
+                    min(xMin, rhs.xMin),
+                    max(xMax, rhs.xMax),
+                    min(yMin, rhs.yMin),
+                    max(yMax, rhs.yMax));
     }
 
     RectF intersect(RectF rhs) const
     {
         RectF rect = RectF(
-                    std::max(xMin, rhs.xMin),
-                    std::min(xMax, rhs.xMax),
-                    std::max(yMin, rhs.yMin),
-                    std::min(yMax, rhs.yMax));
+                    max(xMin, rhs.xMin),
+                    min(xMax, rhs.xMax),
+                    max(yMin, rhs.yMin),
+                    min(yMax, rhs.yMax));
 
         if (rect.isValid())
             return rect;
@@ -398,9 +411,12 @@ struct RectF
     }
 
     bool contains(RectF inner) const;
-};
 
-bool operator==(RectF a, RectF b);
+    RectI toInt() const
+    {
+        return RectI(floor(xMin), ceil(xMax), floor(yMin), ceil(yMax));
+    }
+};
 
 namespace std
 {
@@ -413,6 +429,57 @@ namespace std
     };
 }
 
+
+bool operator==(Vector2i a, Vector2i b);
+bool operator==(Vector2f a, Vector2f b);
+bool operator==(RectI a, RectI b);
+bool operator==(RectF a, RectF b);
+
+RectI operator+(RectI a, float b);
+RectI operator-(RectI a, float b);
+RectI operator*(RectI a, float b);
+RectI operator/(RectI a, float b);
+
+RectF operator+(RectF a, float b);
+RectF operator-(RectF a, float b);
+RectF operator*(RectF a, float b);
+RectF operator/(RectF a, float b);
+
+RectI operator+(RectI a, Vector2i b);
+RectI operator-(RectI a, Vector2i b);
+RectI operator*(RectI a, Vector2i b);
+RectI operator/(RectI a, Vector2i b);
+
+RectF operator+(RectF a, Vector2f b);
+RectF operator-(RectF a, Vector2f b);
+RectF operator*(RectF a, Vector2f b);
+RectF operator/(RectF a, Vector2f b);
+
+Vector2i operator+(Vector2i a, Vector2i b);
+Vector2i operator-(Vector2i a, Vector2i b);
+Vector2i operator*(Vector2i a, Vector2i b);
+Vector2i operator/(Vector2i a, Vector2i b);
+Vector2i operator%(Vector2i a, Vector2i b);
+
+Vector2f operator+(Vector2f a, Vector2f b);
+Vector2f operator-(Vector2f a, Vector2f b);
+Vector2f operator*(Vector2f a, Vector2f b);
+Vector2f operator/(Vector2f a, Vector2f b);
+
+Vector2f operator+(Vector2i a, Vector2f b);
+Vector2f operator-(Vector2i a, Vector2f b);
+Vector2f operator*(Vector2i a, Vector2f b);
+Vector2f operator/(Vector2i a, Vector2f b);
+
+Vector2f operator+(Vector2i a, float b);
+Vector2f operator-(Vector2i a, float b);
+Vector2f operator*(Vector2i a, float b);
+Vector2f operator/(Vector2i a, float b);
+
+Vector2f operator+(Vector2f a, float b);
+Vector2f operator-(Vector2f a, float b);
+Vector2f operator*(Vector2f a, float b);
+Vector2f operator/(Vector2f a, float b);
 
 
 #endif // GEOMETRY_H_INCLUDED

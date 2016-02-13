@@ -2,7 +2,10 @@
 /* Yay Evil 2.0 */
 /*              */
 
-#include "common.h"
+#include "map.h"
+#include "math.h"
+#include "log.h"
+#include "renderer.h"
 
 #define screen_width_min 640
 #define screen_height_min 480

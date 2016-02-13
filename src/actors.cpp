@@ -1,4 +1,7 @@
-#include "common.h"
+#include "actors.h"
+#include "math.h"
+#include "tiles.h"
+
 #define shadow_scalefactor 1.5f
 #define shadowminsize 1.1f
 
