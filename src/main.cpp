@@ -16,7 +16,7 @@ SDL_Surface *screen;
 
 bool YE_Shadows = 1;
 int YE_ShadowQuality = 10;
-float YE_ShadowIntensity = 1.0;
+float YE_ShadowIntensity = 0.6;
 float YE_ShadowScaleA = 1.0;
 
 YE_Map stmap;
