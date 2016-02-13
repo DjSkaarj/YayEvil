@@ -1,6 +1,8 @@
 #ifndef ACTORS_H_INCLUDED
 #define ACTORS_H_INCLUDED
 
+#include "Geometry.h"
+
 class Light
 {
 public:
@@ -8,6 +10,8 @@ public:
     void Draw();
 
     float X, Y, Radius, RColor, GColor, BColor;
+
+    RectF Rect() { return RectF(X - Radius, X + Radius, Y - Radius, Y + Radius); }
 };
 
 class Actor

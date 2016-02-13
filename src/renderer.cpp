@@ -1,7 +1,23 @@
 #include "common.h"
 
+#include "geometry.h"
+
 float tiles_width, tiles_height, half_width, half_height;
-int xmin, ymin, xmax, ymax, index;
+int index;
+
+RectF YE_VisibleWorld()
+{
+    return RectF(cam_x - half_width,
+                 cam_x + half_width,
+                 cam_y - half_height,
+                 cam_y + half_height);
+}
+
+RectI YE_VisibleTiles()
+{
+    RectF w = YE_VisibleWorld();
+    return RectI(floor(w.xMin), ceil(w.xMax), floor(w.yMin), ceil(w.yMax)).intersect(stmap.Rect());
+}
 
 void YE_Renderer()
 {
@@ -21,38 +37,27 @@ void YE_Renderer()
     glOrtho(0, tiles_width, 0, tiles_height, -1, 1);
     glTranslatef(-cam_x+half_width, -cam_y+half_height, 0.0f);
 
-    //calculate size of visible map part in tiles
-    xmin = floor(cam_x-half_width);
-    xmax = ceil(cam_x+half_width);
-    ymin = floor(cam_y-half_height);
-    ymax = ceil(cam_y+half_height);
-
-    //check calculated values
-    if(xmin<0) xmin=0;
-    if(xmax>stmap.Width-1) xmax = stmap.Width-1;
-    if(ymin<0) ymin=0;
-    if(ymax>stmap.Height-1) ymax = stmap.Height-1;
-
     glColor3f(stmap.Rcolor, stmap.Gcolor, stmap.Bcolor);
 
     //render tiles
-    for(int x = xmin; x <= xmax; x++)
-    for(int y = ymin; y <= ymax; y++)
+    RectI vistiles = YE_VisibleTiles();
+    for (Vector2i pos : YE_VisibleTiles())
     {
-        int index = YE_Index2D(x, y, stmap.Width);
-        if(YE_CheckTile(x, y))
-            stmap.Tiles[index].Draw(x, y);
+        int index = YE_Index2D(pos.x, pos.y, stmap.Width);
+        if(YE_CheckTile(pos.x, pos.y))
+            stmap.Tiles[index].Draw(pos.x, pos.y);
     }
 
     //draw fake AO
     glEnable(GL_BLEND);
     glDisable(GL_TEXTURE_2D);
     glBlendFunc(GL_DST_COLOR, GL_ZERO);
-    for(int x = xmin; x <= xmax; x++)
-    for(int y = ymin; y <= ymax; y++)
+
+    //draw fake AO
+    for (Vector2i pos : YE_VisibleTiles())
     {
-        if(YE_CheckIfSolid(x, y))
-            YE_DrawAO(x, y);
+        if(YE_CheckIfSolid(pos.x, pos.y))
+            YE_DrawAO(pos.x, pos.y);
     }
 
     //render player
@@ -67,6 +72,7 @@ void YE_Renderer()
     glClearColor(stmap.ARcolor, stmap.AGcolor, stmap.ABcolor, 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
 
+
     glBlendFunc(GL_ONE, GL_ONE);
     glBindTexture(GL_TEXTURE_2D, Textures["light.png"]);
 
@@ -76,13 +82,10 @@ void YE_Renderer()
     player->DLight->Draw();
 
     //draw map lights
-    for(int i = 0; i < stmap.Lights.size(); i++)
+    for (Light &light : stmap.Lights)
     {
-        /*float x = stmap.Lights[i].X;
-        float y = stmap.Lights[i].Y;
-        float rad = stmap.Lights[i].Radius;
-        if( (((x+rad)>=xmin) && ((x-rad)<=xmax)) || (((y+rad)>=ymin) && ((y-rad)<=ymax)) )*/
-            stmap.Lights[i].Draw();
+        if (light.Rect().intersects(YE_VisibleWorld()))
+            light.Draw();
     }
 
     glColor3f(1.0f, 1.0f, 1.0f);
