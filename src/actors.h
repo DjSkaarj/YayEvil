@@ -1,6 +1,7 @@
 #ifndef ACTORS_H_INCLUDED
 #define ACTORS_H_INCLUDED
 
+#include "common.h"
 #include "geometry.h"
 
 extern bool YE_Shadows;

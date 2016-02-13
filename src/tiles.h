@@ -1,6 +1,8 @@
 #ifndef TILES_H_INCLUDED
 #define TILES_H_INCLUDED
 
+#include "common.h"
+
 extern std::map<std::string, GLuint> Textures;
 
 class Tile

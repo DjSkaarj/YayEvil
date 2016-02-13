@@ -1,4 +1,6 @@
-#include "common.h"
+#include "tiles.h"
+
+#include "map.h"
 
 #define AO_size 0.25
 #define AO_color 0.2f

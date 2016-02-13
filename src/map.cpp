@@ -1,6 +1,8 @@
-#include "common.h"
-#define GL_BGR 0x80E0
-#define GL_BGRA 0x80E1
+#include "map.h"
+
+#include "log.h"
+#include "math.h"
+#include "strings.h"
 
 YE_Map::YE_Map()
 {
