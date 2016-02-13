@@ -125,7 +125,7 @@ void YE_Update (void)
     SDL_GL_SwapBuffers();
 }
 
-bool YE_CheckArg(const char* arg, int argc, char *argv[], int& num)
+bool YE_CheckArg(const char* arg, char *argv[], int& num)
 {
     for (int i = 0; argv[i] != NULL; i++)
     {
@@ -148,16 +148,16 @@ int main (int argc, char *argv[])
     //Check args
 
     int p;
-    if(YE_CheckArg("-map", argc, argv, p))
+    if(YE_CheckArg("-map", argv, p))
     {
         Log(0, "[ARGS] Map '%s' will be loaded (%s %s)", argv[p+1], argv[p], argv[p+1]);
         lmap = argv[p+1];
     }
 
-    if(YE_CheckArg("-w", argc, argv, p))
+    if(YE_CheckArg("-w", argv, p))
         screen_width = atoi(argv[p+1]);
 
-    if(YE_CheckArg("-h", argc, argv, p))
+    if(YE_CheckArg("-h", argv, p))
         screen_height = atoi(argv[p+1]);
 
     screen_width = std::max(screen_width_min, screen_width);
