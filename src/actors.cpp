@@ -15,7 +15,7 @@ void Actor::Draw()
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         for (int i = 0; i < YE_ShadowQuality; i++)
         {
-            float ssize = lerp(shadowminsize, YE_ShadowScale, float((i + 0.5) / YE_ShadowQuality));
+            float ssize = std::max(Width, Height)+lerp(shadowminsize, YE_ShadowScale, float((i + 0.5) / YE_ShadowQuality));
             DrawSprite(ssize, 0.0f, alpha);
         }
     }
