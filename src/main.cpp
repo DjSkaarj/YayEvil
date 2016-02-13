@@ -16,7 +16,7 @@ SDL_Surface *screen;
 
 bool YE_Shadows = 1;
 int YE_ShadowQuality = 10;
-float YE_ShadowIntensity = 0.6;
+float YE_ShadowIntensity = 1.0;
 float YE_ShadowScaleA = 1.0;
 
 YE_Map stmap;
@@ -91,7 +91,7 @@ void YE_Init (void)
 }
 
 int YE_Events (void)
-{
+{        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     SDL_Event event;
     while (SDL_PollEvent(&event))
     {
@@ -176,7 +176,7 @@ int main (int argc, char *argv[])
         multisample = clip(atoi(argv[p+1]), 0, 1);
 
     if(YE_CheckArg("-shadows", argv, p))
-        YE_Shadows = atoi(argv[p+1]);
+        YE_Shadows = clip(atoi(argv[p+1]), 0, 1);
 
     if(YE_CheckArg("-shadowquality", argv, p))
         YE_ShadowQuality = clip(atoi(argv[p+1]), 1, 15);
@@ -194,7 +194,7 @@ int main (int argc, char *argv[])
 
     char mapname[255] = "maps/";
     YE_LoadMap(strcat(mapname, lmap));
-    CreatePlayer(0, 0);
+    CreatePlayer(stmap.PlayerX, stmap.PlayerY);
 
     while (true)
     {

@@ -13,6 +13,8 @@ YE_Map::YE_Map()
     ARcolor = 0.5;
     AGcolor = 0.5;
     ABcolor = 0.5;
+    PlayerX = 0;
+    PlayerY = 0;
 }
 
 int YE_Index2D(int x, int y, int width)
@@ -110,6 +112,13 @@ void YE_LoadMap (const char* filename)
             stmap.AGcolor = std::min(1.0f, YE_ReadFloat());
             stmap.ABcolor = std::min(1.0f, YE_ReadFloat());
             Log(0, "[Map loader] Set ambient color to: %f %f %f", stmap.ARcolor, stmap.AGcolor, stmap.ABcolor);
+        }
+
+        else if(!strcmp(cmd, "playerstart"))
+        {
+            stmap.PlayerX = clip(YE_ReadFloat(), 0.0f, (float)stmap.Width);
+            stmap.PlayerY = clip(YE_ReadFloat(), 0.0f, (float)stmap.Height);
+            Log(0, "[Map loader] Player spawn: %f %f", stmap.PlayerX, stmap.PlayerY);
         }
 
         else if(!strcmp(cmd, "#"))

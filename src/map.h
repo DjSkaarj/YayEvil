@@ -10,6 +10,7 @@ class YE_Map
      char* Name;
      int Width, Height;
      float Rcolor, Gcolor, Bcolor, BGRcolor, BGGcolor, BGBcolor, ARcolor, AGcolor, ABcolor;
+     float PlayerX, PlayerY;
      Tile* Tiles;
      std::vector<Actor*> Actors;
      std::vector<Light> Lights;
