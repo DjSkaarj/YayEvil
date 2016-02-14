@@ -30,13 +30,66 @@ void YE_InitFontLoader()
 
 static unique_ptr<Glyph> YE_DefaultGlyphForSize(int size)
 {
-    return make_unique<Glyph>(0, Vector2f(size), Vector2f(0), Vector2f(size + 1, 0));
+    return make_unique<Glyph>(0, Vector2i(size), Vector2f(0), Vector2f(size + 1, 0));
+}
+
+static void YE_LoadGlyph(Font *font, FT_Face face, char c)
+{
+    FT_Error error = FT_Load_Char(face, c, FT_LOAD_RENDER);
+    if (error)
+    {
+        Log(1, "[Font loader] Failed to load glyph \"%c\": %s", c, FTErrorString(error));
+        return;
+    }
+
+    FT_GlyphSlot glyph = face->glyph;
+
+    auto size = Vector2i(glyph->bitmap.width, glyph->bitmap.rows);
+    auto offset = Vector2f(glyph->bitmap_left, glyph->bitmap_top);
+    auto advance = Vector2f(glyph->advance.x, glyph->advance.y);
+
+    GLuint texture;
+    GLenum origformat = GL_LUMINANCE;
+    GLenum gpuformat = GL_LUMINANCE8;
+
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+
+    // Turn off mipmaps and enable linear interpolation
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, gpuformat,
+                 size.x, size.y,
+                 0, // <----------------------------------------- old useless crap
+                 origformat, GL_UNSIGNED_BYTE, glyph->bitmap.buffer);
+
+    font->SetGlyph(c, make_unique<Glyph>(texture, size, offset, advance));
 }
 
 unique_ptr<Font> YE_LoadFont(const char *filepath, int size)
 {
+    // Create font.
     auto font = make_unique<Font>(YE_DefaultGlyphForSize(size));
-    Log(0, "[Font loader] loaded font %s at size %d", filepath, size);
+
+    // Open in FreeType.
+    FT_Face face;
+    FT_Error error = FT_New_Face(ft, filepath, 0, &face);
+    if (error)
+    {
+        Log(1, "[Font loader] Failed to load %s: %s", filepath, FTErrorString(error));
+        return font;
+    }
+
+    Log(1, "[Font loader] Rendering font %s at size %d...", filepath, size);
+
+    // Set size for rendering.
+    FT_Set_Pixel_Sizes(face, 0, size);
+
+    // Load all printable ASCII characters.
+    for (char c = ' '; c < '~'; c++)
+        YE_LoadGlyph(font.get(), face, c);
+
     return font;
 }
 

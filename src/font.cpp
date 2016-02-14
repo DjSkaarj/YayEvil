@@ -1,7 +1,7 @@
 #include "font.h"
 
 // Create a new glyph from a texture.
-Glyph::Glyph(GLuint texture, Vector2f size, Vector2f offset, Vector2f advance)
+Glyph::Glyph(GLuint texture, Vector2i size, Vector2f offset, Vector2f advance)
 {
     mTexture = texture;
     mSize = size;
@@ -28,7 +28,7 @@ Vector2f Glyph::Offset() const
 }
 
 // The offset of the glyph relative to the drawing cursor.
-Vector2f Glyph::Size() const
+Vector2i Glyph::Size() const
 {
     return mSize;
 }
@@ -58,8 +58,6 @@ const Glyph* Font::GetGlyph(char c) const
     if (it == mGlyphs.end())
         return mDefaultGlyph.get();
     return it->second.get();
-
-    return new Glyph(0, Vector2f(12), Vector2f(0), Vector2f(15, 0));
 }
 
 // Draw a line of text using the font.

@@ -7,17 +7,17 @@
 class Glyph
 {
 public:
-    Glyph(GLuint texture, Vector2f size, Vector2f offset, Vector2f advance);
+    Glyph(GLuint texture, Vector2i size, Vector2f offset, Vector2f advance);
     ~Glyph();
 
     GLuint Texture() const;
-    Vector2f Size() const;
+    Vector2i Size() const;
     Vector2f Offset() const;
     Vector2f Advance() const;
 
 private:
     GLuint mTexture;
-    Vector2f mSize;
+    Vector2i mSize;
     Vector2f mOffset;
     Vector2f mAdvance;
 };
