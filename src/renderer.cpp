@@ -109,7 +109,14 @@ void YE_Renderer()
     glOrtho(0, screen_width, 0, screen_height, -1, 1);
 
     glBlendFunc(GL_ONE, GL_ONE);
-    font->DrawText(Vector2f(100, 100), "Hello world!");
+    font->DrawText(Vector2f(0, 100), "The quick brown fox jumps over the lazy dog.");
+
+    glDisable(GL_TEXTURE_2D);
+    glBegin(GL_LINES);
+    glVertex2f(0, 100);
+    glVertex2f(screen_width, 100);
+    glEnd();
+    glEnable(GL_TEXTURE_2D);
 
     glDisable(GL_BLEND);
 }
