@@ -81,7 +81,7 @@ unique_ptr<Font> YE_LoadFont(const char *filepath, int size)
         return font;
     }
 
-    Log(1, "[Font loader] Rendering font %s at size %d...", filepath, size);
+    Log(0, "[Font loader] Rendering font %s at size %d...", filepath, size);
 
     // Set size for rendering.
     FT_Set_Pixel_Sizes(face, 0, size);
