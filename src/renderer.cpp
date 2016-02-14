@@ -40,7 +40,6 @@ void YE_Renderer()
     glColor3f(stmap.Rcolor, stmap.Gcolor, stmap.Bcolor);
 
     //render tiles
-    RectI vistiles = YE_VisibleTiles();
     for (Vector2i pos : YE_VisibleTiles())
     {
         int index = YE_Index2D(pos.x, pos.y, stmap.Width);
