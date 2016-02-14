@@ -46,7 +46,7 @@ static void YE_LoadGlyph(Font *font, FT_Face face, char c)
 
     auto size = Vector2i(glyph->bitmap.width, glyph->bitmap.rows);
     auto offset = Vector2f(glyph->bitmap_left, glyph->bitmap_top);
-    auto advance = Vector2f(glyph->advance.x, glyph->advance.y);
+    auto advance = Vector2f(glyph->advance.x>>6, glyph->advance.y>>6);
 
     GLuint texture;
     GLenum origformat = GL_LUMINANCE;
