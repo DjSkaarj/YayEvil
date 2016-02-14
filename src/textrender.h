@@ -26,6 +26,6 @@ class CachedFont
 
 };
 
-void YE_InitFontRenderer();
+void YE_InitTextRenderer();
 
 #endif // TEXTRENDER_H_INCLUDED

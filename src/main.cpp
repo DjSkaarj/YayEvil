@@ -6,6 +6,7 @@
 #include "math.h"
 #include "log.h"
 #include "renderer.h"
+#include "textrender.h"
 
 #define screen_width_min 640
 #define screen_height_min 480
@@ -46,6 +47,8 @@ void YE_Init (void)
     }
 
     atexit(SDL_Quit);
+
+    YE_InitTextRenderer();
 
     if (multisample != 0)
     {
