@@ -31,6 +31,7 @@ int time1, time2;
 float deltatime = 0;
 
 const char* lmap = "map01.ye";
+FontFace *font;
 
 float cam_x, cam_y;
 Actor *player = new Actor;
@@ -99,6 +100,8 @@ void YE_Init (void)
     time1=SDL_GetTicks();
     SDL_WM_SetCaption(YE_Caption, NULL);
     YE_LoadTextures();
+
+    font = new FontFace("YayEvil.ttf");
 }
 
 int YE_Events (void)

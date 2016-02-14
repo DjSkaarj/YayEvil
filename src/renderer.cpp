@@ -1,7 +1,6 @@
-#include "common.h"
-
-#include "geometry.h"
 #include "renderer.h"
+#include "geometry.h"
+#include "textrender.h"
 
 float tiles_width, tiles_height, half_width, half_height;
 int index;
@@ -104,6 +103,12 @@ void YE_Renderer()
     glTexCoord2f(1.0, 0.0);
     glVertex2f(cam_x+half_width, cam_y-half_height);
     glEnd();
+
+    //render text
+    glLoadIdentity();
+    glOrtho(0, screen_width, 0, screen_height, -1, 1);
+
+    font->drawText(Vector2f(100, 100), "Hello world!", 18);
 
     glDisable(GL_BLEND);
 }

@@ -29,7 +29,7 @@ void YE_InitTextRenderer()
 
 FontFace::FontFace(const char *path)
 {
-    FT_Error error = FT_New_Face(ft, "FreeSans.ttf", 0, &mFace);
+    FT_Error error = FT_New_Face(ft, path, 0, &mFace);
     if (error)
     {
         Log(1, "[Text renderer] Failed to load %s: %s", path, ErrorString(error));
@@ -42,6 +42,13 @@ FontFace::FontFace(const char *path)
 }
 
 FontFace::~FontFace()
+{
+    FT_Error error = FT_Done_Face(mFace);
+    if (error)
+        Log(1, "[Text renderer] Warning: failed to free font face: %s", ErrorString(error));
+}
+
+void FontFace::drawText(Vector2f position, const char *text, int size)
 {
 
 }
