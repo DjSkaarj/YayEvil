@@ -76,7 +76,6 @@ static void YE_LoadGlyph(Font *font, FT_Face face, char c)
 
     FT_GlyphSlot glyph = face->glyph;
 
-    Log(0, "Convert %c %d", c, glyph->bitmap.pitch);
     byte *image = YE_ConvertBitmap(&glyph->bitmap);
 
     auto size = Vector2i(glyph->bitmap.width, glyph->bitmap.rows);
