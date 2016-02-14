@@ -16,6 +16,7 @@ int screen_height = 768;
 int multisample = 0;
 GLuint Lightbuffer = 0;
 SDL_Surface *screen;
+bool fullscreen = 0;
 
 bool YE_Shadows = 1;
 int YE_ShadowQuality = 10;
@@ -52,7 +53,11 @@ void YE_Init (void)
         SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, multisample);
     }
 
-    screen = SDL_SetVideoMode(screen_width, screen_height, 24, SDL_OPENGL);
+    if(fullscreen)
+        screen = SDL_SetVideoMode(screen_width, screen_height, 24, SDL_OPENGL | SDL_FULLSCREEN);
+    else
+        screen = SDL_SetVideoMode(screen_width, screen_height, 24, SDL_OPENGL);
+
     if (!screen)
     {
         Log(1, "[SDL] Opening %dx%d window failed: %s", screen_width, screen_height, SDL_GetError());
@@ -177,6 +182,9 @@ int main (int argc, char *argv[])
 
     if(YE_CheckArg("-multisample", argv, p))
         multisample = clip(atoi(argv[p+1]), 0, 1);
+
+    if(YE_CheckArg("-fullscreen", argv, p))
+        fullscreen = clip(atoi(argv[p+1]), 0, 1);
 
     if(YE_CheckArg("-shadows", argv, p))
         YE_Shadows = clip(atoi(argv[p+1]), 0, 1);
