@@ -29,7 +29,7 @@ std::map<std::string, GLuint> Textures;
 int time1, time2;
 float deltatime = 0;
 
-char* lmap = "map01.ye";
+const char* lmap = "map01.ye";
 
 float cam_x, cam_y;
 Actor *player = new Actor;
@@ -160,6 +160,8 @@ bool YE_CheckArg(const char* arg, char *argv[], int& num)
 
 int main (int argc, char *argv[])
 {
+    UNUSED(argc);
+
     Log_Init();
 
     for (int i = 0; argv[i] != NULL; i++)
