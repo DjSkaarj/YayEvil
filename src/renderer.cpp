@@ -16,8 +16,7 @@ RectF YE_VisibleWorld()
 
 RectI YE_VisibleTiles()
 {
-    RectF w = YE_VisibleWorld();
-    return RectI(floor(w.xMin), ceil(w.xMax), floor(w.yMin), ceil(w.yMax)).intersect(stmap.Rect());
+    return YE_VisibleWorld().toInt().intersect(stmap.Rect());
 }
 
 void YE_Renderer()
@@ -35,8 +34,8 @@ void YE_Renderer()
     cam_x = player->X;
     cam_y = player->Y;
     glLoadIdentity();
-    glOrtho(0, tiles_width, 0, tiles_height, -1, 1);
-    glTranslatef(-cam_x+half_width, -cam_y+half_height, 0.0f);
+    glOrtho(0, 30, 0, 30, -1, 1);
+    //glTranslatef(-cam_x+half_width, -cam_y+half_height, 0.0f);
 
     glColor3f(stmap.Rcolor, stmap.Gcolor, stmap.Bcolor);
 
