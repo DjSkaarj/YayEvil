@@ -33,39 +33,9 @@ static unique_ptr<Glyph> YE_DefaultGlyphForSize(int size)
     return make_unique<Glyph>(0, Vector2i(size), Vector2f(0), Vector2f(size + 1, 0));
 }
 
-static void YE_LoadGlyph(Font *font, FT_Face face, char c)
-{
-    FT_Error error = FT_Load_Char(face, c, FT_LOAD_RENDER);
-    if (error)
-    {
-        Log(1, "[Font loader] Failed to load glyph \"%c\": %s", c, FTErrorString(error));
-        return;
-    }
+static void YE_LoadGlyph(Font *font, FT_Face face, char c);
+static byte* YE_ConvertBitmap(FT_Bitmap *bitmap);
 
-    FT_GlyphSlot glyph = face->glyph;
-
-    auto size = Vector2i(glyph->bitmap.width, glyph->bitmap.rows);
-    auto offset = Vector2f(glyph->bitmap_left, glyph->bitmap_top);
-    auto advance = Vector2f(glyph->advance.x>>6, glyph->advance.y>>6);
-
-    GLuint texture;
-    GLenum origformat = GL_LUMINANCE;
-    GLenum gpuformat = GL_LUMINANCE8;
-
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
-
-    // Turn off mipmaps and enable linear interpolation
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    glTexImage2D(GL_TEXTURE_2D, 0, gpuformat,
-                 size.x, size.y,
-                 0, // <----------------------------------------- old useless crap
-                 origformat, GL_UNSIGNED_BYTE, glyph->bitmap.buffer);
-
-    font->SetGlyph(c, make_unique<Glyph>(texture, size, offset, advance));
-}
 
 unique_ptr<Font> YE_LoadFont(const char *filepath, int size)
 {
@@ -94,4 +64,68 @@ unique_ptr<Font> YE_LoadFont(const char *filepath, int size)
 
     return font;
 }
+
+static void YE_LoadGlyph(Font *font, FT_Face face, char c)
+{
+    FT_Error error = FT_Load_Char(face, c, FT_LOAD_RENDER);
+    if (error)
+    {
+        Log(1, "[Font loader] Failed to load glyph \"%c\": %s", c, FTErrorString(error));
+        return;
+    }
+
+    FT_GlyphSlot glyph = face->glyph;
+
+    Log(0, "Convert %c %d", c, glyph->bitmap.pitch);
+    byte *image = YE_ConvertBitmap(&glyph->bitmap);
+
+    auto size = Vector2i(glyph->bitmap.width, glyph->bitmap.rows);
+    auto offset = Vector2f(glyph->bitmap_left, glyph->bitmap_top);
+    auto advance = Vector2f(glyph->advance.x>>6, glyph->advance.y>>6);
+
+    GLuint texture;
+    GLenum origformat = GL_LUMINANCE;
+    GLenum gpuformat = GL_LUMINANCE8;
+
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+
+    // Turn off mipmaps and enable linear interpolation
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    glTexImage2D(GL_TEXTURE_2D, 0, gpuformat,
+                 size.x, size.y,
+                 0, // <----------------------------------------- old useless crap
+                 origformat, GL_UNSIGNED_BYTE, image);
+
+    font->SetGlyph(c, make_unique<Glyph>(texture, size, offset, advance));
+    delete image;
+}
+
+static byte* YE_ConvertBitmap(FT_Bitmap *bitmap)
+{
+    int w = bitmap->width;
+    int h = bitmap->rows;
+
+    byte *src = (byte*)bitmap->buffer;
+    byte *dst = new byte[w * h];
+
+    int pitch = bitmap->pitch;
+
+    if (pitch > 0)
+    {
+        for (int row = 0; row < h; row++)
+        {
+            memcpy(&dst[row * w], &src[(h - row - 1) * pitch], w);
+        }
+    }
+
+    return dst;
+}
+
+
+
+
 

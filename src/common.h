@@ -25,6 +25,8 @@
 
 #define UNUSED(expr) do { (void)(expr); } while (0)
 
+typedef unsigned char byte;
+
 using std::min;
 using std::max;
 using std::move;
