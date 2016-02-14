@@ -27,6 +27,13 @@
 
 using std::min;
 using std::max;
+using std::move;
 using std::unique_ptr;
+
+template<typename T, typename... Args>
+std::unique_ptr<T> make_unique(Args&&... args)
+{
+    return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+}
 
 #endif // COMMON_H_INCLUDED
