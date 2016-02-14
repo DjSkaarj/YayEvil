@@ -90,6 +90,8 @@ unique_ptr<Font> YE_LoadFont(const char *filepath, int size)
     for (char c = ' '; c < '~'; c++)
         YE_LoadGlyph(font.get(), face, c);
 
+    FT_Done_Face(face);
+
     return font;
 }
 
