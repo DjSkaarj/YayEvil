@@ -102,7 +102,7 @@ void YE_Init (void)
     SDL_WM_SetCaption(YE_Caption, NULL);
     YE_LoadTextures();
 
-    font = YE_LoadFont("YayEvil.ttf", 12).release();
+    font = YE_LoadFont("YayEvil.ttf", 30).release();
 }
 
 int YE_Events (void)

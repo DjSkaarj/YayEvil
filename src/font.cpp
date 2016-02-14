@@ -74,13 +74,13 @@ void Font::DrawText(Vector2f pos, const char *text)
 
         glBindTexture(GL_TEXTURE_2D, glyph->Texture());
         glBegin(GL_QUADS);
-        glTexCoord2f(0.0, 0.0);
-        glVertex2f(d.x, d.y);
         glTexCoord2f(0.0, 1.0);
-        glVertex2f(d.x, d.y + s.y);
-        glTexCoord2f(1.0, 1.0);
-        glVertex2f(d.x + s.x, d.y + s.y);
+        glVertex2f(d.x, d.y);
+        glTexCoord2f(0.0, 0.0);
+        glVertex2f(d.x, d.y - s.y);
         glTexCoord2f(1.0, 0.0);
+        glVertex2f(d.x + s.x, d.y - s.y);
+        glTexCoord2f(1.0, 1.0);
         glVertex2f(d.x + s.x, d.y);
         glEnd();
 
