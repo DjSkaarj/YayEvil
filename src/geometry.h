@@ -239,17 +239,17 @@ public:
 
     bool isNull() const
     {
-        return xMin >= xMax || yMin >= yMax;
+        return xMin == xMax && yMin == yMax;
     }
 
     bool isValid() const
     {
-        return !isNull();
+        return xMin <= xMax && yMin <= yMax;
     }
 
     bool isImaginary() const
     {
-        return isNull();
+        return !isValid();
     }
 
     RectIFillIterator begin() const
@@ -298,6 +298,7 @@ public:
                     min(xMax, rhs.xMax),
                     max(yMin, rhs.yMin),
                     min(yMax, rhs.yMax));
+
         if (rect.isValid())
             return rect;
         return RectI(0, 0, 0, 0);
@@ -305,7 +306,7 @@ public:
 
     bool intersects(RectI rhs) const
     {
-        return intersect(rhs).isValid();
+        return !intersect(rhs).isNull();
     }
 
     bool contains(RectI inner) const;
@@ -355,17 +356,17 @@ struct RectF
 
     bool isNull() const
     {
-        return xMin >= xMax || yMin >= yMax;
+        return xMin == xMax && yMin == yMax;
     }
 
     bool isValid() const
     {
-        return !isNull();
+        return xMin <= xMax && yMin <= yMax;
     }
 
     bool isImaginary() const
     {
-        return isNull();
+        return !isValid();
     }
 
     Vector2f size() const
@@ -407,7 +408,7 @@ struct RectF
 
     bool intersects(RectF rhs) const
     {
-        return intersect(rhs).isValid();
+        return !intersect(rhs).isNull();
     }
 
     bool contains(RectF inner) const;
