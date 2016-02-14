@@ -8,7 +8,7 @@
 #include <SDL/SDL.h>
 #include "SDL_image.h"
 
-#include "ft2build.h"
+#include <ft2build.h>
 #include FT_FREETYPE_H
 
 #include <cstdio>
