@@ -104,11 +104,12 @@ void YE_Renderer()
     glVertex2f(cam_x+half_width, cam_y-half_height);
     glEnd();
 
-    glDisable(GL_BLEND);
-
     //render text
     glLoadIdentity();
     glOrtho(0, screen_width, 0, screen_height, -1, 1);
 
+    glBlendFunc(GL_ONE, GL_ONE);
     font->DrawText(Vector2f(100, 100), "Hello world!");
+
+    glDisable(GL_BLEND);
 }
