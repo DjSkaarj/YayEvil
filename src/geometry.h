@@ -262,6 +262,26 @@ public:
         return RectIFillIterator(this, xMin, yMax);
     }
 
+    Vector2i lb()
+    {
+        return Vector2i(xMin, yMin);
+    }
+
+    Vector2i lu()
+    {
+        return Vector2i(xMin, yMax);
+    }
+
+    Vector2i rb()
+    {
+        return Vector2i(xMax, yMin);
+    }
+
+    Vector2i ru()
+    {
+        return Vector2i(xMax, yMax);
+    }
+
     Vector2i size() const
     {
         return Vector2i(xMax - xMin, yMax - yMin);
@@ -367,6 +387,26 @@ struct RectF
     bool isImaginary() const
     {
         return !isValid();
+    }
+
+    Vector2f lb()
+    {
+        return Vector2f(xMin, yMin);
+    }
+
+    Vector2f lu()
+    {
+        return Vector2f(xMin, yMax);
+    }
+
+    Vector2f rb()
+    {
+        return Vector2f(xMax, yMin);
+    }
+
+    Vector2f ru()
+    {
+        return Vector2f(xMax, yMax);
     }
 
     Vector2f size() const
