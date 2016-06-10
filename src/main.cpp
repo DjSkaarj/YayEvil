@@ -6,6 +6,8 @@
 #include "math.h"
 #include "log.h"
 #include "renderer.h"
+#include "font.h"
+#include "fontloader.h"
 
 #define screen_width_min 640
 #define screen_height_min 480
@@ -30,6 +32,7 @@ int time1, time2;
 float deltatime = 0;
 
 const char* lmap = "map01.ye";
+Font *font;
 
 float cam_x, cam_y;
 Actor *player = new Actor;
@@ -46,6 +49,8 @@ void YE_Init (void)
     }
 
     atexit(SDL_Quit);
+
+    YE_InitFontLoader();
 
     if (multisample != 0)
     {
@@ -96,6 +101,8 @@ void YE_Init (void)
     time1=SDL_GetTicks();
     SDL_WM_SetCaption(YE_Caption, NULL);
     YE_LoadTextures();
+
+    font = YE_LoadFont("YayEvil.ttf", 30).release();
 }
 
 int YE_Events (void)

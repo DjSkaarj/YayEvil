@@ -8,19 +8,34 @@
 #include <SDL/SDL.h>
 #include "SDL_image.h"
 
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
 #include <cstdio>
 #include <cmath>
 
 #include <algorithm>
 #include <iostream>
 #include <map>
+#include <memory>
+#include <unordered_map>
 #include <vector>
 
 #include "tinydir.h"
 
 #define UNUSED(expr) do { (void)(expr); } while (0)
 
+typedef unsigned char byte;
+
 using std::min;
 using std::max;
+using std::move;
+using std::unique_ptr;
+
+template<typename T, typename... Args>
+std::unique_ptr<T> make_unique(Args&&... args)
+{
+    return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+}
 
 #endif // COMMON_H_INCLUDED
