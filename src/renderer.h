@@ -12,6 +12,8 @@ extern Actor *player;
 extern std::map<std::string, GLuint> Textures;
 extern GLuint Lightbuffer;
 extern Font *font;
+extern Font *menufont;
+extern float deltatime;
 void YE_Renderer(void);
 
 #endif // RENDERER_H_INCLUDED

@@ -1,6 +1,7 @@
 #include "renderer.h"
 #include "geometry.h"
 #include "font.h"
+#include "math.h"
 
 float tiles_width, tiles_height, half_width, half_height;
 int index;
@@ -104,19 +105,14 @@ void YE_Renderer()
     glVertex2f(cam_x+half_width, cam_y-half_height);
     glEnd();
 
-    //render text
+    //draw text
     glLoadIdentity();
     glOrtho(0, screen_width, 0, screen_height, -1, 1);
 
     glBlendFunc(GL_ONE, GL_ONE);
-    font->DrawText(Vector2f(0, 100), "The quick brown fox jumps over the lazy dog.");
-
-    glDisable(GL_TEXTURE_2D);
-    glBegin(GL_LINES);
-    glVertex2f(0, 100);
-    glVertex2f(screen_width, 100);
-    glEnd();
-    glEnable(GL_TEXTURE_2D);
+    menufont->DrawText(Vector2f(0, 0), (NumberToString(floorf(1/deltatime)) + " fps (" + NumberToString(deltatime) + " s)").c_str());
+    menufont->DrawText(Vector2f(0, 20), ("Y: " + NumberToString(player->Y)).c_str());
+    menufont->DrawText(Vector2f(0, 40), ("X: " + NumberToString(player->X)).c_str());
 
     glDisable(GL_BLEND);
 }

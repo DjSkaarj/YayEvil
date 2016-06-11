@@ -9,8 +9,8 @@
 #include "font.h"
 #include "fontloader.h"
 
-#define screen_width_min 640
-#define screen_height_min 480
+#define screen_width_min 320
+#define screen_height_min 240
 #define YE_Caption "Yay Evil 2.0 - NOW WITH FAKE AO!!!"
 
 int screen_width = 1024;
@@ -33,6 +33,7 @@ float deltatime = 0;
 
 const char* lmap = "map01.ye";
 Font *font;
+Font *menufont;
 
 float cam_x, cam_y;
 Actor *player = new Actor;
@@ -102,7 +103,8 @@ void YE_Init (void)
     SDL_WM_SetCaption(YE_Caption, NULL);
     YE_LoadTextures();
 
-    font = YE_LoadFont("YayEvil.ttf", 30).release();
+    font = YE_LoadFont("fonts/YayEvil.ttf", 30).release();
+    menufont = YE_LoadFont("fonts/Consola.ttf", 20).release();
 }
 
 int YE_Events (void)
@@ -175,7 +177,6 @@ int main (int argc, char *argv[])
         Log(0, "[ARGS] argv[%d] contains %s", i, argv[i]);
 
     //Check args
-
     int p;
     if(YE_CheckArg("-map", argv, p))
     {
@@ -184,10 +185,10 @@ int main (int argc, char *argv[])
     }
 
     if(YE_CheckArg("-w", argv, p))
-        screen_width = atoi(argv[p+1]);
+        screen_width = std::max(screen_height_min, atoi(argv[p+1]));
 
     if(YE_CheckArg("-h", argv, p))
-        screen_height = atoi(argv[p+1]);
+        screen_height = std::max(screen_height_min, atoi(argv[p+1]));
 
     if(YE_CheckArg("-multisample", argv, p))
         multisample = clip(atoi(argv[p+1]), 0, 1);

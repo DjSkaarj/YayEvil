@@ -11,4 +11,6 @@ template <typename T> T lerp(T a, T b, float alpha)
     return a * alpha + b * (1.0 - alpha);
 }
 
+std::string NumberToString (float number);
+
 #endif // MATH_H_INCLUDED

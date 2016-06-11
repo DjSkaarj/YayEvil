@@ -123,8 +123,3 @@ static byte* YE_ConvertBitmap(FT_Bitmap *bitmap)
 
     return dst;
 }
-
-
-
-
-

@@ -21,6 +21,9 @@
 #include <unordered_map>
 #include <vector>
 
+#include <string>
+#include <sstream>
+
 #include "tinydir.h"
 
 #define UNUSED(expr) do { (void)(expr); } while (0)
