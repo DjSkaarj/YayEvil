@@ -33,34 +33,33 @@ void Log(bool iferror, const char *format, ...)
 	va_list args;
 	va_start(args, format);
 
-	if (logfile != NULL)
-	{
-	    if(iferror)
-        {
-            fprintf (logfile, "[%.2u:%.2u:%.2u:%.3u] [Error] Critical error took place! Look log_err.txt for more info.\n", hours, minutes, seconds, milliseconds);
-            fprintf (logfile_err, "[%.2u:%.2u:%.2u:%.3u] ", hours, minutes, seconds, milliseconds);
-            vfprintf(logfile_err, format, args);
-            fprintf (logfile_err, "\n");
-            fflush  (logfile_err);
-        }
-		fprintf (logfile, "[%.2u:%.2u:%.2u:%.3u] ", hours, minutes, seconds, milliseconds);
-		vfprintf(logfile, format, args);
-		fprintf (logfile, "\n");
-		fflush  (logfile);
-		return;
-	}
-
     if(iferror)
     {
-            fprintf (stdout, "[%.2u:%.2u:%.2u:%.3u] [Error] Critical error took place! Look stderr for more info.\n", hours, minutes, seconds, milliseconds);
-            fprintf (stderr, "[%.2u:%.2u:%.2u:%.3u] [Error] ", hours, minutes, seconds, milliseconds);
-            vfprintf(stderr, format, args);
-            fprintf (stderr, "\n");
-            fflush  (stderr);
+        fprintf (logfile, "[%.2u:%.2u:%.2u:%.3u] [Error] Critical error took place! Look log_err.txt for more info.\n", hours, minutes, seconds, milliseconds);
+        fprintf (logfile_err, "[%.2u:%.2u:%.2u:%.3u] ", hours, minutes, seconds, milliseconds);
+        vfprintf(logfile_err, format, args);
+        fprintf (logfile_err, "\n");
+        fflush  (logfile_err);
+
+        if(YE_Cmd)
+        {
+            printf ("[%.2u:%.2u:%.2u:%.3u] Critical error took place!", hours, minutes, seconds, milliseconds);
+            printf ("[%.2u:%.2u:%.2u:%.3u] ", hours, minutes, seconds, milliseconds);
+            vprintf(format, args);
+            printf ("\n");
+        }
+        return;
     }
 
-	fprintf (stdout, "[%.2u:%.2u:%.2u:%.3u] ", hours, minutes, seconds, milliseconds);
-	vfprintf(stdout, format, args);
-	fprintf (stdout, "\n");
-	fflush  (stdout);
+    fprintf (logfile, "[%.2u:%.2u:%.2u:%.3u] ", hours, minutes, seconds, milliseconds);
+    vfprintf(logfile, format, args);
+    fprintf (logfile, "\n");
+    fflush  (logfile);
+
+    if(YE_Cmd)
+    {
+        printf ("[%.2u:%.2u:%.2u:%.3u] ", hours, minutes, seconds, milliseconds);
+        vprintf(format, args);
+        printf ("\n");
+    }
 }

@@ -11,14 +11,17 @@
 
 #define screen_width_min 320
 #define screen_height_min 240
-#define YE_Caption "Yay Evil 2.0 - NOW WITH FAKE AO!!!"
+#define YE_Caption "Yay Evil 2.0 - POWERED BY SDL2!"
 
 int screen_width = 1024;
 int screen_height = 768;
 int multisample = 0;
 GLuint Lightbuffer = 0;
-SDL_Surface *screen;
+SDL_Window *screen;
 bool fullscreen = 0;
+SDL_GLContext glContext;
+
+bool YE_Cmd = 0;
 
 bool YE_Shadows = 1;
 int YE_ShadowQuality = 10;
@@ -40,14 +43,14 @@ Actor *player = new Actor;
 
 void YE_Init (void)
 {
-    setbuf(stdout, 0);
-    setbuf(stderr, 0);
     Log(0, "[General] Yay Evil is starting...");
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
     {
         Log(1, "[SDL] SDL initialization failed: %s", SDL_GetError());
         exit(1);
     }
+
+    Log(0, "[SDL] SDL_VIDEO initialized.", screen_width, screen_height);
 
     atexit(SDL_Quit);
 
@@ -60,17 +63,29 @@ void YE_Init (void)
     }
 
     if(fullscreen)
-        screen = SDL_SetVideoMode(screen_width, screen_height, 24, SDL_OPENGL | SDL_FULLSCREEN);
+        screen = SDL_CreateWindow(YE_Caption, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+                                screen_width, screen_height, SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN);
     else
-        screen = SDL_SetVideoMode(screen_width, screen_height, 24, SDL_OPENGL);
+        screen = SDL_CreateWindow(YE_Caption, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+                                screen_width, screen_height, SDL_WINDOW_OPENGL);
 
-    if (!screen)
+    if (screen == NULL)
     {
         Log(1, "[SDL] Opening %dx%d window failed: %s", screen_width, screen_height, SDL_GetError());
         exit(1);
     }
 
     Log(0, "[SDL] Opening %dx%d window successful.", screen_width, screen_height);
+
+    glContext = SDL_GL_CreateContext(screen);
+
+    if( glContext == NULL )
+    {
+            Log(1, "OpenGL context could not be created! SDL Error: %s\n", SDL_GetError());
+            exit(1);
+    }
+
+    Log(0, "[SDL] OpenGL context created.");
 
     glewInit();
     glEnable(GL_TEXTURE_2D);
@@ -99,8 +114,9 @@ void YE_Init (void)
         exit(1);
     }
 
+    Log(0, "[OpenGL] Framebuffer created.");
+
     time1=SDL_GetTicks();
-    SDL_WM_SetCaption(YE_Caption, NULL);
     YE_LoadTextures();
 
     font = YE_LoadFont("fonts/YayEvil.ttf", 30).release();
@@ -122,22 +138,31 @@ int YE_Events (void)
                     return 1;
         }
     }
-    Uint8 *keys = SDL_GetKeyState(NULL);
-    if(keys['w'] || keys[SDLK_UP])
+
+    const Uint8 *keys = SDL_GetKeyboardState(NULL);
+    if(keys[SDL_GetScancodeFromKey(SDLK_w)] || keys[SDL_SCANCODE_UP])
     {
         player->Y += player->Speed * deltatime;
+        if(player->CheckTop())
+            player->Y = floorf(player->Y) + player->Height - 0.1;
     }
-    if(keys['s'] || keys[SDLK_DOWN])
+    if(keys[SDL_GetScancodeFromKey(SDLK_s)] || keys[SDL_SCANCODE_DOWN])
     {
         player->Y -= player->Speed * deltatime;
+        if(player->CheckBottom())
+            player->Y = ceilf(player->Y) - player->Height + 0.1;
     }
-    if(keys['a'] || keys[SDLK_LEFT])
+    if(keys[SDL_GetScancodeFromKey(SDLK_a)] || keys[SDL_SCANCODE_LEFT])
     {
         player->X -= player->Speed * deltatime;
+        if(player->CheckLeft())
+            player->X = ceilf(player->X) - player->Width + 0.1;
     }
-    if(keys['d'] || keys[SDLK_RIGHT])
+    if(keys[SDL_GetScancodeFromKey(SDLK_d)] || keys[SDL_SCANCODE_RIGHT])
     {
         player->X += player->Speed * deltatime;
+        if(player->CheckRight())
+            player->X = floorf(player->X) + player->Width - 0.1;
     }
     return 0;
 }
@@ -151,7 +176,7 @@ void YE_Update (void)
     deltatime = (time2-time1)*0.001;
     time1 = time2;
 
-    SDL_GL_SwapBuffers();
+    SDL_GL_SwapWindow(screen);
 }
 
 bool YE_CheckArg(const char* arg, char *argv[], int& num)
@@ -166,6 +191,9 @@ bool YE_CheckArg(const char* arg, char *argv[], int& num)
     }
     return false;
 }
+
+void YE_CleanUp (void)
+{}
 
 int main (int argc, char *argv[])
 {
@@ -208,8 +236,8 @@ int main (int argc, char *argv[])
     if(YE_CheckArg("-shadowscale", argv, p))
         YE_ShadowScaleA = clip(atof(argv[p+1]), 1.0, 3.0);
 
-    screen_width = std::max(screen_width_min, screen_width);
-    screen_height = std::max(screen_height_min, screen_height);
+    if(YE_CheckArg("-cmd", argv, p))
+        YE_Cmd = clip(atoi(argv[p+1]), 0, 1);
 
     YE_Init();
 
@@ -223,5 +251,7 @@ int main (int argc, char *argv[])
             exit(1);
         YE_Update();
     }
+
+    YE_CleanUp();
     return 0;
 }

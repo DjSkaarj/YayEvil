@@ -1,12 +1,99 @@
 #include "actors.h"
 #include "math.h"
 #include "tiles.h"
+#include "map.h"
 
 #define shadow_scalefactor 1.5f
 #define shadowminsize 1.1f
 
 Actor::Actor()
 {}
+
+float Actor::x1()
+{
+    return X-whalf();
+}
+
+float Actor::x2()
+{
+    return X+whalf();
+}
+
+float Actor::y1()
+{
+    return Y-hhalf();
+}
+
+float Actor::y2()
+{
+    return Y+hhalf();
+}
+
+float Actor::whalf()
+{
+    return Width/2;
+}
+
+float Actor::hhalf()
+{
+    return Height/2;
+}
+
+bool Actor::CheckTop()
+{
+    int bx1 = floorf(x1());
+    int bx2 = floorf(x2()) + 1;
+    int by = floorf(y2());
+
+    for(int i = bx1; i < bx2; i++)
+    {
+        if(YE_CheckIfSolid(i, by))
+            return true;
+    }
+    return false;
+}
+
+bool Actor::CheckBottom()
+{
+    int bx1 = floorf(x1());
+    int bx2 = floorf(x2()) + 1;
+    int by = floorf(y1());
+
+    for(int i = bx1; i < bx2; i++)
+    {
+        if(YE_CheckIfSolid(i, by))
+            return true;
+    }
+    return false;
+}
+
+bool Actor::CheckLeft()
+{
+    int by1 = floorf(y1());
+    int by2 = floorf(y2()) + 1;
+    int bx = floorf(x1());
+
+    for(int i = by1; i < by2; i++)
+    {
+        if(YE_CheckIfSolid(bx, i))
+            return true;
+    }
+    return false;
+}
+
+bool Actor::CheckRight()
+{
+    int by1 = floorf(y1());
+    int by2 = floorf(y2()) + 1;
+    int bx = floorf(x2());
+
+    for(int i = by1; i < by2; i++)
+    {
+        if(YE_CheckIfSolid(bx, i))
+            return true;
+    }
+    return false;
+}
 
 void Actor::Draw()
 {

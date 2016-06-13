@@ -5,8 +5,9 @@
 #include "glew.h"
 #include <GL/gl.h>
 
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
 #include "SDL_image.h"
+#include "SDL_mixer.h"
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
