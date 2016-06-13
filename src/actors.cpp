@@ -95,6 +95,50 @@ bool Actor::CheckRight()
     return false;
 }
 
+void Actor::MoveUp()
+{
+    Y += Speed * deltatime;
+}
+
+void Actor::MoveDown()
+{
+    Y -= Speed * deltatime;
+}
+
+void Actor::MoveLeft()
+{
+    X -= Speed * deltatime;
+}
+
+void Actor::MoveRight()
+{
+    X += Speed * deltatime;
+}
+
+void Actor::CollisionTop()
+{
+    if(CheckTop() && Solid)
+        Y = floorf(Y) + Height - 0.1;
+}
+
+void Actor::CollisionBottom()
+{
+    if(CheckBottom() && Solid)
+        Y = ceilf(Y) - Height + 0.1;
+}
+
+void Actor::CollisionLeft()
+{
+    if(CheckLeft() && Solid)
+        X = ceilf(X) - Width + 0.1;
+}
+
+void Actor::CollisionRight()
+{
+    if(CheckRight() && Solid)
+        X = floorf(X) + Width - 0.1;
+}
+
 void Actor::Draw()
 {
     if(Shadow && YE_Shadows)
@@ -158,6 +202,8 @@ void Light::Draw()
 
 void CreatePlayer(float spawnx, float spawny)
 {
+    player->Solid = true;
+    player->Shadow = true;
     player->HP = 100;
     player->X = spawnx;
     player->Y = spawny;
@@ -167,6 +213,5 @@ void CreatePlayer(float spawnx, float spawny)
     player->DLight->RColor = 1.0;
     player->DLight->GColor = 0.2;
     player->DLight->BColor = 0.6;
-    player->Shadow = 1;
     strcpy(player->Sprite, "p_idle_01.png");
 }

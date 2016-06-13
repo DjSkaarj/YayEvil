@@ -142,27 +142,23 @@ int YE_Events (void)
     const Uint8 *keys = SDL_GetKeyboardState(NULL);
     if(keys[SDL_GetScancodeFromKey(SDLK_w)] || keys[SDL_SCANCODE_UP])
     {
-        player->Y += player->Speed * deltatime;
-        if(player->CheckTop())
-            player->Y = floorf(player->Y) + player->Height - 0.1;
+        player->MoveUp();
+        player->CollisionTop();
     }
     if(keys[SDL_GetScancodeFromKey(SDLK_s)] || keys[SDL_SCANCODE_DOWN])
     {
-        player->Y -= player->Speed * deltatime;
-        if(player->CheckBottom())
-            player->Y = ceilf(player->Y) - player->Height + 0.1;
+        player->MoveDown();
+        player->CollisionBottom();
     }
     if(keys[SDL_GetScancodeFromKey(SDLK_a)] || keys[SDL_SCANCODE_LEFT])
     {
-        player->X -= player->Speed * deltatime;
-        if(player->CheckLeft())
-            player->X = ceilf(player->X) - player->Width + 0.1;
+        player->MoveLeft();
+        player->CollisionLeft();
     }
     if(keys[SDL_GetScancodeFromKey(SDLK_d)] || keys[SDL_SCANCODE_RIGHT])
     {
-        player->X += player->Speed * deltatime;
-        if(player->CheckRight())
-            player->X = floorf(player->X) + player->Width - 0.1;
+        player->MoveRight();
+        player->CollisionRight();
     }
     return 0;
 }

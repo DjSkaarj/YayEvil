@@ -12,6 +12,8 @@ extern float YE_ShadowIntensity;
 extern float YE_ShadowScaleA;
 extern YE_Map stmap;
 
+extern float deltatime;
+
 class Light
 {
 public:
@@ -29,6 +31,27 @@ public:
     Actor();
     void Draw();
     void DrawSprite(float scale, float saturation, float alpha);
+
+    int HP;
+    bool Shadow, Solid;
+    float X, Y, Alpha, Speed, Width, Height;
+    Light* DLight = new Light;
+    char Sprite[255];
+
+    float whalf();
+    float hhalf();
+
+    void MoveUp();
+    void MoveDown();
+    void MoveLeft();
+    void MoveRight();
+
+    void CollisionTop();
+    void CollisionBottom();
+    void CollisionLeft();
+    void CollisionRight();
+
+private:
     bool CheckTop();
     bool CheckBottom();
     bool CheckLeft();
@@ -37,15 +60,6 @@ public:
     float x2();
     float y1();
     float y2();
-
-    int Solid, HP;
-    bool Shadow;
-    float X, Y, Alpha, Speed, Width, Height;
-    Light* DLight = new Light;
-    char Sprite[255];
-
-    float whalf();
-    float hhalf();
 };
 
 void CreatePlayer(float spawnx, float spawny);

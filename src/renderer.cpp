@@ -105,9 +105,6 @@ void YE_Renderer()
     glVertex2f(cam_x+half_width, cam_y-half_height);
     glEnd();
 
-    player->CheckTop();
-    player->CheckBottom();
-
     //draw text
     glLoadIdentity();
     glOrtho(0, screen_width, 0, screen_height, -1, 1);
