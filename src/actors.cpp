@@ -7,7 +7,15 @@
 #define shadowminsize 1.1f
 
 Actor::Actor()
-{}
+{
+    HP = 100;
+    Shadow = 0;
+    Solid = 0;
+    Noclip = 0;
+    Alpha = 1.0;
+    Speed = 0;
+    strcpy(Sprite, "");
+}
 
 float Actor::x1()
 {
@@ -117,25 +125,25 @@ void Actor::MoveRight()
 
 void Actor::CollisionTop()
 {
-    if(CheckTop() && Solid)
+    if(CheckTop() && !Noclip)
         Y = floorf(Y) + Height - 0.1;
 }
 
 void Actor::CollisionBottom()
 {
-    if(CheckBottom() && Solid)
+    if(CheckBottom() && !Noclip)
         Y = ceilf(Y) - Height + 0.1;
 }
 
 void Actor::CollisionLeft()
 {
-    if(CheckLeft() && Solid)
+    if(CheckLeft() && !Noclip)
         X = ceilf(X) - Width + 0.1;
 }
 
 void Actor::CollisionRight()
 {
-    if(CheckRight() && Solid)
+    if(CheckRight() && !Noclip)
         X = floorf(X) + Width - 0.1;
 }
 
@@ -154,7 +162,7 @@ void Actor::Draw()
         }
     }
 
-    DrawSprite(1.0f, 1.0f, 1.0f);
+    DrawSprite(1.0f, 1.0f, Alpha);
 }
 
 void Actor::DrawSprite(float scale, float saturation, float alpha)

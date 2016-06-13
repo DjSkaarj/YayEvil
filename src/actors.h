@@ -33,7 +33,7 @@ public:
     void DrawSprite(float scale, float saturation, float alpha);
 
     int HP;
-    bool Shadow, Solid;
+    bool Shadow, Solid, Noclip;
     float X, Y, Alpha, Speed, Width, Height;
     Light* DLight = new Light;
     char Sprite[255];
