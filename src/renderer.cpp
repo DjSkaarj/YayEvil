@@ -110,9 +110,15 @@ void YE_Renderer()
     glOrtho(0, screen_width, 0, screen_height, -1, 1);
 
     glBlendFunc(GL_ONE, GL_ONE);
-    menufont->DrawText(Vector2f(0, 0), ("Deltatime: " + NumberToString(deltatime) + " s").c_str());
-    menufont->DrawText(Vector2f(0, 20), ("Y: " + NumberToString(player->Y)).c_str());
-    menufont->DrawText(Vector2f(0, 40), ("X: " + NumberToString(player->X)).c_str());
+    menufont->DrawText(Vector2i(0, 0), ("Deltatime: " + NumberToString(deltatime) + " s").c_str());
+    menufont->DrawText(Vector2i(0, 20), ("Y: " + NumberToString(player->Y)).c_str());
+    menufont->DrawText(Vector2i(0, 40), ("X: " + NumberToString(player->X)).c_str());
+
+    glColor3f(1.0f, 0.5f, 0.0f);
+    Vector2f vec = ScreenToWorld(pmouse->pos);
+    std::string test = NumberToString(vec.x) + " " + NumberToString(vec.y);
+    menufont->DrawText(Vector2i(std::min(pmouse->pos.x, screen_width - 120), std::min(pmouse->pos.y, screen_height-15)), test.c_str());
+    glColor3f(1.0f, 1.0f, 1.0f);
 
     glDisable(GL_BLEND);
 }

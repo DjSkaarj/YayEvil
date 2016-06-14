@@ -8,6 +8,7 @@
 #include "renderer.h"
 #include "font.h"
 #include "fontloader.h"
+#include "mouse.h"
 
 #define screen_width_min 320
 #define screen_height_min 240
@@ -17,9 +18,11 @@ int screen_width = 1024;
 int screen_height = 768;
 int multisample = 0;
 GLuint Lightbuffer = 0;
-SDL_Window *screen;
 bool fullscreen = 0;
+
 SDL_GLContext glContext;
+SDL_Event event;
+SDL_Window *screen;
 
 bool YE_Cmd = 0;
 
@@ -40,6 +43,7 @@ Font *menufont;
 
 float cam_x, cam_y;
 Actor *player = new Actor;
+Mouse *pmouse = new Mouse;
 
 void YE_Init (void)
 {
@@ -125,7 +129,6 @@ void YE_Init (void)
 
 int YE_Events (void)
 {
-    SDL_Event event;
     while (SDL_PollEvent(&event))
     {
         switch (event.type)
@@ -137,6 +140,7 @@ int YE_Events (void)
                 if (event.key.keysym.sym == SDLK_ESCAPE)
                     return 1;
         }
+        pmouse->HandleEvents();
     }
 
     const Uint8 *keys = SDL_GetKeyboardState(NULL);
