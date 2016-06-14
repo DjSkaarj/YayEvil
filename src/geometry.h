@@ -3,6 +3,8 @@
 
 #include "common.h"
 
+struct Vector2f;
+
 struct Vector2i
 {
     int x;
@@ -74,6 +76,8 @@ struct Vector2i
     {
         return x * x + y * y;
     }
+
+    Vector2f normalize() const;
 };
 
 struct Vector2f
@@ -162,6 +166,8 @@ struct Vector2f
     {
         return x * x + y * y;
     }
+
+    Vector2f normalize() const;
 };
 
 

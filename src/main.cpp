@@ -149,29 +149,13 @@ int YE_Events (void)
     bool left = (keys[SDL_GetScancodeFromKey(SDLK_a)] || keys[SDL_SCANCODE_LEFT]);
     bool right = (keys[SDL_GetScancodeFromKey(SDLK_d)] || keys[SDL_SCANCODE_RIGHT]);
 
-    if(up && down)
-    {
-        up = false;
-        down = false;
-    }
-    if(left && right)
-    {
-        left = false;
-        right = false;
-    }
+    Vector2i input(0, 0);
 
-    Vector2f movement(0, 0);
+    input.y = up - down;
+    input.x = right - left;
 
-    if(up)
-        movement.y += player->Speed * deltatime;
-    if(down)
-        movement.y -= player->Speed * deltatime;
-    if(left)
-        movement.x -= player->Speed * deltatime;
-    if(right)
-        movement.x += player->Speed * deltatime;
-
-    player->Move(movement);
+    if (input.x != 0 || input.y != 0)
+        player->Move(input.normalize() * player->Speed * deltatime);
 
     return 0;
 }

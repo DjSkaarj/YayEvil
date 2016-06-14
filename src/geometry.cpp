@@ -251,3 +251,13 @@ RectF operator/(RectF a, Vector2f b)
 RectF operator-(RectF a, Vector2f b);
 RectF operator*(RectF a, Vector2f b);
 RectF operator/(RectF a, Vector2f b);
+
+Vector2f Vector2i::normalize() const
+{
+    return *this / length();
+}
+
+Vector2f Vector2f::normalize() const
+{
+    return *this / length();
+}

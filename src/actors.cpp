@@ -6,7 +6,7 @@
 #define shadow_scalefactor 1.5f
 #define shadowminsize 1.1f
 
-#define collision_offset 0.1
+#define collision_offset 0.06
 
 Actor::Actor()
 {
@@ -130,12 +130,6 @@ void Actor::CollisionRight()
 
 void Actor::Move(Vector2f vec)
 {
-    if(vec == Vector2f(0, 0))
-    {
-        vec.x /= SQRT_2;
-        vec.y /= SQRT_2;
-    }
-
     X += vec.x;
 
     if(vec.x > 0)
