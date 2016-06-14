@@ -111,7 +111,7 @@ void YE_DrawAO(int x, int y)
         glVertex2f(x-AO_size, y-AO_size);
         glVertex2f(x, y-AO_size);
     }
-    if((r_m && r_u && m_u) || (r_u && !r_m && m_u))
+    if((r_m && r_u && m_u) || (r_u && !r_m && !m_u))
     {
         glColor3f(AO_color, AO_color, AO_color);
         glVertex2f(x+1, y);

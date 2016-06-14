@@ -6,6 +6,8 @@
 #define shadow_scalefactor 1.5f
 #define shadowminsize 1.1f
 
+#define collision_offset 0.1
+
 Actor::Actor()
 {
     HP = 100;
@@ -105,25 +107,25 @@ bool Actor::CheckRight()
 void Actor::CollisionTop()
 {
     if(CheckTop() && !Noclip)
-        Y = floorf(Y) + Height - 0.1;
+        Y = floorf(Y) + Height - collision_offset;
 }
 
 void Actor::CollisionBottom()
 {
     if(CheckBottom() && !Noclip)
-        Y = ceilf(Y) - Height + 0.1;
+        Y = ceilf(Y) - Height + collision_offset;
 }
 
 void Actor::CollisionLeft()
 {
     if(CheckLeft() && !Noclip)
-        X = ceilf(X) - Width + 0.1;
+        X = ceilf(X) - Width + collision_offset;
 }
 
 void Actor::CollisionRight()
 {
     if(CheckRight() && !Noclip)
-        X = floorf(X) + Width - 0.1;
+        X = floorf(X) + Width - collision_offset;
 }
 
 void Actor::Move(Vector2f vec)
