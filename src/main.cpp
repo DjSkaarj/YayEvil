@@ -140,26 +140,35 @@ int YE_Events (void)
     }
 
     const Uint8 *keys = SDL_GetKeyboardState(NULL);
-    if(keys[SDL_GetScancodeFromKey(SDLK_w)] || keys[SDL_SCANCODE_UP])
+    bool up = (keys[SDL_GetScancodeFromKey(SDLK_w)] || keys[SDL_SCANCODE_UP]);
+    bool down = (keys[SDL_GetScancodeFromKey(SDLK_s)] || keys[SDL_SCANCODE_DOWN]);
+    bool left = (keys[SDL_GetScancodeFromKey(SDLK_a)] || keys[SDL_SCANCODE_LEFT]);
+    bool right = (keys[SDL_GetScancodeFromKey(SDLK_d)] || keys[SDL_SCANCODE_RIGHT]);
+
+    if(up && down)
     {
-        player->MoveUp();
-        player->CollisionTop();
+        up = false;
+        down = false;
     }
-    if(keys[SDL_GetScancodeFromKey(SDLK_s)] || keys[SDL_SCANCODE_DOWN])
+    if(left && right)
     {
-        player->MoveDown();
-        player->CollisionBottom();
+        left = false;
+        right = false;
     }
-    if(keys[SDL_GetScancodeFromKey(SDLK_a)] || keys[SDL_SCANCODE_LEFT])
-    {
-        player->MoveLeft();
-        player->CollisionLeft();
-    }
-    if(keys[SDL_GetScancodeFromKey(SDLK_d)] || keys[SDL_SCANCODE_RIGHT])
-    {
-        player->MoveRight();
-        player->CollisionRight();
-    }
+
+    Vector2f movement(0, 0);
+
+    if(up)
+        movement.y += player->Speed * deltatime;
+    if(down)
+        movement.y -= player->Speed * deltatime;
+    if(left)
+        movement.x -= player->Speed * deltatime;
+    if(right)
+        movement.x += player->Speed * deltatime;
+
+    player->Move(movement);
+
     return 0;
 }
 

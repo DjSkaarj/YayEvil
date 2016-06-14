@@ -32,24 +32,18 @@ public:
     void Draw();
     void DrawSprite(float scale, float saturation, float alpha);
 
+    void CollisionTop();
+    void CollisionBottom();
+    void CollisionLeft();
+    void CollisionRight();
+
+    void Move(Vector2f vec);
+
     int HP;
     bool Shadow, Solid, Noclip;
     float X, Y, Alpha, Speed, Width, Height;
     Light* DLight = new Light;
     char Sprite[255];
-
-    float whalf();
-    float hhalf();
-
-    void MoveUp();
-    void MoveDown();
-    void MoveLeft();
-    void MoveRight();
-
-    void CollisionTop();
-    void CollisionBottom();
-    void CollisionLeft();
-    void CollisionRight();
 
 private:
     bool CheckTop();
@@ -60,6 +54,8 @@ private:
     float x2();
     float y1();
     float y2();
+    float whalf();
+    float hhalf();
 };
 
 void CreatePlayer(float spawnx, float spawny);

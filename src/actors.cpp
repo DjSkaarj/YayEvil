@@ -14,7 +14,6 @@ Actor::Actor()
     Noclip = 0;
     Alpha = 1.0;
     Speed = 0;
-    strcpy(Sprite, "");
 }
 
 float Actor::x1()
@@ -103,26 +102,6 @@ bool Actor::CheckRight()
     return false;
 }
 
-void Actor::MoveUp()
-{
-    Y += Speed * deltatime;
-}
-
-void Actor::MoveDown()
-{
-    Y -= Speed * deltatime;
-}
-
-void Actor::MoveLeft()
-{
-    X -= Speed * deltatime;
-}
-
-void Actor::MoveRight()
-{
-    X += Speed * deltatime;
-}
-
 void Actor::CollisionTop()
 {
     if(CheckTop() && !Noclip)
@@ -145,6 +124,29 @@ void Actor::CollisionRight()
 {
     if(CheckRight() && !Noclip)
         X = floorf(X) + Width - 0.1;
+}
+
+void Actor::Move(Vector2f vec)
+{
+    if(vec == Vector2f(0, 0))
+    {
+        vec.x /= SQRT_2;
+        vec.y /= SQRT_2;
+    }
+
+    X += vec.x;
+
+    if(vec.x > 0)
+        CollisionRight();
+    else if(vec.x < 0)
+        CollisionLeft();
+
+    Y += vec.y;
+
+    if(vec.y > 0)
+        CollisionTop();
+    else if(vec.y < 0)
+        CollisionBottom();
 }
 
 void Actor::Draw()
