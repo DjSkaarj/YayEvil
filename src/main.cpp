@@ -12,7 +12,7 @@
 
 #define screen_width_min 320
 #define screen_height_min 240
-#define YE_Caption "Yay Evil 2.0 - POWERED BY SDL2!"
+#define YE_Caption "Yay Evil 2.0 - COLLISION!"
 
 int screen_width = 1024;
 int screen_height = 768;
