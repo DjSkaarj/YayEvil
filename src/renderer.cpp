@@ -33,7 +33,7 @@ void YE_Renderer()
     half_height = tiles_height/2;
 
     //move camera
-    player->pos = cam;
+    cam = player->pos;
 
     glLoadIdentity();
     glOrtho(0, tiles_width, 0, tiles_height, -1, 1);
