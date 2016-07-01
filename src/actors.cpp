@@ -20,22 +20,22 @@ Actor::Actor()
 
 float Actor::x1()
 {
-    return X-whalf();
+    return pos.x-whalf();
 }
 
 float Actor::x2()
 {
-    return X+whalf();
+    return pos.x+whalf();
 }
 
 float Actor::y1()
 {
-    return Y-hhalf();
+    return pos.y-hhalf();
 }
 
 float Actor::y2()
 {
-    return Y+hhalf();
+    return pos.y+hhalf();
 }
 
 float Actor::whalf()
@@ -107,37 +107,37 @@ bool Actor::CheckRight()
 void Actor::CollisionTop()
 {
     if(CheckTop() && !Noclip)
-        Y = floorf(Y) + Height - collision_offset;
+        pos.y = floorf(pos.y) + Height - collision_offset;
 }
 
 void Actor::CollisionBottom()
 {
     if(CheckBottom() && !Noclip)
-        Y = ceilf(Y) - Height + collision_offset;
+        pos.y = ceilf(pos.y) - Height + collision_offset;
 }
 
 void Actor::CollisionLeft()
 {
     if(CheckLeft() && !Noclip)
-        X = ceilf(X) - Width + collision_offset;
+        pos.x = ceilf(pos.x) - Width + collision_offset;
 }
 
 void Actor::CollisionRight()
 {
     if(CheckRight() && !Noclip)
-        X = floorf(X) + Width - collision_offset;
+        pos.x = floorf(pos.x) + Width - collision_offset;
 }
 
 void Actor::Move(Vector2f vec)
 {
-    X += vec.x;
+    pos.x += vec.x;
 
     if(vec.x > 0)
         CollisionRight();
     else if(vec.x < 0)
         CollisionLeft();
 
-    Y += vec.y;
+    pos.y += vec.y;
 
     if(vec.y > 0)
         CollisionTop();
@@ -170,16 +170,19 @@ void Actor::DrawSprite(float scale, float saturation, float alpha)
 
     float SHalfWidth = Width/2*scale;
     float SHalfHeight = Height/2*scale;
+    float x = pos.x;
+    float y = pos.y;
+
     glBegin(GL_QUADS);
     glColor4f(saturation, saturation, saturation, alpha);
-    glTexCoord2f(1.0, 1.0);
-    glVertex2f(X-SHalfWidth, Y-SHalfHeight);
-    glTexCoord2f(1.0, 0.0);
-    glVertex2f(X-SHalfWidth, Y+SHalfHeight);
-    glTexCoord2f(0.0, 0.0);
-    glVertex2f(X+SHalfWidth, Y+SHalfHeight);
     glTexCoord2f(0.0, 1.0);
-    glVertex2f(X+SHalfWidth, Y-SHalfHeight);
+    glVertex2f(x-SHalfWidth, y-SHalfHeight);
+    glTexCoord2f(0.0, 0.0);
+    glVertex2f(x-SHalfWidth, y+SHalfHeight);
+    glTexCoord2f(1.0, 0.0);
+    glVertex2f(x+SHalfWidth, y+SHalfHeight);
+    glTexCoord2f(1.0, 1.0);
+    glVertex2f(x+SHalfWidth, y-SHalfHeight);
     glEnd();
 }
 
@@ -193,16 +196,19 @@ Light::Light()
 
 void Light::Draw()
 {
+    float x = pos.x;
+    float y = pos.y;
+
     glColor3f(RColor, GColor, BColor);
     glBegin(GL_QUADS);
     glTexCoord2f(1.0, 1.0);
-    glVertex2f(X-Radius, Y-Radius);
+    glVertex2f(x-Radius, y-Radius);
     glTexCoord2f(1.0, 0.0);
-    glVertex2f(X-Radius, Y+Radius);
+    glVertex2f(x-Radius, y+Radius);
     glTexCoord2f(0.0, 0.0);
-    glVertex2f(X+Radius, Y+Radius);
+    glVertex2f(x+Radius, y+Radius);
     glTexCoord2f(0.0, 1.0);
-    glVertex2f(X+Radius, Y-Radius);
+    glVertex2f(x+Radius, y-Radius);
     glEnd();
 }
 
@@ -211,8 +217,8 @@ void CreatePlayer(float spawnx, float spawny)
     player->Solid = true;
     player->Shadow = true;
     player->HP = 100;
-    player->X = spawnx;
-    player->Y = spawny;
+    player->pos.x = spawnx;
+    player->pos.y = spawny;
     player->Width = 0.7;
     player->Height = 0.7;
     player->Speed = 5;

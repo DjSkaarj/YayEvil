@@ -41,7 +41,7 @@ const char* lmap = "map01.ye";
 Font *font;
 Font *menufont;
 
-float cam_x, cam_y;
+Vector2f cam;
 Actor *player = new Actor;
 Mouse *pmouse = new Mouse;
 
@@ -122,6 +122,9 @@ void YE_Init (void)
 
     time1=SDL_GetTicks();
     YE_LoadTextures();
+
+    SDL_ShowCursor(SDL_DISABLE);
+    pmouse->NormalCursor->Create("cursor.png", 30, 30);
 
     font = YE_LoadFont("fonts/YayEvil.ttf", 30).release();
     menufont = YE_LoadFont("fonts/Consola.ttf", 20).release();

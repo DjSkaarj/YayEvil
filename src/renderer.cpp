@@ -6,12 +6,14 @@
 float tiles_width, tiles_height, half_width, half_height;
 int index;
 
+Light lol;
+
 RectF YE_VisibleWorld()
 {
-    return RectF(cam_x - half_width,
-                 cam_x + half_width,
-                 cam_y - half_height,
-                 cam_y + half_height);
+    return RectF(cam.x - half_width,
+                 cam.x + half_width,
+                 cam.y - half_height,
+                 cam.y + half_height);
 }
 
 RectI YE_VisibleTiles()
@@ -31,11 +33,11 @@ void YE_Renderer()
     half_height = tiles_height/2;
 
     //move camera
-    cam_x = player->X;
-    cam_y = player->Y;
+    player->pos = cam;
+
     glLoadIdentity();
     glOrtho(0, tiles_width, 0, tiles_height, -1, 1);
-    glTranslatef(-cam_x+half_width, -cam_y+half_height, 0.0f);
+    glTranslatef(-cam.x+half_width, -cam.y+half_height, 0.0f);
 
     glColor3f(stmap.Rcolor, stmap.Gcolor, stmap.Bcolor);
 
@@ -47,7 +49,6 @@ void YE_Renderer()
             stmap.Tiles[index].Draw(pos.x, pos.y);
     }
 
-    //draw fake AO
     glEnable(GL_BLEND);
     glDisable(GL_TEXTURE_2D);
     glBlendFunc(GL_DST_COLOR, GL_ZERO);
@@ -76,9 +77,14 @@ void YE_Renderer()
     glBindTexture(GL_TEXTURE_2D, Textures["light.png"]);
 
     //render player's light
-    player->DLight->X = player->X; // <-|--- !REMOVE THIS CRAP!
-    player->DLight->Y = player->Y; // <-|
+    player->DLight->pos = player->pos;
     player->DLight->Draw();
+
+    //test cursor light
+    Vector2f vec = ScreenToWorld(pmouse->pos);
+
+    lol.pos = vec;
+    lol.Draw();
 
     //draw map lights
     for (Light &light : stmap.Lights)
@@ -96,13 +102,13 @@ void YE_Renderer()
     //render lightmap
     glBegin(GL_QUADS);
     glTexCoord2f(0.0, 0.0);
-    glVertex2f(cam_x-half_width, cam_y-half_height);
+    glVertex2f(cam.x-half_width, cam.y-half_height);
     glTexCoord2f(0.0, 1.0);
-    glVertex2f(cam_x-half_width, cam_y+half_height);
+    glVertex2f(cam.x-half_width, cam.y+half_height);
     glTexCoord2f(1.0, 1.0);
-    glVertex2f(cam_x+half_width, cam_y+half_height);
+    glVertex2f(cam.x+half_width, cam.y+half_height);
     glTexCoord2f(1.0, 0.0);
-    glVertex2f(cam_x+half_width, cam_y-half_height);
+    glVertex2f(cam.x+half_width, cam.y-half_height);
     glEnd();
 
     //draw text
@@ -111,14 +117,12 @@ void YE_Renderer()
 
     glBlendFunc(GL_ONE, GL_ONE);
     menufont->DrawText(Vector2i(0, 0), ("Deltatime: " + NumberToString(deltatime) + " s").c_str());
-    menufont->DrawText(Vector2i(0, 20), ("Y: " + NumberToString(player->Y)).c_str());
-    menufont->DrawText(Vector2i(0, 40), ("X: " + NumberToString(player->X)).c_str());
+    menufont->DrawText(Vector2i(0, 20), ("Y: " + NumberToString(player->pos.y)).c_str());
+    menufont->DrawText(Vector2i(0, 40), ("X: " + NumberToString(player->pos.x)).c_str());
 
-    glColor3f(1.0f, 0.5f, 0.0f);
-    Vector2f vec = ScreenToWorld(pmouse->pos);
-    std::string test = NumberToString(vec.x) + " " + NumberToString(vec.y);
-    menufont->DrawText(Vector2i(std::min(pmouse->pos.x, screen_width - 120), std::min(pmouse->pos.y, screen_height-15)), test.c_str());
-    glColor3f(1.0f, 1.0f, 1.0f);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    pmouse->NormalCursor->Draw(pmouse->pos);
 
     glDisable(GL_BLEND);
 }

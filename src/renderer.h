@@ -7,7 +7,7 @@
 class Font;
 class Mouse;
 
-extern float cam_x, cam_y;
+extern Vector2f cam;
 extern int screen_width, screen_height;
 extern YE_Map stmap;
 extern Actor *player;

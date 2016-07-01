@@ -82,14 +82,14 @@ void YE_LoadMap (const char* filename)
         else if(!strcmp(cmd, "light"))
         {
             Light lightbuff;
-            lightbuff.X = YE_ReadFloat();
-            lightbuff.Y = YE_ReadFloat();
+            lightbuff.pos.x = YE_ReadFloat();
+            lightbuff.pos.y = YE_ReadFloat();
             lightbuff.Radius = YE_ReadFloat();
             lightbuff.RColor = YE_ReadFloat();
             lightbuff.GColor = YE_ReadFloat();
             lightbuff.BColor = YE_ReadFloat();
             stmap.Lights.push_back(lightbuff);
-            Log(0, "[Map loader] Registered new light [%f,%f]: radius=%f color=%f|%f|%f", lightbuff.X, lightbuff.Y, lightbuff.Radius, lightbuff.RColor, lightbuff.GColor, lightbuff.BColor);
+            Log(0, "[Map loader] Registered new light [%f,%f]: radius=%f color=%f|%f|%f", lightbuff.pos.x, lightbuff.pos.y, lightbuff.Radius, lightbuff.RColor, lightbuff.GColor, lightbuff.BColor);
         }
 
         else if(!strcmp(cmd, "globalcolor"))

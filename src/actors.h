@@ -20,9 +20,10 @@ public:
     Light();
     void Draw();
 
-    float X, Y, Radius, RColor, GColor, BColor;
+    Vector2f pos;
+    float Radius, RColor, GColor, BColor;
 
-    RectF Rect() { return RectF(X - Radius, X + Radius, Y - Radius, Y + Radius); }
+    RectF Rect() { return RectF(pos.x - Radius, pos.x + Radius, pos.y - Radius, pos.y + Radius); }
 };
 
 class Actor
@@ -39,9 +40,11 @@ public:
 
     void Move(Vector2f vec);
 
+    Vector2f pos;
+
     int HP;
     bool Shadow, Solid, Noclip;
-    float X, Y, Alpha, Speed, Width, Height;
+    float Alpha, Speed, Width, Height;
     Light* DLight = new Light;
     char Sprite[255];
 
