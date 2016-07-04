@@ -1,4 +1,7 @@
 #include "mouse.h"
+#include "math.h"
+
+#define SCALE_STEP 8.0
 
 void Mouse::HandleEvents()
 {
@@ -7,6 +10,13 @@ void Mouse::HandleEvents()
     case SDL_MOUSEMOTION:
         pos.x = event.motion.x;
         pos.y = screen_height - event.motion.y;
+        break;
+    case SDL_MOUSEWHEEL:
+        if(event.wheel.y > 0)
+            tile_size = clip(tile_size+SCALE_STEP, SCALE_MIN, SCALE_MAX);
+        else
+            tile_size = clip(tile_size-SCALE_STEP, SCALE_MIN, SCALE_MAX);
+        break;
     }
 }
 
@@ -42,7 +52,7 @@ void Cursor::Draw(Vector2f pos)
 
 Vector2f ScreenToWorld(Vector2f pos)
 {
-    Vector2f fpos = pos / 64.0;
+    Vector2f fpos = pos / tile_size;
 
     fpos.x += cam.x - half_width;
     fpos.y += cam.y - half_height;
@@ -57,6 +67,6 @@ Vector2f WorldToScreen(Vector2f pos)
     fpos.x -= cam.x + half_width;
     fpos.y -= cam.y - half_height;
 
-    fpos *= 64.0;
+    fpos *= tile_size;
     return fpos;
 }

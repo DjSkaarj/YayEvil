@@ -41,13 +41,13 @@ void Log(bool iferror, const char *format, ...)
         fprintf (logfile_err, "\n");
         fflush  (logfile_err);
 
-        if(YE_Cmd)
+        /*if(YE_Cmd)
         {
             printf ("[%.2u:%.2u:%.2u:%.3u] Critical error took place!", hours, minutes, seconds, milliseconds);
             printf ("[%.2u:%.2u:%.2u:%.3u] ", hours, minutes, seconds, milliseconds);
             vprintf(format, args);
             printf ("\n");
-        }
+        }*/
         return;
     }
 
@@ -56,10 +56,10 @@ void Log(bool iferror, const char *format, ...)
     fprintf (logfile, "\n");
     fflush  (logfile);
 
-    if(YE_Cmd)
+    /*if(YE_Cmd)
     {
         printf ("[%.2u:%.2u:%.2u:%.3u] ", hours, minutes, seconds, milliseconds);
         vprintf(format, args);
         printf ("\n");
-    }
+    }*/
 }

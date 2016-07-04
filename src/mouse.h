@@ -9,6 +9,7 @@ extern SDL_Event event;
 extern int screen_width, screen_height;
 extern float half_width, half_height;
 extern Vector2f cam;
+extern float tile_size;
 
 class Cursor
 {

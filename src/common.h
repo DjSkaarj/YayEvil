@@ -25,6 +25,8 @@
 
 #include "tinydir.h"
 
+#define SCALE_MIN 8.0
+#define SCALE_MAX 256.0
 #define UNUSED(expr) do { (void)(expr); } while (0)
 
 typedef unsigned char byte;

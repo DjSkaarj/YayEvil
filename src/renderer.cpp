@@ -27,8 +27,8 @@ void YE_Renderer()
     glClear(GL_COLOR_BUFFER_BIT);
 
     //calculate screen size in tiles
-    tiles_width = screen_width/64.0;
-    tiles_height = screen_height/64.0;
+    tiles_width = screen_width/tile_size;
+    tiles_height = screen_height/tile_size;
     half_width = tiles_width/2;
     half_height = tiles_height/2;
 
@@ -117,8 +117,9 @@ void YE_Renderer()
 
     glBlendFunc(GL_ONE, GL_ONE);
     menufont->DrawText(Vector2i(0, 0), ("Deltatime: " + NumberToString(deltatime) + " s").c_str());
-    menufont->DrawText(Vector2i(0, 20), ("Y: " + NumberToString(player->pos.y)).c_str());
-    menufont->DrawText(Vector2i(0, 40), ("X: " + NumberToString(player->pos.x)).c_str());
+    menufont->DrawText(Vector2i(0, 20), ("Tile size: " + NumberToString(tile_size)).c_str());
+    menufont->DrawText(Vector2i(0, 40), ("Y: " + NumberToString(player->pos.y)).c_str());
+    menufont->DrawText(Vector2i(0, 60), ("X: " + NumberToString(player->pos.x)).c_str());
 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 

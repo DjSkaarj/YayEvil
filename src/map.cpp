@@ -9,12 +9,15 @@ YE_Map::YE_Map()
     Rcolor = 1.0;
     Gcolor = 1.0;
     Bcolor = 1.0;
+
     BGRcolor = 0.0;
     BGGcolor = 0.0;
     BGBcolor = 0.0;
+
     ARcolor = 0.5;
     AGcolor = 0.5;
     ABcolor = 0.5;
+
     PlayerX = 0;
     PlayerY = 0;
 }
@@ -28,26 +31,29 @@ void YE_LoadMap (const char* filename)
 {
     FILE* level;
 
-    Log(0, "[Map loader] Opening '%s'", filename);
+    Log(0, "[Map loader] Opening '%s'...", filename);
     level = fopen(filename, "r");
     if(!level)
         Log(1, "[Map list] Couldn't open map file: '%s'!", filename);
 
     int width, height;
+
     YE_InitParser(level);
     YE_ReadString();
     width = YE_ReadInt();
     height = YE_ReadInt();
+
     stmap.Width = width;
     stmap.Height = height;
-    Log(0, "[Map loader] Loaded map %s[%d,%d]", filename, width, height);
+    Log(0, "[Map loader] Parsing map '%s' [%d,%d]...", filename, width, height);
 
     stmap.Tiles = new Tile[width*height];
-    for(int i=0; i<width*height; i++)
+    for(int i=0; i < width*height; i++)
     {
         strcpy(stmap.Tiles[i].Texture, "none");
         stmap.Tiles[i].Solid = 0;
     }
+
     while(YE_NextLine())
     {
         char cmd[255];
@@ -72,7 +78,8 @@ void YE_LoadMap (const char* filename)
 
                 strcpy(stmap.Tiles[index].Texture, texture);
                 stmap.Tiles[index].Solid = solid;
-                Log(0, "[Map loader] Registered new tile [%d,%d]: texture=%s solid=%d", x, y, texture, solid);
+                if(YE_LogMap)
+                    Log(0, "[Map loader] Registered new tile [%d,%d]: texture=%s solid=%d", x, y, texture, solid);
             }
         }
 
@@ -89,7 +96,8 @@ void YE_LoadMap (const char* filename)
             lightbuff.GColor = YE_ReadFloat();
             lightbuff.BColor = YE_ReadFloat();
             stmap.Lights.push_back(lightbuff);
-            Log(0, "[Map loader] Registered new light [%f,%f]: radius=%f color=%f|%f|%f", lightbuff.pos.x, lightbuff.pos.y, lightbuff.Radius, lightbuff.RColor, lightbuff.GColor, lightbuff.BColor);
+            if(YE_LogMap)
+                Log(0, "[Map loader] Registered new light [%f,%f]: radius=%f color=%f|%f|%f", lightbuff.pos.x, lightbuff.pos.y, lightbuff.Radius, lightbuff.RColor, lightbuff.GColor, lightbuff.BColor);
         }
 
         else if(!strcmp(cmd, "globalcolor"))
@@ -97,7 +105,8 @@ void YE_LoadMap (const char* filename)
             stmap.Rcolor = std::min(1.0f, YE_ReadFloat());
             stmap.Gcolor = std::min(1.0f, YE_ReadFloat());
             stmap.Bcolor = std::min(1.0f, YE_ReadFloat());
-            Log(0, "[Map loader] Set global color to: %f %f %f", stmap.Rcolor, stmap.Gcolor, stmap.Bcolor);
+            if(YE_LogMap)
+                Log(0, "[Map loader] Set global color to: %f %f %f", stmap.Rcolor, stmap.Gcolor, stmap.Bcolor);
         }
 
         else if(!strcmp(cmd, "backgroundcolor"))
@@ -105,7 +114,8 @@ void YE_LoadMap (const char* filename)
             stmap.BGRcolor = std::min(1.0f, YE_ReadFloat());
             stmap.BGGcolor = std::min(1.0f, YE_ReadFloat());
             stmap.BGBcolor = std::min(1.0f, YE_ReadFloat());
-            Log(0, "[Map loader] Set background color to: %f %f %f", stmap.BGRcolor, stmap.BGGcolor, stmap.BGBcolor);
+            if(YE_LogMap)
+                Log(0, "[Map loader] Set background color to: %f %f %f", stmap.BGRcolor, stmap.BGGcolor, stmap.BGBcolor);
         }
 
         else if(!strcmp(cmd, "ambientcolor"))
@@ -113,14 +123,16 @@ void YE_LoadMap (const char* filename)
             stmap.ARcolor = std::min(1.0f, YE_ReadFloat());
             stmap.AGcolor = std::min(1.0f, YE_ReadFloat());
             stmap.ABcolor = std::min(1.0f, YE_ReadFloat());
-            Log(0, "[Map loader] Set ambient color to: %f %f %f", stmap.ARcolor, stmap.AGcolor, stmap.ABcolor);
+            if(YE_LogMap)
+                Log(0, "[Map loader] Set ambient color to: %f %f %f", stmap.ARcolor, stmap.AGcolor, stmap.ABcolor);
         }
 
         else if(!strcmp(cmd, "playerstart"))
         {
             stmap.PlayerX = clip(YE_ReadFloat(), 0.0f, (float)stmap.Width);
             stmap.PlayerY = clip(YE_ReadFloat(), 0.0f, (float)stmap.Height);
-            Log(0, "[Map loader] Player spawn: %f %f", stmap.PlayerX, stmap.PlayerY);
+            if(YE_LogMap)
+                Log(0, "[Map loader] Player spawn: %f %f", stmap.PlayerX, stmap.PlayerY);
         }
 
         else if(!strcmp(cmd, "#"))
@@ -129,7 +141,7 @@ void YE_LoadMap (const char* filename)
         else Log(0, "[Warning] [Map loader] '%s' is invalid map command", cmd);
     }
     fclose(level);
-    Log(0, "[Map loader] Reading '%s' is finished!", filename);
+    Log(0, "[Map loader] Finished parsing '%s'!", filename);
 }
 
 GLuint YE_LoadImage(const char *filename)
@@ -182,14 +194,12 @@ GLuint YE_LoadImage(const char *filename)
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
 
-    // we should turn off mipmapping or OpenGL will use non-existent (white) mipmaps
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-        glTexImage2D(GL_TEXTURE_2D, 0, gpuformat, // second parameter: number of mipmap
-                 image->w, image->h,
-                 0, // <----------------------------------------- old useless crap
-                 origformat, GL_UNSIGNED_BYTE, image->pixels);
+    glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, gpuformat, image->w, image->h, 0, origformat, GL_UNSIGNED_BYTE, image->pixels);
 
     SDL_FreeSurface(image);
     return texture;
@@ -203,19 +213,21 @@ void YE_LoadTexturesDir(const char* dirpath)
     for (unsigned int i = 0; i < dir.n_files; i++)
     {
         tinydir_readfile_n(&dir, &file, i);
-        if((YE_EndsWith(file.name, "bmp")||YE_EndsWith(file.name, "png")||YE_EndsWith(file.name, "tga")||YE_EndsWith(file.name, "jpeg"))&&!file.is_dir)
+        if((YE_EndsWith(file.name, "bmp") || YE_EndsWith(file.name, "png") || YE_EndsWith(file.name, "tiff") || YE_EndsWith(file.name, "jpeg")) && !file.is_dir)
         {
             char path[255];
             strcpy(path, dirpath);
             strcat(path, file.name);
             GLuint texbuffer = YE_LoadImage(path);
-            if(texbuffer!=0)
+
+            if(texbuffer != 0)
             {
                 char loadtex[255];
                 strcpy(loadtex, file.name);
                 YE_StrToLower(loadtex);
                 Textures.insert(std::pair<std::string, GLuint>((loadtex), texbuffer));
-                Log(0, "[Texture loader] Loaded texture %s", file.name);
+                if(YE_LogTex)
+                    Log(0, "[Texture loader] Loaded texture %s", file.name);
             }
         }
     }
@@ -226,8 +238,9 @@ void YE_LoadTextures(void)
 {
     Log(0, "[Texture loader] Loading textures...");
     YE_LoadTexturesDir("textures/");
-    Log(0, "[Texture loader] Textures loaded!");
+    Log(0, "[Texture loader] Finished loading textures!");
+
     Log(0, "[Texture loader] Loading sprites...");
     YE_LoadTexturesDir("textures/sprites/");
-    Log(0, "[Texture loader] Loaded sprites!");
+    Log(0, "[Texture loader] Finished loading sprites!");
 }

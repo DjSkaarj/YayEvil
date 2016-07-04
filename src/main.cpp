@@ -24,7 +24,8 @@ SDL_GLContext glContext;
 SDL_Event event;
 SDL_Window *screen;
 
-bool YE_Cmd = 0;
+bool YE_LogMap = 0;
+bool YE_LogTex = 1;
 
 bool YE_Shadows = 1;
 int YE_ShadowQuality = 10;
@@ -36,6 +37,8 @@ std::map<std::string, GLuint> Textures;
 
 int time1, time2;
 float deltatime = 0;
+
+float tile_size = 64.0;
 
 const char* lmap = "map01.ye";
 Font *font;
@@ -104,6 +107,7 @@ void YE_Init (void)
     GLuint RenderTexture;
     glGenTextures(1, &RenderTexture);
     glBindTexture(GL_TEXTURE_2D, RenderTexture);
+
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, screen_width, screen_height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -232,8 +236,11 @@ int main (int argc, char *argv[])
     if(YE_CheckArg("-shadowscale", argv, p))
         YE_ShadowScaleA = clip(atof(argv[p+1]), 1.0, 3.0);
 
-    if(YE_CheckArg("-cmd", argv, p))
-        YE_Cmd = clip(atoi(argv[p+1]), 0, 1);
+    if(YE_CheckArg("-logmap", argv, p))
+        YE_LogMap = clip(atoi(argv[p+1]), 0, 1);
+
+    if(YE_CheckArg("-logtex", argv, p))
+        YE_LogTex = clip(atoi(argv[p+1]), 0, 1);
 
     YE_Init();
 

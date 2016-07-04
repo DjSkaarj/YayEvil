@@ -21,6 +21,10 @@ class YE_Map
 };
 
 extern YE_Map stmap;
+
+extern bool YE_LogMap;
+extern bool YE_LogTex;
+
 extern std::map<std::string, GLuint> Textures;
 extern std::vector<std::string> Maplist;
 int YE_Index2D(int x, int y, int width);
