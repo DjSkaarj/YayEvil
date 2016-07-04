@@ -24,28 +24,33 @@ void Tile::Draw(Vector2i pos)
     glEnd();
 }
 
+bool YE_CheckAO(Vector2i pos)
+{
+    return (stmap.CheckTile(pos) && !stmap.TileIsSolid(pos));
+}
+
 void YE_DrawAO(Vector2i pos)
-{/*
+{
     int x = pos.x;
     int y = pos.y;
 
-    bool l_u = (YE_CheckTile(x-1, y-1) && !YE_CheckIfSolid(x-1, y-1));
-    bool m_u = (YE_CheckTile(x, y-1) && !YE_CheckIfSolid(x, y-1));
-    bool r_u = (YE_CheckTile(x+1, y-1) && !YE_CheckIfSolid(x+1, y-1));
+    bool l_u = YE_CheckAO(pos.offset(-1, -1));
+    bool m_u = YE_CheckAO(pos.offset(0, -1));
+    bool r_u = YE_CheckAO(pos.offset(1, -1));
 
-    bool l_m = (YE_CheckTile(x-1, y) && !YE_CheckIfSolid(x-1, y));
-    bool r_m = (YE_CheckTile(x+1, y) && !YE_CheckIfSolid(x+1, y));
+    bool l_m = YE_CheckAO(pos.offset(-1, 0));
+    bool r_m = YE_CheckAO(pos.offset(1, 0));
 
-    bool l_b = (YE_CheckTile(x-1, y+1) && !YE_CheckIfSolid(x-1, y+1));
-    bool m_b = (YE_CheckTile(x, y+1) && !YE_CheckIfSolid(x, y+1));
-    bool r_b = (YE_CheckTile(x+1, y+1) && !YE_CheckIfSolid(x+1, y+1));
+    bool l_b = YE_CheckAO(pos.offset(-1, 1));
+    bool m_b = YE_CheckAO(pos.offset(0, 1));
+    bool r_b = YE_CheckAO(pos.offset(1, -1));
 
     glBegin(GL_QUADS);
+    glColor3f(AO_color, AO_color, AO_color);
 
     //edges
     if(m_u)
     {
-        glColor3f(AO_color, AO_color, AO_color);
         glVertex2f(x, y);
         glVertex2f(x+1, y);
         glColor3f(1.0f, 1.0f, 1.0f);
@@ -54,7 +59,6 @@ void YE_DrawAO(Vector2i pos)
     }
     if(l_m)
     {
-        glColor3f(AO_color, AO_color, AO_color);
         glVertex2f(x, y);
         glVertex2f(x, y+1);
         glColor3f(1.0f, 1.0f, 1.0f);
@@ -63,7 +67,6 @@ void YE_DrawAO(Vector2i pos)
     }
     if(r_m)
     {
-        glColor3f(AO_color, AO_color, AO_color);
         glVertex2f(x+1, y);
         glVertex2f(x+1, y+1);
         glColor3f(1.0f, 1.0f, 1.0f);
@@ -72,7 +75,6 @@ void YE_DrawAO(Vector2i pos)
     }
     if(m_b)
     {
-        glColor3f(AO_color, AO_color, AO_color);
         glVertex2f(x, y+1);
         glVertex2f(x+1, y+1);
         glColor3f(1.0f, 1.0f, 1.0f);
@@ -83,7 +85,6 @@ void YE_DrawAO(Vector2i pos)
     //corners
     if((l_m && l_u && m_u) || (l_u && !l_m && !m_u))
     {
-        glColor3f(AO_color, AO_color, AO_color);
         glVertex2f(x, y);
         glColor3f(1.0f, 1.0f, 1.0f);
         glVertex2f(x-AO_size, y);
@@ -92,7 +93,6 @@ void YE_DrawAO(Vector2i pos)
     }
     if((r_m && r_u && m_u) || (r_u && !r_m && !m_u))
     {
-        glColor3f(AO_color, AO_color, AO_color);
         glVertex2f(x+1, y);
         glColor3f(1.0f, 1.0f, 1.0f);
         glVertex2f(x+1, y-AO_size);
@@ -101,7 +101,6 @@ void YE_DrawAO(Vector2i pos)
     }
     if((l_m && l_b && m_b) || (l_b && !l_m && !m_b))
     {
-        glColor3f(AO_color, AO_color, AO_color);
         glVertex2f(x, y+1);
         glColor3f(1.0f, 1.0f, 1.0f);
         glVertex2f(x-AO_size, y+1);
@@ -110,7 +109,6 @@ void YE_DrawAO(Vector2i pos)
     }
     if((m_b && r_b && r_m) || (r_b && !m_b && !r_m))
     {
-        glColor3f(AO_color, AO_color, AO_color);
         glVertex2f(x+1, y+1);
         glColor3f(1.0f, 1.0f, 1.0f);
         glVertex2f(x+1+AO_size, y+1);
@@ -119,4 +117,4 @@ void YE_DrawAO(Vector2i pos)
     }
 
     glEnd();
-*/}
+}

@@ -78,6 +78,7 @@ struct Vector2i
     }
 
     Vector2f normalize() const;
+    Vector2i offset(int x, int y) const;
 };
 
 struct Vector2f
