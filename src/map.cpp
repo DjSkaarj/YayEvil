@@ -22,9 +22,27 @@ YE_Map::YE_Map()
     PlayerY = 0;
 }
 
-int YE_Index2D(int x, int y, int width)
+int YE_Map::Index2d(Vector2i pos)
 {
-    return x + (y * width);
+    return pos.x + (pos.y * Size.x);
+}
+
+bool YE_Map::CheckTile(Vector2i pos)
+{
+    if (!Rect().contains(pos.x, pos.y))
+        return false;
+
+    if (!strcmp(Tiles[Index2d(pos)].Texture, "none"))
+        return false;
+
+    return true;
+}
+
+bool YE_Map::TileIsSolid(Vector2i pos)
+{
+    if (!stmap.Rect().contains(pos.x, pos.y))
+        return false;
+    return Tiles[Index2d(pos)].Solid;
 }
 
 void YE_LoadMap (const char* filename)
@@ -43,8 +61,8 @@ void YE_LoadMap (const char* filename)
     width = YE_ReadInt();
     height = YE_ReadInt();
 
-    stmap.Width = width;
-    stmap.Height = height;
+    stmap.Size.x = width;
+    stmap.Size.y = height;
     Log(0, "[Map loader] Parsing map '%s' [%d,%d]...", filename, width, height);
 
     stmap.Tiles = new Tile[width*height];
@@ -59,17 +77,18 @@ void YE_LoadMap (const char* filename)
         char cmd[255];
         YE_ReadStringA(cmd, 255);
 
-        /*if tile*/
         if(!strcmp(cmd, "tile"))
         {
             int x = YE_ReadInt();
             int y = YE_ReadInt();
 
-            if(x < 0 || x >= stmap.Width || y < 0 || y >= stmap.Height)
-                Log(0, "[Map loader] Tile at [%d,%d] is outside of map[%d,%d]!", x, y, stmap.Width, stmap.Height);
+            Vector2i vec = Vector2i(x, y);
+
+            if(!stmap.Rect().contains(x, y))
+                Log(0, "[Map loader] Tile at [%d,%d] is outside of map[%d,%d]!", x, y, stmap.Size.x, stmap.Size.y);
             else
             {
-                int index = YE_Index2D(x, y, width);
+                int index = stmap.Index2d(vec);
 
                 char texture[255];
                 YE_ReadStringA(texture, 255);
@@ -129,8 +148,8 @@ void YE_LoadMap (const char* filename)
 
         else if(!strcmp(cmd, "playerstart"))
         {
-            stmap.PlayerX = clip(YE_ReadFloat(), 0.0f, (float)stmap.Width);
-            stmap.PlayerY = clip(YE_ReadFloat(), 0.0f, (float)stmap.Height);
+            stmap.PlayerX = clip(YE_ReadFloat(), 0.0f, (float)stmap.Size.x);
+            stmap.PlayerY = clip(YE_ReadFloat(), 0.0f, (float)stmap.Size.y);
             if(YE_LogMap)
                 Log(0, "[Map loader] Player spawn: %f %f", stmap.PlayerX, stmap.PlayerY);
         }

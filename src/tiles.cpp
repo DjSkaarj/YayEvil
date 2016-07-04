@@ -8,47 +8,26 @@
 Tile::Tile()
 {}
 
-void Tile::Draw(int x, int y)
+void Tile::Draw(Vector2i pos)
 {
     GLuint rtexture = Textures[Texture];
     glBindTexture(GL_TEXTURE_2D, rtexture);
     glBegin(GL_QUADS);
     glTexCoord2f(0.0, 1.0);
-    glVertex2f(x, y);
+    glVertex2f(pos.x, pos.y);
     glTexCoord2f(0.0, 0.0);
-    glVertex2f(x, y+1.0);
+    glVertex2f(pos.x, pos.y+1.0);
     glTexCoord2f(1.0, 0.0);
-    glVertex2f(x+1.0, y+1.0);
+    glVertex2f(pos.x+1.0, pos.y+1.0);
     glTexCoord2f(1.0, 1.0);
-    glVertex2f(x+1.0, y);
+    glVertex2f(pos.x+1.0, pos.y);
     glEnd();
 }
 
-bool YE_CheckTile(int x, int y)
-{
-    if (!stmap.Rect().contains(x, y))
-        return false;
-
-    int index = YE_Index2D(x, y, stmap.Width);
-    if (!strcmp(stmap.Tiles[index].Texture, "none"))
-        return false;
-
-    return true;
-}
-
-bool YE_CheckIfSolid(int x, int y)
-{
-    int index = YE_Index2D(x, y, stmap.Width);
-    return stmap.Tiles[index].Solid;
-}
-
-void YE_DrawAO(int x, int y)
-{
-    /*
-    (x-1; y-1)   (x; y-1)    (x+1; y-1)
-    (x-1; y)     (x; y)      (x+1; y)
-    (x-1; y+1)   (x; y+1)    (x+1; y+1)
-    */
+void YE_DrawAO(Vector2i pos)
+{/*
+    int x = pos.x;
+    int y = pos.y;
 
     bool l_u = (YE_CheckTile(x-1, y-1) && !YE_CheckIfSolid(x-1, y-1));
     bool m_u = (YE_CheckTile(x, y-1) && !YE_CheckIfSolid(x, y-1));
@@ -140,4 +119,4 @@ void YE_DrawAO(int x, int y)
     }
 
     glEnd();
-}
+*/}

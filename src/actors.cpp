@@ -56,7 +56,7 @@ bool Actor::CheckTop()
 
     for(int i = bx1; i < bx2; i++)
     {
-        if(YE_CheckIfSolid(i, by))
+        if(stmap.TileIsSolid(Vector2i(i, by)))
             return true;
     }
     return false;
@@ -70,7 +70,7 @@ bool Actor::CheckBottom()
 
     for(int i = bx1; i < bx2; i++)
     {
-        if(YE_CheckIfSolid(i, by))
+        if(stmap.TileIsSolid(Vector2i(i, by)))
             return true;
     }
     return false;
@@ -84,7 +84,7 @@ bool Actor::CheckLeft()
 
     for(int i = by1; i < by2; i++)
     {
-        if(YE_CheckIfSolid(bx, i))
+        if(stmap.TileIsSolid(Vector2i(bx, i)))
             return true;
     }
     return false;
@@ -98,7 +98,7 @@ bool Actor::CheckRight()
 
     for(int i = by1; i < by2; i++)
     {
-        if(YE_CheckIfSolid(bx, i))
+        if(stmap.TileIsSolid(Vector2i(bx, i)))
             return true;
     }
     return false;

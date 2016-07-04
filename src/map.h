@@ -9,15 +9,20 @@ class YE_Map
 {
  public:
      YE_Map();
-     char* Name;
-     int Width, Height;
-     float Rcolor, Gcolor, Bcolor, BGRcolor, BGGcolor, BGBcolor, ARcolor, AGcolor, ABcolor;
-     float PlayerX, PlayerY;
+     int Index2d(Vector2i pos);
+     bool CheckTile(Vector2i pos);
+     bool TileIsSolid(Vector2i pos);
+
+     Vector2i Size;
      Tile* Tiles;
      std::vector<Actor*> Actors;
      std::vector<Light> Lights;
+     std::string Name;
 
-     RectI Rect() { return RectI(Width, Height); }
+     float Rcolor, Gcolor, Bcolor, BGRcolor, BGGcolor, BGBcolor, ARcolor, AGcolor, ABcolor;
+     float PlayerX, PlayerY;
+
+     RectI Rect() { return RectI(Size.x, Size.y); }
 };
 
 extern YE_Map stmap;
@@ -27,7 +32,7 @@ extern bool YE_LogTex;
 
 extern std::map<std::string, GLuint> Textures;
 extern std::vector<std::string> Maplist;
-int YE_Index2D(int x, int y, int width);
+
 void YE_LoadMap(const char* file);
 void YE_LoadTextures(void);
 GLuint YE_LoadImage(const char *filename);

@@ -44,9 +44,9 @@ void YE_Renderer()
     //render tiles
     for (Vector2i pos : YE_VisibleTiles())
     {
-        int index = YE_Index2D(pos.x, pos.y, stmap.Width);
-        if(YE_CheckTile(pos.x, pos.y))
-            stmap.Tiles[index].Draw(pos.x, pos.y);
+        int index = stmap.Index2d(pos);
+        if(stmap.CheckTile(pos))
+            stmap.Tiles[index].Draw(pos);
     }
 
     glEnable(GL_BLEND);
@@ -56,8 +56,8 @@ void YE_Renderer()
     //draw fake AO
     for (Vector2i pos : YE_VisibleTiles())
     {
-        if(YE_CheckIfSolid(pos.x, pos.y))
-            YE_DrawAO(pos.x, pos.y);
+        if(stmap.TileIsSolid(pos))
+            YE_DrawAO(pos);
     }
 
     //render player
