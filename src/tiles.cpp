@@ -43,7 +43,7 @@ void YE_DrawAO(Vector2i pos)
 
     bool l_b = YE_CheckAO(pos.offset(-1, 1));
     bool m_b = YE_CheckAO(pos.offset(0, 1));
-    bool r_b = YE_CheckAO(pos.offset(1, -1));
+    bool r_b = YE_CheckAO(pos.offset(1, 1));
 
     glBegin(GL_QUADS);
     glColor3f(AO_color, AO_color, AO_color);
