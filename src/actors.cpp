@@ -2,6 +2,7 @@
 #include "math.h"
 #include "tiles.h"
 #include "map.h"
+#include "states.h"
 
 #define shadow_scalefactor 1.5f
 #define shadowminsize 1.1f

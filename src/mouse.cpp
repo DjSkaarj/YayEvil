@@ -9,8 +9,9 @@ void Mouse::HandleEvents()
     {
     case SDL_MOUSEMOTION:
         pos.x = event.motion.x;
-        pos.y = screen_height - event.motion.y;
+        pos.y = cam->res.y - event.motion.y;
         break;
+
     case SDL_MOUSEWHEEL:
         if(event.wheel.y > 0)
             tile_size = clip(tile_size+SCALE_STEP, SCALE_MIN, SCALE_MAX);
@@ -24,16 +25,15 @@ void Cursor::Create(std::string image, float width, float height)
 {
     Image = Textures[image];
 
-    Width = width;
-    Height = height;
+    Size = Vector2f(width, height);
 }
 
 void Cursor::Draw(Vector2f pos)
 {
     glBindTexture(GL_TEXTURE_2D, Image);
 
-    float CHalfWidth = Width/2;
-    float CHalfHeight = Height/2;
+    float CHalfWidth = Size.x/2;
+    float CHalfHeight = Size.y/2;
 
     float x = pos.x + CHalfWidth;
     float y = pos.y - CHalfHeight;
@@ -54,8 +54,8 @@ Vector2f ScreenToWorld(Vector2f pos)
 {
     Vector2f fpos = pos / tile_size;
 
-    fpos.x += cam.x - half_width;
-    fpos.y += cam.y - half_height;
+    fpos.x += cam->pos.x - half_width;
+    fpos.y += cam->pos.y - half_height;
 
     return fpos;
 }
@@ -64,8 +64,8 @@ Vector2f WorldToScreen(Vector2f pos)
 {
     Vector2f fpos = pos;
 
-    fpos.x -= cam.x + half_width;
-    fpos.y -= cam.y - half_height;
+    fpos.x -= cam->pos.x + half_width;
+    fpos.y -= cam->pos.y - half_height;
 
     fpos *= tile_size;
     return fpos;

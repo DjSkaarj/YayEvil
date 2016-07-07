@@ -5,6 +5,7 @@
 #include "geometry.h"
 
 class YE_Map;
+class State;
 
 extern bool YE_Shadows;
 extern int YE_ShadowQuality;
@@ -45,8 +46,11 @@ public:
     int HP;
     bool Shadow, Solid, Noclip;
     float Alpha, Speed, Width, Height;
-    Light* DLight = new Light;
+    Light *DLight = new Light;
     char Sprite[255];
+
+    State *CurrentState;
+    template<typename T> void SetState();
 
 private:
     bool CheckTop();
