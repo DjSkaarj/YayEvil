@@ -9,11 +9,7 @@
 #include "font.h"
 #include "fontloader.h"
 #include "mouse.h"
-
-#define screen_width_min 320
-#define screen_height_min 240
-#define screen_width_def 1024
-#define screen_height_def 768
+#include "states.h"
 
 #define YE_Caption "Yay Evil 2.0 - COLLISION!"
 
@@ -66,7 +62,7 @@ void YE_Init (void)
 
     YE_InitFontLoader();
 
-    if (multisample != 0)
+    if (multisample)
     {
         SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
         SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, multisample);
@@ -85,7 +81,7 @@ void YE_Init (void)
 
     glContext = SDL_GL_CreateContext(screen);
 
-    if( glContext == NULL )
+    if(glContext == NULL)
     {
             Log(1, "OpenGL context could not be created! SDL Error: %s\n", SDL_GetError());
             exit(1);
@@ -167,6 +163,9 @@ int YE_Events (void)
 
 void YE_Update (void)
 {
+    for(Actor actor : stmap.Actors)
+        actor.CurrentState->Update(&actor);
+
     YE_Renderer();
 
     //calculate deltatime
@@ -212,10 +211,10 @@ int main (int argc, char *argv[])
     }
 
     if(YE_CheckArg("-w", argv, p))
-        cam->res.x = std::max(screen_height_min, atoi(argv[p+1]));
+        cam->res.x = std::max(SCREEN_WIDTH_MIN, atoi(argv[p+1]));
 
     if(YE_CheckArg("-h", argv, p))
-        cam->res.y = std::max(screen_height_min, atoi(argv[p+1]));
+        cam->res.y = std::max(SCREEN_HEIGHT_MIN, atoi(argv[p+1]));
 
     if(YE_CheckArg("-multisample", argv, p))
         multisample = clip(atoi(argv[p+1]), 0, 1);
@@ -242,7 +241,7 @@ int main (int argc, char *argv[])
         YE_LogTex = clip(atoi(argv[p+1]), 0, 1);
 
     if(cam->res == 0)
-        cam->res = Vector2i(screen_width_def, screen_height_def);
+        cam->res = Vector2i(SCREEN_WIDTH_DEF, SCREEN_HEIGHT_DEF);
 
     YE_Init();
 

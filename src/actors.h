@@ -3,9 +3,9 @@
 
 #include "common.h"
 #include "geometry.h"
+#include "states.h"
 
 class YE_Map;
-class State;
 
 extern bool YE_Shadows;
 extern int YE_ShadowQuality;
@@ -49,6 +49,7 @@ public:
     Light *DLight = new Light;
     char Sprite[255];
 
+    float Angle;
     State *CurrentState;
     template<typename T> void SetState();
 
@@ -64,6 +65,15 @@ private:
     float whalf();
     float hhalf();
 };
+
+template<typename T> void Actor::SetState()
+{
+    CurrentState->Exit(this);
+
+    delete CurrentState;
+    CurrentState = new T();
+    CurrentState->Enter(this);
+}
 
 void CreatePlayer(float spawnx, float spawny);
 extern Actor *player;

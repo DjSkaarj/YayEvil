@@ -1,8 +1,6 @@
 #include "mouse.h"
 #include "math.h"
 
-#define SCALE_STEP 8.0
-
 void Mouse::HandleEvents()
 {
     switch(event.type)
