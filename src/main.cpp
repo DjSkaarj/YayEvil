@@ -89,7 +89,26 @@ void YE_Init (void)
 
     Log(0, "[SDL] OpenGL context created.");
 
-    glewInit();
+    glewExperimental = GL_TRUE;
+    GLenum glewerr = glewInit();
+    if (glewerr != GLEW_OK)
+    {
+        Log(1, "[OpenGL] Failed to initialize GLEW: %s\n", glewGetErrorString(glewerr));
+        exit(1);
+    }
+
+    if (!GLEW_VERSION_2_0)
+    {
+        Log(1, "[OpenGL] OpenGL version is lower than 2.0. OpenGL 2.0 is required.");
+        exit(1);
+    }
+
+    if (!GLEW_ARB_framebuffer_object)
+    {
+        Log(1, "[OpenGL] GL_ARB_framebuffer_object extension is missing. It is required.");
+        exit(1);
+    }
+
     glEnable(GL_TEXTURE_2D);
     glMatrixMode(GL_MODELVIEW);
     glOrtho(0, cam->res.x / tile_size, 0, cam->res.y / tile_size, -1, 1);
