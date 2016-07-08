@@ -7,8 +7,13 @@
 class Font;
 class Mouse;
 
-extern Vector2f cam;
-extern int screen_width, screen_height;
+class Camera
+{
+public:
+    Vector2f pos;
+    Vector2i res;
+};
+
 extern YE_Map stmap;
 extern Actor *player;
 extern std::map<std::string, GLuint> Textures;
@@ -16,6 +21,7 @@ extern GLuint Lightbuffer;
 extern Font *font;
 extern Font *menufont;
 extern Mouse *pmouse;
+extern Camera *cam;
 extern float deltatime;
 void YE_Renderer(void);
 

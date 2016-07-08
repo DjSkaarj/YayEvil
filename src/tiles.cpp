@@ -1,9 +1,5 @@
 #include "tiles.h"
-
 #include "map.h"
-
-#define AO_size 0.25
-#define AO_color 0.2f
 
 Tile::Tile()
 {}
@@ -50,77 +46,77 @@ void YE_DrawAO(Vector2i pos)
     //edges
     if(m_u)
     {
-        glColor3f(AO_color, AO_color, AO_color);
+        glColor3f(AO_COLOR, AO_COLOR, AO_COLOR);
         glVertex2f(x, y);
         glVertex2f(x+1, y);
         glColor3f(1.0f, 1.0f, 1.0f);
-        glVertex2f(x+1, y-AO_size);
-        glVertex2f(x, y-AO_size);
+        glVertex2f(x+1, y-AO_SIZE);
+        glVertex2f(x, y-AO_SIZE);
     }
     if(l_m)
     {
-        glColor3f(AO_color, AO_color, AO_color);
+        glColor3f(AO_COLOR, AO_COLOR, AO_COLOR);
         glVertex2f(x, y);
         glVertex2f(x, y+1);
         glColor3f(1.0f, 1.0f, 1.0f);
-        glVertex2f(x-AO_size, y+1);
-        glVertex2f(x-AO_size, y);
+        glVertex2f(x-AO_SIZE, y+1);
+        glVertex2f(x-AO_SIZE, y);
     }
     if(r_m)
     {
-        glColor3f(AO_color, AO_color, AO_color);
+        glColor3f(AO_COLOR, AO_COLOR, AO_COLOR);
         glVertex2f(x+1, y);
         glVertex2f(x+1, y+1);
         glColor3f(1.0f, 1.0f, 1.0f);
-        glVertex2f(x+1+AO_size, y+1);
-        glVertex2f(x+1+AO_size, y);
+        glVertex2f(x+1+AO_SIZE, y+1);
+        glVertex2f(x+1+AO_SIZE, y);
     }
     if(m_b)
     {
-        glColor3f(AO_color, AO_color, AO_color);
+        glColor3f(AO_COLOR, AO_COLOR, AO_COLOR);
         glVertex2f(x, y+1);
         glVertex2f(x+1, y+1);
         glColor3f(1.0f, 1.0f, 1.0f);
-        glVertex2f(x+1, y+1+AO_size);
-        glVertex2f(x, y+1+AO_size);
+        glVertex2f(x+1, y+1+AO_SIZE);
+        glVertex2f(x, y+1+AO_SIZE);
     }
 
     //corners
     if((l_m && l_u && m_u) || (l_u && !l_m && !m_u))
     {
-        glColor3f(AO_color, AO_color, AO_color);
+        glColor3f(AO_COLOR, AO_COLOR, AO_COLOR);
         glVertex2f(x, y);
         glColor3f(1.0f, 1.0f, 1.0f);
-        glVertex2f(x-AO_size, y);
-        glVertex2f(x-AO_size, y-AO_size);
-        glVertex2f(x, y-AO_size);
+        glVertex2f(x-AO_SIZE, y);
+        glVertex2f(x-AO_SIZE, y-AO_SIZE);
+        glVertex2f(x, y-AO_SIZE);
     }
     if((r_m && r_u && m_u) || (r_u && !r_m && !m_u))
     {
-        glColor3f(AO_color, AO_color, AO_color);
+        glColor3f(AO_COLOR, AO_COLOR, AO_COLOR);
         glVertex2f(x+1, y);
         glColor3f(1.0f, 1.0f, 1.0f);
-        glVertex2f(x+1, y-AO_size);
-        glVertex2f(x+1+AO_size, y-AO_size);
-        glVertex2f(x+1+AO_size, y);
+        glVertex2f(x+1, y-AO_SIZE);
+        glVertex2f(x+1+AO_SIZE, y-AO_SIZE);
+        glVertex2f(x+1+AO_SIZE, y);
     }
     if((l_m && l_b && m_b) || (l_b && !l_m && !m_b))
     {
-        glColor3f(AO_color, AO_color, AO_color);
+        glColor3f(AO_COLOR, AO_COLOR, AO_COLOR);
         glVertex2f(x, y+1);
         glColor3f(1.0f, 1.0f, 1.0f);
-        glVertex2f(x-AO_size, y+1);
-        glVertex2f(x-AO_size, y+1+AO_size);
-        glVertex2f(x, y+1+AO_size);
+        glVertex2f(x-AO_SIZE, y+1);
+        glVertex2f(x-AO_SIZE, y+1+AO_SIZE);
+        glVertex2f(x, y+1+AO_SIZE);
     }
     if((m_b && r_b && r_m) || (r_b && !m_b && !r_m))
     {
-        glColor3f(AO_color, AO_color, AO_color);
+        glColor3f(AO_COLOR, AO_COLOR, AO_COLOR);
         glVertex2f(x+1, y+1);
         glColor3f(1.0f, 1.0f, 1.0f);
-        glVertex2f(x+1+AO_size, y+1);
-        glVertex2f(x+1+AO_size, y+1+AO_size);
-        glVertex2f(x+1, y+1+AO_size);
+        glVertex2f(x+1+AO_SIZE, y+1);
+        glVertex2f(x+1+AO_SIZE, y+1+AO_SIZE);
+        glVertex2f(x+1, y+1+AO_SIZE);
     }
 
     glEnd();

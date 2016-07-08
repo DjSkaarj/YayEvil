@@ -5,16 +5,17 @@
 #include "geometry.h"
 #include "renderer.h"
 
+class Camera;
+
 extern SDL_Event event;
-extern int screen_width, screen_height;
 extern float half_width, half_height;
-extern Vector2f cam;
+extern Camera *cam;
 extern float tile_size;
 
 class Cursor
 {
 public:
-    float Width, Height;
+    Vector2f Size;
     GLuint Image;
 
     void Create(std::string image, float width, float height);

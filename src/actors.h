@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "geometry.h"
+#include "states.h"
 
 class YE_Map;
 
@@ -45,8 +46,12 @@ public:
     int HP;
     bool Shadow, Solid, Noclip;
     float Alpha, Speed, Width, Height;
-    Light* DLight = new Light;
+    Light *DLight = new Light;
     char Sprite[255];
+
+    float Angle;
+    State *CurrentState;
+    template<typename T> void SetState();
 
 private:
     bool CheckTop();
@@ -60,6 +65,15 @@ private:
     float whalf();
     float hhalf();
 };
+
+template<typename T> void Actor::SetState()
+{
+    CurrentState->Exit(this);
+
+    delete CurrentState;
+    CurrentState = new T();
+    CurrentState->Enter(this);
+}
 
 void CreatePlayer(float spawnx, float spawny);
 extern Actor *player;

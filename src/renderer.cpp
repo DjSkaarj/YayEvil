@@ -3,17 +3,17 @@
 #include "font.h"
 #include "math.h"
 
-float tiles_width, tiles_height, half_width, half_height;
+float tile_width, tile_height, half_width, half_height;
 //int index;
 
 Light lol;
 
 RectF YE_VisibleWorld()
 {
-    return RectF(cam.x - half_width,
-                 cam.x + half_width,
-                 cam.y - half_height,
-                 cam.y + half_height);
+    return RectF(cam->pos.x - half_width,
+                 cam->pos.x + half_width,
+                 cam->pos.y - half_height,
+                 cam->pos.y + half_height);
 }
 
 RectI YE_VisibleTiles()
@@ -27,17 +27,17 @@ void YE_Renderer()
     glClear(GL_COLOR_BUFFER_BIT);
 
     //calculate screen size in tiles
-    tiles_width = screen_width/tile_size;
-    tiles_height = screen_height/tile_size;
-    half_width = tiles_width/2;
-    half_height = tiles_height/2;
+    tile_width = cam->res.x/tile_size;
+    tile_height = cam->res.y/tile_size;
+    half_width = tile_width/2;
+    half_height = tile_height/2;
 
     //move camera
-    cam = player->pos;
+    cam->pos = player->pos;
 
     glLoadIdentity();
-    glOrtho(0, tiles_width, 0, tiles_height, -1, 1);
-    glTranslatef(-cam.x+half_width, -cam.y+half_height, 0.0f);
+    glOrtho(0, tile_width, 0, tile_height, -1, 1);
+    glTranslatef(-cam->pos.x+half_width, -cam->pos.y+half_height, 0.0f);
 
     glColor3f(stmap.Rcolor, stmap.Gcolor, stmap.Bcolor);
 
@@ -72,7 +72,6 @@ void YE_Renderer()
     glClearColor(stmap.ARcolor, stmap.AGcolor, stmap.ABcolor, 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
 
-
     glBlendFunc(GL_ONE, GL_ONE);
     glBindTexture(GL_TEXTURE_2D, Textures["light.png"]);
 
@@ -81,9 +80,8 @@ void YE_Renderer()
     player->DLight->Draw();
 
     //test cursor light
-    Vector2f vec = ScreenToWorld(pmouse->pos);
 
-    lol.pos = vec;
+    lol.pos = ScreenToWorld(pmouse->pos);
     lol.Draw();
 
     //draw map lights
@@ -102,18 +100,18 @@ void YE_Renderer()
     //render lightmap
     glBegin(GL_QUADS);
     glTexCoord2f(0.0, 0.0);
-    glVertex2f(cam.x-half_width, cam.y-half_height);
+    glVertex2f(cam->pos.x-half_width, cam->pos.y-half_height);
     glTexCoord2f(0.0, 1.0);
-    glVertex2f(cam.x-half_width, cam.y+half_height);
+    glVertex2f(cam->pos.x-half_width, cam->pos.y+half_height);
     glTexCoord2f(1.0, 1.0);
-    glVertex2f(cam.x+half_width, cam.y+half_height);
+    glVertex2f(cam->pos.x+half_width, cam->pos.y+half_height);
     glTexCoord2f(1.0, 0.0);
-    glVertex2f(cam.x+half_width, cam.y-half_height);
+    glVertex2f(cam->pos.x+half_width, cam->pos.y-half_height);
     glEnd();
 
     //draw text
     glLoadIdentity();
-    glOrtho(0, screen_width, 0, screen_height, -1, 1);
+    glOrtho(0, cam->res.x, 0, cam->res.y, -1, 1);
 
     glBlendFunc(GL_ONE, GL_ONE);
     menufont->DrawText(Vector2i(0, 0), ("Deltatime: " + NumberToString(deltatime) + " s").c_str());

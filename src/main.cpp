@@ -9,20 +9,12 @@
 #include "font.h"
 #include "fontloader.h"
 #include "mouse.h"
+#include "states.h"
 
-#define screen_width_min 320
-#define screen_height_min 240
 #define YE_Caption "Yay Evil 2.0 - COLLISION!"
 
-int screen_width = 1024;
-int screen_height = 768;
 int multisample = 0;
-GLuint Lightbuffer = 0;
 bool fullscreen = 0;
-
-SDL_GLContext glContext;
-SDL_Event event;
-SDL_Window *screen;
 
 bool YE_LogMap = 0;
 bool YE_LogTex = 1;
@@ -32,21 +24,28 @@ int YE_ShadowQuality = 10;
 float YE_ShadowIntensity = 0.6;
 float YE_ShadowScaleA = 1.0;
 
+const char *lmap = "map01.ye";
+
+GLuint Lightbuffer = 0;
+
+SDL_GLContext glContext;
+SDL_Event event;
+SDL_Window *screen;
+
 YE_Map stmap;
 std::map<std::string, GLuint> Textures;
 
 int time1, time2;
 float deltatime = 0;
 
-float tile_size = 64.0;
-
-const char* lmap = "map01.ye";
 Font *font;
 Font *menufont;
 
-Vector2f cam;
+float tile_size = 64.0;
+
 Actor *player = new Actor;
 Mouse *pmouse = new Mouse;
+Camera *cam = new Camera;
 
 void YE_Init (void)
 {
@@ -57,36 +56,32 @@ void YE_Init (void)
         exit(1);
     }
 
-    Log(0, "[SDL] SDL_VIDEO initialized.", screen_width, screen_height);
+    Log(0, "[SDL] SDL_VIDEO initialized.", cam->res.x, cam->res.y);
 
     atexit(SDL_Quit);
 
     YE_InitFontLoader();
 
-    if (multisample != 0)
+    if (multisample)
     {
         SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
         SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, multisample);
     }
 
-    if(fullscreen)
-        screen = SDL_CreateWindow(YE_Caption, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-                                screen_width, screen_height, SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN);
-    else
-        screen = SDL_CreateWindow(YE_Caption, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-                                screen_width, screen_height, SDL_WINDOW_OPENGL);
+    screen = SDL_CreateWindow(YE_Caption, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+                        cam->res.x, cam->res.y, SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN * (fullscreen));
 
     if (screen == NULL)
     {
-        Log(1, "[SDL] Opening %dx%d window failed: %s", screen_width, screen_height, SDL_GetError());
+        Log(1, "[SDL] Opening %dx%d window failed: %s", cam->res.x, cam->res.y, SDL_GetError());
         exit(1);
     }
 
-    Log(0, "[SDL] Opening %dx%d window successful.", screen_width, screen_height);
+    Log(0, "[SDL] Opening %dx%d window successful.", cam->res.x, cam->res.y);
 
     glContext = SDL_GL_CreateContext(screen);
 
-    if( glContext == NULL )
+    if(glContext == NULL)
     {
             Log(1, "OpenGL context could not be created! SDL Error: %s\n", SDL_GetError());
             exit(1);
@@ -116,7 +111,7 @@ void YE_Init (void)
 
     glEnable(GL_TEXTURE_2D);
     glMatrixMode(GL_MODELVIEW);
-    glOrtho(0, screen_width / 64.0, 0, screen_height / 64.0, -1, 1);
+    glOrtho(0, cam->res.x / tile_size, 0, cam->res.y / tile_size, -1, 1);
 
     //create empty buffer
     glGenFramebuffers(1, &Lightbuffer);
@@ -127,7 +122,7 @@ void YE_Init (void)
     glGenTextures(1, &RenderTexture);
     glBindTexture(GL_TEXTURE_2D, RenderTexture);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, screen_width, screen_height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, cam->res.x, cam->res.y, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
@@ -143,7 +138,7 @@ void YE_Init (void)
 
     Log(0, "[OpenGL] Framebuffer created.");
 
-    time1=SDL_GetTicks();
+    time1 = SDL_GetTicks();
     YE_LoadTextures();
 
     SDL_ShowCursor(SDL_DISABLE);
@@ -177,8 +172,7 @@ int YE_Events (void)
 
     Vector2i input(0, 0);
 
-    input.y = up - down;
-    input.x = right - left;
+    input = Vector2i(right - left, up - down);
 
     if (input.x != 0 || input.y != 0)
         player->Move(input.normalize() * player->Speed * deltatime);
@@ -188,17 +182,20 @@ int YE_Events (void)
 
 void YE_Update (void)
 {
+    for(Actor actor : stmap.Actors)
+        actor.CurrentState->Update(&actor);
+
     YE_Renderer();
 
     //calculate deltatime
     time2 = SDL_GetTicks();
-    deltatime = (time2-time1)*0.001;
+    deltatime = (time2-time1) * 0.001;
     time1 = time2;
 
     SDL_GL_SwapWindow(screen);
 }
 
-bool YE_CheckArg(const char* arg, char *argv[], int& num)
+bool YE_CheckArg(const char *arg, char *argv[], int& num)
 {
     for (int i = 0; argv[i] != NULL; i++)
     {
@@ -211,6 +208,7 @@ bool YE_CheckArg(const char* arg, char *argv[], int& num)
     return false;
 }
 
+//still useless
 void YE_CleanUp (void)
 {}
 
@@ -232,10 +230,10 @@ int main (int argc, char *argv[])
     }
 
     if(YE_CheckArg("-w", argv, p))
-        screen_width = std::max(screen_height_min, atoi(argv[p+1]));
+        cam->res.x = std::max(SCREEN_WIDTH_MIN, atoi(argv[p+1]));
 
     if(YE_CheckArg("-h", argv, p))
-        screen_height = std::max(screen_height_min, atoi(argv[p+1]));
+        cam->res.y = std::max(SCREEN_HEIGHT_MIN, atoi(argv[p+1]));
 
     if(YE_CheckArg("-multisample", argv, p))
         multisample = clip(atoi(argv[p+1]), 0, 1);
@@ -260,6 +258,9 @@ int main (int argc, char *argv[])
 
     if(YE_CheckArg("-logtex", argv, p))
         YE_LogTex = clip(atoi(argv[p+1]), 0, 1);
+
+    if(cam->res == 0)
+        cam->res = Vector2i(SCREEN_WIDTH_DEF, SCREEN_HEIGHT_DEF);
 
     YE_Init();
 

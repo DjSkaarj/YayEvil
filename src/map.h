@@ -14,8 +14,8 @@ class YE_Map
      bool TileIsSolid(Vector2i pos);
 
      Vector2i Size;
-     Tile* Tiles;
-     std::vector<Actor*> Actors;
+     Tile *Tiles;
+     std::vector<Actor> Actors;
      std::vector<Light> Lights;
      std::string Name;
 
@@ -33,7 +33,7 @@ extern bool YE_LogTex;
 extern std::map<std::string, GLuint> Textures;
 extern std::vector<std::string> Maplist;
 
-void YE_LoadMap(const char* file);
+void YE_LoadMap(const char *file);
 void YE_LoadTextures(void);
 GLuint YE_LoadImage(const char *filename);
 

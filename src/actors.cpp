@@ -2,11 +2,10 @@
 #include "math.h"
 #include "tiles.h"
 #include "map.h"
+#include "states.h"
 
 #define shadow_scalefactor 1.5f
 #define shadowminsize 1.1f
-
-#define collision_offset 0.06
 
 Actor::Actor()
 {
@@ -16,6 +15,9 @@ Actor::Actor()
     Noclip = 0;
     Alpha = 1.0;
     Speed = 0;
+    Angle = 0;
+
+    CurrentState = new State;
 }
 
 float Actor::x1()
@@ -107,25 +109,25 @@ bool Actor::CheckRight()
 void Actor::CollisionTop()
 {
     if(CheckTop() && !Noclip)
-        pos.y = floorf(pos.y) + Height - collision_offset;
+        pos.y = floorf(pos.y) + Height - COLLISION_OFFSET;
 }
 
 void Actor::CollisionBottom()
 {
     if(CheckBottom() && !Noclip)
-        pos.y = ceilf(pos.y) - Height + collision_offset;
+        pos.y = ceilf(pos.y) - Height + COLLISION_OFFSET;
 }
 
 void Actor::CollisionLeft()
 {
     if(CheckLeft() && !Noclip)
-        pos.x = ceilf(pos.x) - Width + collision_offset;
+        pos.x = ceilf(pos.x) - Width + COLLISION_OFFSET;
 }
 
 void Actor::CollisionRight()
 {
     if(CheckRight() && !Noclip)
-        pos.x = floorf(pos.x) + Width - collision_offset;
+        pos.x = floorf(pos.x) + Width - COLLISION_OFFSET;
 }
 
 void Actor::Move(Vector2f vec)
@@ -226,4 +228,5 @@ void CreatePlayer(float spawnx, float spawny)
     player->DLight->GColor = 0.2;
     player->DLight->BColor = 0.6;
     strcpy(player->Sprite, "p_idle_01.png");
+    player->SetState<PlayerIdleState>();
 }

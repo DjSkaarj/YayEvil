@@ -52,7 +52,7 @@ void YE_LoadMap (const char* filename)
     Log(0, "[Map loader] Opening '%s'...", filename);
     level = fopen(filename, "r");
     if(!level)
-        Log(1, "[Map list] Couldn't open map file: '%s'!", filename);
+        Log(1, "[Map loader] Couldn't open map file: '%s'!", filename);
 
     int width, height;
 
@@ -61,12 +61,11 @@ void YE_LoadMap (const char* filename)
     width = YE_ReadInt();
     height = YE_ReadInt();
 
-    stmap.Size.x = width;
-    stmap.Size.y = height;
+    stmap.Size = Vector2i(width, height);
     Log(0, "[Map loader] Parsing map '%s' [%d,%d]...", filename, width, height);
 
     stmap.Tiles = new Tile[width*height];
-    for(int i=0; i < width*height; i++)
+    for(int i = 0; i < width*height; i++)
     {
         strcpy(stmap.Tiles[i].Texture, "none");
         stmap.Tiles[i].Solid = 0;
@@ -103,13 +102,20 @@ void YE_LoadMap (const char* filename)
         }
 
         else if(!strcmp(cmd, "actor"))
-        {}
+        {
+            Actor actorbuff;
+            actorbuff.pos.x = YE_ReadFloat();
+            actorbuff.pos.y = YE_ReadFloat();
+
+            stmap.Actors.push_back(actorbuff);
+        }
 
         else if(!strcmp(cmd, "light"))
         {
             Light lightbuff;
             lightbuff.pos.x = YE_ReadFloat();
             lightbuff.pos.y = YE_ReadFloat();
+
             lightbuff.Radius = YE_ReadFloat();
             lightbuff.RColor = YE_ReadFloat();
             lightbuff.GColor = YE_ReadFloat();
