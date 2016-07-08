@@ -30,40 +30,54 @@ public:
 class Actor
 {
 public:
-    Actor();
+    Actor(Vector2f spawn);
     void Draw();
-    void DrawSprite(float scale, float saturation, float alpha);
+    void DrawSprite(float scale, float saturation, float alpha) const;
 
+    void Move(Vector2f vec);
+    void Teleport(Vector2f vec);
+
+    Light *DLight = new Light;
+
+    State *CurrentState;
+    template<typename T> void SetState();
+
+    GETSET(float, Angle);
+    GETSET(float, Alpha);
+    GETSET(float, Speed);
+    GETSET(float, Width);
+    GETSET(float, Height);
+
+    GETSET(int, hp);
+    GETSET(bool, Shadow);
+    GETSET(bool, Solid);
+    GETSET(bool, Noclip);
+
+    GETTER(Vector2f, pos);
+    GETSET(GLuint, Sprite);
+
+private:
+    float _Angle, _Alpha, _Speed, _Width, _Height;
+    int _hp;
+    bool _Shadow, _Solid, _Noclip;
+    Vector2f _pos;
+    GLuint _Sprite;
+
+    //collision
     void CollisionTop();
     void CollisionBottom();
     void CollisionLeft();
     void CollisionRight();
-
-    void Move(Vector2f vec);
-
-    Vector2f pos;
-
-    int HP;
-    bool Shadow, Solid, Noclip;
-    float Alpha, Speed, Width, Height;
-    Light *DLight = new Light;
-    char Sprite[255];
-
-    float Angle;
-    State *CurrentState;
-    template<typename T> void SetState();
-
-private:
-    bool CheckTop();
-    bool CheckBottom();
-    bool CheckLeft();
-    bool CheckRight();
-    float x1();
-    float x2();
-    float y1();
-    float y2();
-    float whalf();
-    float hhalf();
+    bool CheckTop() const;
+    bool CheckBottom() const;
+    bool CheckLeft() const;
+    bool CheckRight() const;
+    float x1() const;
+    float x2() const;
+    float y1() const;
+    float y2() const;
+    float whalf() const;
+    float hhalf() const;
 };
 
 template<typename T> void Actor::SetState()

@@ -7,50 +7,51 @@
 #define shadow_scalefactor 1.5f
 #define shadowminsize 1.1f
 
-Actor::Actor()
+Actor::Actor(Vector2f spawn)
 {
-    HP = 100;
-    Shadow = 0;
-    Solid = 0;
-    Noclip = 0;
-    Alpha = 1.0;
-    Speed = 0;
-    Angle = 0;
+    _hp = 100;
+    _Shadow = 0;
+    _Solid = 0;
+    _Noclip = 0;
+    _Alpha = 1.0;
+    _Speed = 0;
+    _Angle = 0;
+    _pos = spawn;
 
     CurrentState = new State;
 }
 
-float Actor::x1()
+float Actor::x1() const
 {
-    return pos.x-whalf();
+    return _pos.x-whalf();
 }
 
-float Actor::x2()
+float Actor::x2() const
 {
-    return pos.x+whalf();
+    return _pos.x+whalf();
 }
 
-float Actor::y1()
+float Actor::y1() const
 {
-    return pos.y-hhalf();
+    return _pos.y-hhalf();
 }
 
-float Actor::y2()
+float Actor::y2() const
 {
-    return pos.y+hhalf();
+    return _pos.y+hhalf();
 }
 
-float Actor::whalf()
+float Actor::whalf() const
 {
-    return Width/2;
+    return _Width/2;
 }
 
-float Actor::hhalf()
+float Actor::hhalf() const
 {
-    return Height/2;
+    return _Height/2;
 }
 
-bool Actor::CheckTop()
+bool Actor::CheckTop() const
 {
     int bx1 = floorf(x1());
     int bx2 = floorf(x2()) + 1;
@@ -64,7 +65,7 @@ bool Actor::CheckTop()
     return false;
 }
 
-bool Actor::CheckBottom()
+bool Actor::CheckBottom() const
 {
     int bx1 = floorf(x1());
     int bx2 = floorf(x2()) + 1;
@@ -78,7 +79,7 @@ bool Actor::CheckBottom()
     return false;
 }
 
-bool Actor::CheckLeft()
+bool Actor::CheckLeft() const
 {
     int by1 = floorf(y1());
     int by2 = floorf(y2()) + 1;
@@ -92,7 +93,7 @@ bool Actor::CheckLeft()
     return false;
 }
 
-bool Actor::CheckRight()
+bool Actor::CheckRight() const
 {
     int by1 = floorf(y1());
     int by2 = floorf(y2()) + 1;
@@ -108,38 +109,38 @@ bool Actor::CheckRight()
 
 void Actor::CollisionTop()
 {
-    if(CheckTop() && !Noclip)
-        pos.y = floorf(pos.y) + Height - COLLISION_OFFSET;
+    if(CheckTop() && !_Noclip)
+        _pos.y = floorf(_pos.y) + _Height - COLLISION_OFFSET;
 }
 
 void Actor::CollisionBottom()
 {
-    if(CheckBottom() && !Noclip)
-        pos.y = ceilf(pos.y) - Height + COLLISION_OFFSET;
+    if(CheckBottom() && !_Noclip)
+        _pos.y = ceilf(_pos.y) - _Height + COLLISION_OFFSET;
 }
 
 void Actor::CollisionLeft()
 {
-    if(CheckLeft() && !Noclip)
-        pos.x = ceilf(pos.x) - Width + COLLISION_OFFSET;
+    if(CheckLeft() && !_Noclip)
+        _pos.x = ceilf(_pos.x) - _Width + COLLISION_OFFSET;
 }
 
 void Actor::CollisionRight()
 {
-    if(CheckRight() && !Noclip)
-        pos.x = floorf(pos.x) + Width - COLLISION_OFFSET;
+    if(CheckRight() && !_Noclip)
+        _pos.x = floorf(_pos.x) + _Width - COLLISION_OFFSET;
 }
 
 void Actor::Move(Vector2f vec)
 {
-    pos.x += vec.x;
+    _pos.x += vec.x;
 
     if(vec.x > 0)
         CollisionRight();
     else if(vec.x < 0)
         CollisionLeft();
 
-    pos.y += vec.y;
+    _pos.y += vec.y;
 
     if(vec.y > 0)
         CollisionTop();
@@ -147,9 +148,14 @@ void Actor::Move(Vector2f vec)
         CollisionBottom();
 }
 
+void Actor::Teleport(Vector2f vec)
+{
+    _pos = vec;
+}
+
 void Actor::Draw()
 {
-    if(Shadow && YE_Shadows)
+    if(_Shadow && YE_Shadows)
     {
         float YE_ShadowScale = YE_ShadowScaleA*shadow_scalefactor;
         float alpha = YE_ShadowIntensity / YE_ShadowQuality;
@@ -162,18 +168,17 @@ void Actor::Draw()
         }
     }
 
-    DrawSprite(1.0f, 1.0f, Alpha);
+    DrawSprite(1.0f, 1.0f, _Alpha);
 }
 
-void Actor::DrawSprite(float scale, float saturation, float alpha)
+void Actor::DrawSprite(float scale, float saturation, float alpha) const
 {
-    GLuint rpsprite = Textures[Sprite];
-    glBindTexture(GL_TEXTURE_2D, rpsprite);
+    glBindTexture(GL_TEXTURE_2D, _Sprite);
 
-    float SHalfWidth = Width/2*scale;
-    float SHalfHeight = Height/2*scale;
-    float x = pos.x;
-    float y = pos.y;
+    float SHalfWidth = _Width/2*scale;
+    float SHalfHeight = _Height/2*scale;
+    float x = _pos.x;
+    float y = _pos.y;
 
     glBegin(GL_QUADS);
     glColor4f(saturation, saturation, saturation, alpha);
@@ -216,17 +221,16 @@ void Light::Draw()
 
 void CreatePlayer(float spawnx, float spawny)
 {
-    player->Solid = true;
-    player->Shadow = true;
-    player->HP = 100;
-    player->pos.x = spawnx;
-    player->pos.y = spawny;
-    player->Width = 0.7;
-    player->Height = 0.7;
-    player->Speed = 5;
+    player->SetSolid(true);
+    player->SetShadow(true);
+    player->Sethp(100);
+    player->Teleport(Vector2f(spawnx, spawny));
+    player->SetWidth(0.7);
+    player->SetHeight(0.7);
+    player->SetSpeed(5);
     player->DLight->RColor = 1.0;
     player->DLight->GColor = 0.2;
     player->DLight->BColor = 0.6;
-    strcpy(player->Sprite, "p_idle_01.png");
+    player->SetSprite(Textures["p_idle_01.png"]);
     player->SetState<PlayerIdleState>();
 }

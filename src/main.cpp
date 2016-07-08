@@ -43,7 +43,7 @@ Font *menufont;
 
 float tile_size = 64.0;
 
-Actor *player = new Actor;
+Actor *player = new Actor(0);
 Mouse *pmouse = new Mouse;
 Camera *cam = new Camera;
 
@@ -175,7 +175,7 @@ int YE_Events (void)
     input = Vector2i(right - left, up - down);
 
     if (input.x != 0 || input.y != 0)
-        player->Move(input.normalize() * player->Speed * deltatime);
+        player->Move(input.normalize() * player->Speed() * deltatime);
 
     return 0;
 }

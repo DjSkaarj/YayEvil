@@ -124,9 +124,9 @@ void YE_LoadMap (const char* filename)
 
         else if(!strcmp(cmd, "actor"))
         {
-            Actor actorbuff;
-            actorbuff.pos.x = YE_ReadFloat();
-            actorbuff.pos.y = YE_ReadFloat();
+            float x = YE_ReadFloat();
+            float y = YE_ReadFloat();
+            Actor actorbuff(Vector2f(x, y));
 
             stmap.Actors.push_back(actorbuff);
         }

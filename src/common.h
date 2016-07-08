@@ -39,6 +39,10 @@
 #define AO_SIZE 0.25
 #define AO_COLOR 0.2f
 
+#define GETTER(Type, X) Type X() const { return _##X; }
+#define SETTER(Type, X) void Set##X(const Type &value) { _##X = value; }
+#define GETSET(Type, X) GETTER(Type, X) SETTER(Type, X)
+
 #define UNUSED(expr) do { (void)(expr); } while (0)
 
 typedef unsigned char byte;
