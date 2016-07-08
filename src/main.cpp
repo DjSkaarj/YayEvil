@@ -101,7 +101,6 @@ void YE_Init (void)
         exit(1);
     }
 
-    glewInit();
     glEnable(GL_TEXTURE_2D);
     glMatrixMode(GL_MODELVIEW);
     glOrtho(0, screen_width / 64.0, 0, screen_height / 64.0, -1, 1);
