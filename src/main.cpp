@@ -94,6 +94,13 @@ void YE_Init (void)
 
     Log(0, "[SDL] OpenGL context created.");
 
+    GLenum glewerr = glewInit();
+    if (glewerr != GLEW_OK)
+    {
+        Log(1, "[OpenGL] Failed to initialize GLEW: %s\n", glewGetErrorString(glewerr));
+        exit(1);
+    }
+
     glewInit();
     glEnable(GL_TEXTURE_2D);
     glMatrixMode(GL_MODELVIEW);
