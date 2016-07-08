@@ -94,6 +94,7 @@ void YE_Init (void)
 
     Log(0, "[SDL] OpenGL context created.");
 
+    glewExperimental = GL_TRUE;
     GLenum glewerr = glewInit();
     if (glewerr != GLEW_OK)
     {
