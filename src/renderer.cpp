@@ -4,7 +4,7 @@
 #include "math.h"
 
 float tile_width, tile_height, half_width, half_height;
-int index;
+//int index;
 
 Light lol;
 
