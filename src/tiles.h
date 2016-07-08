@@ -10,10 +10,10 @@ class Tile
 {
 public:
     Tile();
-
     void Draw(Vector2i pos);
-    int Solid;
-    char Texture[255];
+
+    bool Solid;
+    GLuint Texture;
 };
 
 void YE_DrawAO(Vector2i pos);

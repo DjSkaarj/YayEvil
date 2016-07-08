@@ -2,12 +2,14 @@
 #include "map.h"
 
 Tile::Tile()
-{}
+{
+    Texture = 0;
+    Solid = 0;
+}
 
 void Tile::Draw(Vector2i pos)
 {
-    GLuint rtexture = Textures[Texture];
-    glBindTexture(GL_TEXTURE_2D, rtexture);
+    glBindTexture(GL_TEXTURE_2D, Texture);
     glBegin(GL_QUADS);
     glTexCoord2f(0.0, 1.0);
     glVertex2f(pos.x, pos.y);
@@ -22,7 +24,7 @@ void Tile::Draw(Vector2i pos)
 
 bool YE_CheckAO(Vector2i pos)
 {
-    return (stmap.CheckTile(pos) && !stmap.TileIsSolid(pos));
+    return (stmap.TileExists(pos) && !stmap.TileIsSolid(pos));
 }
 
 void YE_DrawAO(Vector2i pos)

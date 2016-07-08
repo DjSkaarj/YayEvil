@@ -22,27 +22,54 @@ YE_Map::YE_Map()
     PlayerY = 0;
 }
 
-int YE_Map::Index2d(Vector2i pos)
+int YE_Map::Index2d(Vector2i pos) const
 {
     return pos.x + (pos.y * Size.x);
 }
 
-bool YE_Map::CheckTile(Vector2i pos)
+void YE_Map::TileDraw(Vector2i pos) const
 {
-    if (!Rect().contains(pos.x, pos.y))
-        return false;
+    Tiles[Index2d(pos)].Draw(pos);
+}
 
-    if (!strcmp(Tiles[Index2d(pos)].Texture, "none"))
-        return false;
+bool YE_Map::TileInMap(Vector2i pos) const
+{
+    return Rect().contains(pos);
+}
+
+bool YE_Map::TileExists(Vector2i pos) const
+{
+    if (!TileInMap(pos) || (!TileTexture(pos))) return false;
 
     return true;
 }
 
-bool YE_Map::TileIsSolid(Vector2i pos)
+bool YE_Map::TileIsSolid(Vector2i pos) const
 {
-    if (!stmap.Rect().contains(pos.x, pos.y))
-        return false;
+    if (!TileExists(pos)) return true;
+
     return Tiles[Index2d(pos)].Solid;
+}
+
+GLuint YE_Map::TileTexture(Vector2i pos) const
+{
+    if (!TileInMap(pos)) return false;
+
+    return Tiles[Index2d(pos)].Texture;
+}
+
+void YE_Map::SetTileSolid(Vector2i pos, bool x)
+{
+    if (!TileInMap(pos)) return;
+
+    Tiles[Index2d(pos)].Solid = x;
+}
+
+void YE_Map::SetTileTexture(Vector2i pos, GLuint x)
+{
+    if (!TileInMap(pos)) return;
+
+    Tiles[Index2d(pos)].Texture = x;
 }
 
 void YE_LoadMap (const char* filename)
@@ -65,11 +92,6 @@ void YE_LoadMap (const char* filename)
     Log(0, "[Map loader] Parsing map '%s' [%d,%d]...", filename, width, height);
 
     stmap.Tiles = new Tile[width*height];
-    for(int i = 0; i < width*height; i++)
-    {
-        strcpy(stmap.Tiles[i].Texture, "none");
-        stmap.Tiles[i].Solid = 0;
-    }
 
     while(YE_NextLine())
     {
@@ -83,19 +105,18 @@ void YE_LoadMap (const char* filename)
 
             Vector2i vec = Vector2i(x, y);
 
-            if(!stmap.Rect().contains(x, y))
+            if(!stmap.TileInMap(vec))
                 Log(0, "[Map loader] Tile at [%d,%d] is outside of map[%d,%d]!", x, y, stmap.Size.x, stmap.Size.y);
             else
             {
-                int index = stmap.Index2d(vec);
-
                 char texture[255];
                 YE_ReadStringA(texture, 255);
                 YE_StrToLower(texture);
                 int solid = YE_ReadInt();
 
-                strcpy(stmap.Tiles[index].Texture, texture);
-                stmap.Tiles[index].Solid = solid;
+                stmap.SetTileSolid(vec, solid);
+                stmap.SetTileTexture(vec, Textures[texture]);
+
                 if(YE_LogMap)
                     Log(0, "[Map loader] Registered new tile [%d,%d]: texture=%s solid=%d", x, y, texture, solid);
             }

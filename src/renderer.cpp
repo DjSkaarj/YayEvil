@@ -44,9 +44,8 @@ void YE_Renderer()
     //render tiles
     for (Vector2i pos : YE_VisibleTiles())
     {
-        int index = stmap.Index2d(pos);
-        if(stmap.CheckTile(pos))
-            stmap.Tiles[index].Draw(pos);
+        if(stmap.TileExists(pos))
+            stmap.TileDraw(pos);
     }
 
     glEnable(GL_BLEND);

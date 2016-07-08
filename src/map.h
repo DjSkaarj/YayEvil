@@ -9,9 +9,15 @@ class YE_Map
 {
  public:
      YE_Map();
-     int Index2d(Vector2i pos);
-     bool CheckTile(Vector2i pos);
-     bool TileIsSolid(Vector2i pos);
+     int Index2d(Vector2i pos) const;
+     void TileDraw(Vector2i pos) const;
+     bool TileInMap(Vector2i pos) const;
+     bool TileExists(Vector2i pos) const;
+
+     bool TileIsSolid(Vector2i pos) const;
+     GLuint TileTexture(Vector2i pos) const;
+     void SetTileSolid(Vector2i pos, bool x);
+     void SetTileTexture(Vector2i pos, GLuint x);
 
      Vector2i Size;
      Tile *Tiles;
@@ -22,7 +28,7 @@ class YE_Map
      float Rcolor, Gcolor, Bcolor, BGRcolor, BGGcolor, BGBcolor, ARcolor, AGcolor, ABcolor;
      float PlayerX, PlayerY;
 
-     RectI Rect() { return RectI(Size.x, Size.y); }
+     RectI Rect() const { return RectI(Size.x, Size.y); }
 };
 
 extern YE_Map stmap;
