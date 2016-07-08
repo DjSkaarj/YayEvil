@@ -101,6 +101,18 @@ void YE_Init (void)
         exit(1);
     }
 
+    if (!GLEW_VERSION_2_0)
+    {
+        Log(1, "[OpenGL] OpenGL version is lower than 2.0. OpenGL 2.0 is required.");
+        exit(1);
+    }
+
+    if (!GLEW_ARB_framebuffer_object)
+    {
+        Log(1, "[OpenGL] GL_ARB_framebuffer_object extension is missing. It is required.");
+        exit(1);
+    }
+
     glEnable(GL_TEXTURE_2D);
     glMatrixMode(GL_MODELVIEW);
     glOrtho(0, screen_width / 64.0, 0, screen_height / 64.0, -1, 1);
