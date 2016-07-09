@@ -33,6 +33,12 @@ public:
 class Actor
 {
 public:
+    enum Flags
+    {
+        AF_NONE = 0,
+        AF_CLIPBOUNCE
+    };
+
     Actor(Vector2f spawn);
     void Update();
     void Draw();
@@ -45,6 +51,8 @@ public:
 
     State *CurrentState;
     template<typename T> void SetState();
+
+    GETSET(Actor::Flags, flags)
 
     GETSET(float, Angle)
     GETSET(float, Alpha)
@@ -64,10 +72,11 @@ public:
     GETSET(GLuint, Sprite)
 
 private:
+    Actor::Flags _flags;
     float _Angle, _Alpha, _Speed, _Bounce, _Friction, _Width, _Height;
     int _hp;
     bool _Shadow, _Solid, _Noclip;
-    Vector2f _pos, _vel;
+    Vector2f _pos, _prevpos, _vel;
     GLuint _Sprite;
 
     // physics

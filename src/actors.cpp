@@ -142,7 +142,9 @@ void Actor::CollisionTop()
     if(CheckTop() && !_Noclip)
     {
         _pos.y = floorf(_pos.y) + _Height - COLLISION_OFFSET;
-        _vel.y *= - _Bounce;
+
+        if (((_flags & AF_CLIPBOUNCE) && (_prevpos.y != _pos.y)) || !(_flags & AF_CLIPBOUNCE))
+            _vel.y *= - _Bounce;
     }
 }
 
@@ -151,7 +153,9 @@ void Actor::CollisionBottom()
     if(CheckBottom() && !_Noclip)
     {
         _pos.y = ceilf(_pos.y) - _Height + COLLISION_OFFSET;
-        _vel.y *= - _Bounce;
+
+        if (((_flags & AF_CLIPBOUNCE) && (_prevpos.y != _pos.y)) || !(_flags & AF_CLIPBOUNCE))
+            _vel.y *= - _Bounce;
     }
 }
 
@@ -160,7 +164,9 @@ void Actor::CollisionLeft()
     if(CheckLeft() && !_Noclip)
     {
         _pos.x = ceilf(_pos.x) - _Width + COLLISION_OFFSET;
-        _vel.x *= - _Bounce;
+
+        if (((_flags & AF_CLIPBOUNCE) && (_prevpos.x != _pos.x)) || !(_flags & AF_CLIPBOUNCE))
+            _vel.x *= - _Bounce;
     }
 }
 
@@ -169,12 +175,15 @@ void Actor::CollisionRight()
     if(CheckRight() && !_Noclip)
     {
         _pos.x = floorf(_pos.x) + _Width - COLLISION_OFFSET;
-        _vel.x *= - _Bounce;
+
+        if (((_flags & AF_CLIPBOUNCE) && (_prevpos.x != _pos.x)) || !(_flags & AF_CLIPBOUNCE))
+            _vel.x *= - _Bounce;
     }
 }
 
 void Actor::Move(Vector2f vec)
 {
+    _prevpos.x = _pos.x;
     _pos.x += vec.x;
 
     if(vec.x > 0)
@@ -182,6 +191,7 @@ void Actor::Move(Vector2f vec)
     else if(vec.x < 0)
         CollisionLeft();
 
+    _prevpos.y = _pos.y;
     _pos.y += vec.y;
 
     if(vec.y > 0)
@@ -277,6 +287,7 @@ void CreatePlayer(float spawnx, float spawny)
     player->SetSpeed(1.0);
     player->SetBounce(0.5);
     player->SetFriction(0.15);
+    player->Setflags(Actor::AF_CLIPBOUNCE);
     player->DLight->RColor = 1.0;
     player->DLight->GColor = 0.2;
     player->DLight->BColor = 0.6;
