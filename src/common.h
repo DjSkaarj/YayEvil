@@ -42,8 +42,10 @@ extern "C"
 #define SCREEN_WIDTH_DEF 800
 #define SCREEN_HEIGHT_DEF 600
 
-#define AO_SIZE 0.25
+#define AO_SIZE 0.25f
 #define AO_COLOR 0.2f
+
+#define SPEED_FACTOR 5.0f
 
 #define GETTER(Type, X) Type X() const { return _##X; }
 #define SETTER(Type, X) void Set##X(const Type &value) { _##X = value; }

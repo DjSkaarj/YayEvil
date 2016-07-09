@@ -202,7 +202,7 @@ void Actor::Teleport(Vector2f vec)
     _pos = vec;
 }
 
-void Actor::Walk(Vector2f vec)
+void Actor::SetVelocity(Vector2f vec)
 {
     _vel = vec;
 }
@@ -282,9 +282,9 @@ void CreatePlayer(float spawnx, float spawny)
     player->SetWidth(0.7);
     player->SetHeight(0.7);
     player->SetSpeed(1.0);
-    player->SetBounceFactor(0.5);
-    player->SetFriction(0.01);
-    player->SetClipBounce(true);
+    player->SetFriction(1.0);
+    //player->SetBounceFactor(0.5);
+    //player->SetClipBounce(true);
     player->DLight->RColor = 1.0;
     player->DLight->GColor = 0.2;
     player->DLight->BColor = 0.6;

@@ -5,8 +5,8 @@
 #include "geometry.h"
 #include "states.h"
 
-#define FRICTION_FACTOR 0.01
-#define COLLISION_OFFSET 0.01
+#define FRICTION_FACTOR 0.1
+#define COLLISION_OFFSET 0.06
 
 class YE_Map;
 
@@ -52,7 +52,7 @@ public:
     void DrawSprite(float scale, float saturation, float alpha) const;
 
     void Teleport(Vector2f vec);
-    void Walk(Vector2f vec);
+    void SetVelocity(Vector2f vec);
 
     Light *DLight = new Light;
 
