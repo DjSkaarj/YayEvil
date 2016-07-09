@@ -46,22 +46,22 @@ public:
     State *CurrentState;
     template<typename T> void SetState();
 
-    GETSET(float, Angle);
-    GETSET(float, Alpha);
-    GETSET(float, Speed);
-    GETSET(float, Bounce);
-    GETSET(float, Friction);
-    GETSET(float, Width);
-    GETSET(float, Height);
+    GETSET(float, Angle)
+    GETSET(float, Alpha)
+    GETSET(float, Speed)
+    GETSET(float, Bounce)
+    GETSET(float, Friction)
+    GETSET(float, Width)
+    GETSET(float, Height)
 
-    GETSET(int, hp);
-    GETSET(bool, Shadow);
-    GETSET(bool, Solid);
-    GETSET(bool, Noclip);
+    GETSET(int, hp)
+    GETSET(bool, Shadow)
+    GETSET(bool, Solid)
+    GETSET(bool, Noclip)
 
-    GETTER(Vector2f, pos);
-    GETTER(Vector2f, vel);
-    GETSET(GLuint, Sprite);
+    GETTER(Vector2f, pos)
+    GETTER(Vector2f, vel)
+    GETSET(GLuint, Sprite)
 
 private:
     float _Angle, _Alpha, _Speed, _Bounce, _Friction, _Width, _Height;
