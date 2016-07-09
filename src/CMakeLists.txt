@@ -16,9 +16,9 @@ if (WINSIMPLE)
 aux_source_directory(glew SOURCES)
 endif()
 
-# ignore glew.h
 add_executable(yayevil ${SOURCES})
-set_target_properties(yayevil PROPERTIES COTIRE_PREFIX_HEADER_IGNORE_PATH "${CMAKE_SOURCE_DIR}/src/glew/")
+
+set_target_properties(yayevil PROPERTIES COTIRE_CXX_PREFIX_HEADER_INIT "common.h")
 
 if (NOT NO_COTIRE)
 cotire(yayevil)
