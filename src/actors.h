@@ -57,7 +57,7 @@ public:
     GETSET(float, Angle)
     GETSET(float, Alpha)
     GETSET(float, Speed)
-    GETSET(float, Bounce)
+    GETSET(float, BounceFactor)
     GETSET(float, Friction)
     GETSET(float, Width)
     GETSET(float, Height)
@@ -73,7 +73,7 @@ public:
 
 private:
     Actor::Flags _flags;
-    float _Angle, _Alpha, _Speed, _Bounce, _Friction, _Width, _Height;
+    float _Angle, _Alpha, _Speed, _BounceFactor, _Friction, _Width, _Height;
     int _hp;
     bool _Shadow, _Solid, _Noclip;
     Vector2f _pos, _prevpos, _vel;

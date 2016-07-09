@@ -19,7 +19,7 @@ Actor::Actor(Vector2f spawn)
     _pos = spawn;
     _vel = Vector2f(0, 0);
     _Friction = 1.0;
-    _Bounce = 0;
+    _BounceFactor = 0;
 
     CurrentState = new State;
 }
@@ -144,7 +144,7 @@ void Actor::CollisionTop()
         _pos.y = floorf(_pos.y) + _Height - COLLISION_OFFSET;
 
         if (((_flags & AF_CLIPBOUNCE) && (_prevpos.y != _pos.y)) || !(_flags & AF_CLIPBOUNCE))
-            _vel.y *= - _Bounce;
+            _vel.y *= - _BounceFactor;
     }
 }
 
@@ -155,7 +155,7 @@ void Actor::CollisionBottom()
         _pos.y = ceilf(_pos.y) - _Height + COLLISION_OFFSET;
 
         if (((_flags & AF_CLIPBOUNCE) && (_prevpos.y != _pos.y)) || !(_flags & AF_CLIPBOUNCE))
-            _vel.y *= - _Bounce;
+            _vel.y *= - _BounceFactor;
     }
 }
 
@@ -166,7 +166,7 @@ void Actor::CollisionLeft()
         _pos.x = ceilf(_pos.x) - _Width + COLLISION_OFFSET;
 
         if (((_flags & AF_CLIPBOUNCE) && (_prevpos.x != _pos.x)) || !(_flags & AF_CLIPBOUNCE))
-            _vel.x *= - _Bounce;
+            _vel.x *= - _BounceFactor;
     }
 }
 
@@ -177,7 +177,7 @@ void Actor::CollisionRight()
         _pos.x = floorf(_pos.x) + _Width - COLLISION_OFFSET;
 
         if (((_flags & AF_CLIPBOUNCE) && (_prevpos.x != _pos.x)) || !(_flags & AF_CLIPBOUNCE))
-            _vel.x *= - _Bounce;
+            _vel.x *= - _BounceFactor;
     }
 }
 
@@ -285,7 +285,7 @@ void CreatePlayer(float spawnx, float spawny)
     player->SetWidth(0.7);
     player->SetHeight(0.7);
     player->SetSpeed(1.0);
-    player->SetBounce(0.5);
+    player->SetBounceFactor(0.5);
     player->SetFriction(0.15);
     player->Setflags(Actor::AF_CLIPBOUNCE);
     player->DLight->RColor = 1.0;
