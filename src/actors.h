@@ -6,7 +6,6 @@
 #include "states.h"
 
 #define FRICTION_FACTOR 0.01
-#define SPEED_FACTOR 0.1
 
 class YE_Map;
 

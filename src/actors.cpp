@@ -283,7 +283,7 @@ void CreatePlayer(float spawnx, float spawny)
     player->SetHeight(0.7);
     player->SetSpeed(1.0);
     player->SetBounceFactor(0.5);
-    player->SetFriction(0.15);
+    player->SetFriction(0.01);
     player->SetClipBounce(true);
     player->DLight->RColor = 1.0;
     player->DLight->GColor = 0.2;
