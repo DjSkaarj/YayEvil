@@ -172,10 +172,26 @@ int YE_Events (void)
 
     Vector2i input(0, 0);
 
-    input = Vector2i(right - left, up - down);
+    //set directions
+    if (up)
+        input.y++;
+    if (down)
+        input.y--;
+    if (right)
+        input.x++;
+    if (left)
+        input.x--;
 
-    if (input.x != 0 || input.y != 0)
-        player->Move(input.normalize() * player->Speed() * deltatime);
+    //set player velocity
+    Vector2f vel = player->vel();
+
+    if (input.x != 0)
+        vel.x = player->Speed() * sign(input.x) * SPEED_FACTOR;
+
+    if (input.y != 0)
+        vel.y = player->Speed() * sign(input.y) * SPEED_FACTOR;
+
+    player->Walk(vel);
 
     return 0;
 }
@@ -183,7 +199,9 @@ int YE_Events (void)
 void YE_Update (void)
 {
     for(Actor actor : stmap.Actors)
-        actor.CurrentState->Update(&actor);
+        actor.Update();
+
+    player->Update();
 
     YE_Renderer();
 

@@ -5,6 +5,9 @@
 #include "geometry.h"
 #include "states.h"
 
+#define FRICTION_FACTOR 0.01
+#define SPEED_FACTOR 0.1
+
 class YE_Map;
 
 extern bool YE_Shadows;
@@ -31,11 +34,12 @@ class Actor
 {
 public:
     Actor(Vector2f spawn);
+    void Update();
     void Draw();
     void DrawSprite(float scale, float saturation, float alpha) const;
 
-    void Move(Vector2f vec);
     void Teleport(Vector2f vec);
+    void Walk(Vector2f vec);
 
     Light *DLight = new Light;
 
@@ -45,6 +49,8 @@ public:
     GETSET(float, Angle);
     GETSET(float, Alpha);
     GETSET(float, Speed);
+    GETSET(float, Bounce);
+    GETSET(float, Friction);
     GETSET(float, Width);
     GETSET(float, Height);
 
@@ -54,14 +60,19 @@ public:
     GETSET(bool, Noclip);
 
     GETTER(Vector2f, pos);
+    GETTER(Vector2f, vel);
     GETSET(GLuint, Sprite);
 
 private:
-    float _Angle, _Alpha, _Speed, _Width, _Height;
+    float _Angle, _Alpha, _Speed, _Bounce, _Friction, _Width, _Height;
     int _hp;
     bool _Shadow, _Solid, _Noclip;
-    Vector2f _pos;
+    Vector2f _pos, _vel;
     GLuint _Sprite;
+
+    // physics
+    void UpdatePhysics();
+    void Move(Vector2f vec);
 
     //collision
     void CollisionTop();
