@@ -16,6 +16,8 @@ if (WINSIMPLE)
 aux_source_directory(glew SOURCES)
 endif()
 
+add_executable(yayevil ${SOURCES})
+
 set_target_properties(yayevil PROPERTIES COTIRE_CXX_PREFIX_HEADER_INIT "common.h")
 
 if (NOT NO_COTIRE)
