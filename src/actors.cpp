@@ -10,15 +10,21 @@
 Actor::Actor(Vector2f spawn)
 {
     _hp = 100;
-    _Shadow = 0;
-    _Solid = 0;
-    _Noclip = 0;
     _Alpha = 1.0;
     _Speed = 0;
     _Angle = 0;
     _pos = spawn;
+    _vel = Vector2f(0, 0);
+    _Friction = 1.0;
+    _BounceFactor = 0;
 
     CurrentState = new State;
+}
+
+void Actor::Update()
+{
+    UpdatePhysics();
+    CurrentState->Update(this);
 }
 
 float Actor::x1() const
@@ -49,6 +55,27 @@ float Actor::whalf() const
 float Actor::hhalf() const
 {
     return _Height/2;
+}
+
+void Actor::UpdatePhysics()
+{
+    if (_vel.x != 0 || _vel.y != 0)
+        Move(_vel);
+
+    //process friction
+    Vector2f newvel(fabs(_vel.x), fabs(_vel.y));
+
+    if (newvel.x > 0)
+        newvel.x -= _Friction * FRICTION_FACTOR;
+    if (newvel.x < 0)
+        newvel.x = 0;
+
+    if (newvel.y > 0)
+        newvel.y -= _Friction * FRICTION_FACTOR;
+    if (newvel.y < 0)
+        newvel.y = 0;
+
+    _vel = Vector2f(newvel.x * sign(_vel.x), newvel.y * sign(_vel.y));
 }
 
 bool Actor::CheckTop() const
@@ -109,30 +136,51 @@ bool Actor::CheckRight() const
 
 void Actor::CollisionTop()
 {
-    if(CheckTop() && !_Noclip)
+    if(CheckTop() && !(_flags & AF_NOCLIP))
+    {
         _pos.y = floorf(_pos.y) + _Height - COLLISION_OFFSET;
+
+        if (((_flags & AF_CLIPBOUNCE) && (_prevpos.y != _pos.y)) || !(_flags & AF_CLIPBOUNCE))
+            _vel.y *= - _BounceFactor;
+    }
 }
 
 void Actor::CollisionBottom()
 {
-    if(CheckBottom() && !_Noclip)
+    if(CheckBottom() && !(_flags & AF_NOCLIP))
+    {
         _pos.y = ceilf(_pos.y) - _Height + COLLISION_OFFSET;
+
+        if (((_flags & AF_CLIPBOUNCE) && (_prevpos.y != _pos.y)) || !(_flags & AF_CLIPBOUNCE))
+            _vel.y *= - _BounceFactor;
+    }
 }
 
 void Actor::CollisionLeft()
 {
-    if(CheckLeft() && !_Noclip)
+    if(CheckLeft() && !(_flags & AF_NOCLIP))
+    {
         _pos.x = ceilf(_pos.x) - _Width + COLLISION_OFFSET;
+
+        if (((_flags & AF_CLIPBOUNCE) && (_prevpos.x != _pos.x)) || !(_flags & AF_CLIPBOUNCE))
+            _vel.x *= - _BounceFactor;
+    }
 }
 
 void Actor::CollisionRight()
 {
-    if(CheckRight() && !_Noclip)
+    if(CheckRight() && !(_flags & AF_NOCLIP))
+    {
         _pos.x = floorf(_pos.x) + _Width - COLLISION_OFFSET;
+
+        if (((_flags & AF_CLIPBOUNCE) && (_prevpos.x != _pos.x)) || !(_flags & AF_CLIPBOUNCE))
+            _vel.x *= - _BounceFactor;
+    }
 }
 
 void Actor::Move(Vector2f vec)
 {
+    _prevpos.x = _pos.x;
     _pos.x += vec.x;
 
     if(vec.x > 0)
@@ -140,6 +188,7 @@ void Actor::Move(Vector2f vec)
     else if(vec.x < 0)
         CollisionLeft();
 
+    _prevpos.y = _pos.y;
     _pos.y += vec.y;
 
     if(vec.y > 0)
@@ -153,9 +202,14 @@ void Actor::Teleport(Vector2f vec)
     _pos = vec;
 }
 
+void Actor::Walk(Vector2f vec)
+{
+    _vel = vec;
+}
+
 void Actor::Draw()
 {
-    if(_Shadow && YE_Shadows)
+    if((_flags2 & AF2_DRAWSHADOW) && YE_Shadows)
     {
         float YE_ShadowScale = YE_ShadowScaleA*shadow_scalefactor;
         float alpha = YE_ShadowIntensity / YE_ShadowQuality;
@@ -222,12 +276,15 @@ void Light::Draw()
 void CreatePlayer(float spawnx, float spawny)
 {
     player->SetSolid(true);
-    player->SetShadow(true);
+    player->SetDrawShadow(true);
     player->Sethp(100);
     player->Teleport(Vector2f(spawnx, spawny));
     player->SetWidth(0.7);
     player->SetHeight(0.7);
-    player->SetSpeed(5);
+    player->SetSpeed(1.0);
+    player->SetBounceFactor(0.5);
+    player->SetFriction(0.15);
+    player->SetClipBounce(true);
     player->DLight->RColor = 1.0;
     player->DLight->GColor = 0.2;
     player->DLight->BColor = 0.6;

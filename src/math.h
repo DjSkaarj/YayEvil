@@ -13,6 +13,16 @@ template <typename T> T lerp(T a, T b, float alpha)
     return a * alpha + b * (1.0 - alpha);
 }
 
+template <typename T> T sign(T a)
+{
+    if (a > 0)
+        return 1;
+    else if (a < 0)
+        return -1;
+    else
+        return 0;
+}
+
 std::string NumberToString (float number);
 
 #endif // MATH_H_INCLUDED

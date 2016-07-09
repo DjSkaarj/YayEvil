@@ -170,12 +170,15 @@ int YE_Events (void)
     bool left = (keys[SDL_GetScancodeFromKey(SDLK_a)] || keys[SDL_SCANCODE_LEFT]);
     bool right = (keys[SDL_GetScancodeFromKey(SDLK_d)] || keys[SDL_SCANCODE_RIGHT]);
 
-    Vector2i input(0, 0);
+    Vector2i input(right - left, up - down);
 
-    input = Vector2i(right - left, up - down);
+    //set player velocity
+    Vector2f vel = player->vel();
 
     if (input.x != 0 || input.y != 0)
-        player->Move(input.normalize() * player->Speed() * deltatime);
+        vel = input.normalize() * player->Speed() * SPEED_FACTOR;
+
+    player->Walk(vel);
 
     return 0;
 }
@@ -183,7 +186,9 @@ int YE_Events (void)
 void YE_Update (void)
 {
     for(Actor actor : stmap.Actors)
-        actor.CurrentState->Update(&actor);
+        actor.Update();
+
+    player->Update();
 
     YE_Renderer();
 

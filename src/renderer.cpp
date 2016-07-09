@@ -117,6 +117,7 @@ void YE_Renderer()
     menufont->DrawText(Vector2i(0, 20), ("Tile size: " + NumberToString(tile_size)).c_str());
     menufont->DrawText(Vector2i(0, 40), ("Y: " + NumberToString(player->pos().y)).c_str());
     menufont->DrawText(Vector2i(0, 60), ("X: " + NumberToString(player->pos().x)).c_str());
+    menufont->DrawText(Vector2i(0, 80), ("Speed: " + NumberToString(player->vel().length() / SPEED_FACTOR)).c_str());
 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
