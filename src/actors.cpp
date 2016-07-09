@@ -10,9 +10,6 @@
 Actor::Actor(Vector2f spawn)
 {
     _hp = 100;
-    _Shadow = 0;
-    _Solid = 0;
-    _Noclip = 0;
     _Alpha = 1.0;
     _Speed = 0;
     _Angle = 0;
@@ -139,7 +136,7 @@ bool Actor::CheckRight() const
 
 void Actor::CollisionTop()
 {
-    if(CheckTop() && !_Noclip)
+    if(CheckTop() && !(_flags & AF_NOCLIP))
     {
         _pos.y = floorf(_pos.y) + _Height - COLLISION_OFFSET;
 
@@ -150,7 +147,7 @@ void Actor::CollisionTop()
 
 void Actor::CollisionBottom()
 {
-    if(CheckBottom() && !_Noclip)
+    if(CheckBottom() && !(_flags & AF_NOCLIP))
     {
         _pos.y = ceilf(_pos.y) - _Height + COLLISION_OFFSET;
 
@@ -161,7 +158,7 @@ void Actor::CollisionBottom()
 
 void Actor::CollisionLeft()
 {
-    if(CheckLeft() && !_Noclip)
+    if(CheckLeft() && !(_flags & AF_NOCLIP))
     {
         _pos.x = ceilf(_pos.x) - _Width + COLLISION_OFFSET;
 
@@ -172,7 +169,7 @@ void Actor::CollisionLeft()
 
 void Actor::CollisionRight()
 {
-    if(CheckRight() && !_Noclip)
+    if(CheckRight() && !(_flags & AF_NOCLIP))
     {
         _pos.x = floorf(_pos.x) + _Width - COLLISION_OFFSET;
 
@@ -212,7 +209,7 @@ void Actor::Walk(Vector2f vec)
 
 void Actor::Draw()
 {
-    if(_Shadow && YE_Shadows)
+    if((_flags2 & AF2_DRAWSHADOW) && YE_Shadows)
     {
         float YE_ShadowScale = YE_ShadowScaleA*shadow_scalefactor;
         float alpha = YE_ShadowIntensity / YE_ShadowQuality;
@@ -279,7 +276,7 @@ void Light::Draw()
 void CreatePlayer(float spawnx, float spawny)
 {
     player->SetSolid(true);
-    player->SetShadow(true);
+    player->SetDrawShadow(true);
     player->Sethp(100);
     player->Teleport(Vector2f(spawnx, spawny));
     player->SetWidth(0.7);

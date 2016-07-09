@@ -43,8 +43,8 @@
 #define SETTER(Type, X) void Set##X(const Type &value) { _##X = value; }
 #define GETSET(Type, X) GETTER(Type, X) SETTER(Type, X)
 
-#define FGETTER(Name, X, FLAGS) bool Name() const { return FLAGS & X; }
-#define FSETTER(Name, X, FLAGS) void Set##Name(bool set) { if (set) FLAGS |= X; else FLAGS &= ~X; }
+#define FGETTER(Name, X, FLAGS) bool Name() const { return _##FLAGS & X; }
+#define FSETTER(Name, X, FLAGS) void Set##Name(bool set) { if (set) _##FLAGS |= X; else _##FLAGS &= ~X; }
 #define FGETSET(Name, X, FLAGS) FGETTER(Name, X, FLAGS) FSETTER(Name, X, FLAGS)
 
 #define UNUSED(expr) do { (void)(expr); } while (0)
