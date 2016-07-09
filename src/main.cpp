@@ -175,7 +175,7 @@ int YE_Events (void)
     //set player velocity
     Vector2f vel = player->vel();
 
-    if (input.x != 0 || input.y != 0)
+    if (input)
         vel = input.normalize() * player->Speed() * deltatime;
 
     player->Walk(vel);

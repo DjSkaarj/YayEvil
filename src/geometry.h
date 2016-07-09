@@ -31,6 +31,11 @@ struct Vector2i
         y(y)
     {}
 
+    explicit operator bool()
+    {
+        return x != 0 || y != 0;
+    }
+
     void operator+=(Vector2i rhs)
     {
         x += rhs.x;
@@ -95,6 +100,11 @@ struct Vector2f
         y = point.y();
     }
 #endif // QT_VERSION
+
+    explicit operator bool()
+    {
+        return x != 0 || y != 0;
+    }
 
     Vector2f(float n)
     {
