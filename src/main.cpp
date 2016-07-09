@@ -170,26 +170,16 @@ int YE_Events (void)
     bool left = (keys[SDL_GetScancodeFromKey(SDLK_a)] || keys[SDL_SCANCODE_LEFT]);
     bool right = (keys[SDL_GetScancodeFromKey(SDLK_d)] || keys[SDL_SCANCODE_RIGHT]);
 
-    Vector2i input(0, 0);
-
-    //set directions
-    if (up)
-        input.y++;
-    if (down)
-        input.y--;
-    if (right)
-        input.x++;
-    if (left)
-        input.x--;
+    Vector2i input(right - left, up - down);
 
     //set player velocity
     Vector2f vel = player->vel();
 
     if (input.x != 0)
-        vel.x = player->Speed() * sign(input.x) * SPEED_FACTOR;
+        vel.x = player->Speed() * input.normalize().x * SPEED_FACTOR;
 
     if (input.y != 0)
-        vel.y = player->Speed() * sign(input.y) * SPEED_FACTOR;
+        vel.y = player->Speed() * input.normalize().y * SPEED_FACTOR;
 
     player->Walk(vel);
 

@@ -52,7 +52,9 @@ public:
     State *CurrentState;
     template<typename T> void SetState();
 
-    GETSET(Actor::Flags, flags)
+    GETSET(int, flags)
+
+    FGETSET(ClipBounce, AF_CLIPBOUNCE, _flags)
 
     GETSET(float, Angle)
     GETSET(float, Alpha)
@@ -72,7 +74,7 @@ public:
     GETSET(GLuint, Sprite)
 
 private:
-    Actor::Flags _flags;
+    int _flags;
     float _Angle, _Alpha, _Speed, _BounceFactor, _Friction, _Width, _Height;
     int _hp;
     bool _Shadow, _Solid, _Noclip;

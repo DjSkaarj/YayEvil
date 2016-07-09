@@ -287,7 +287,7 @@ void CreatePlayer(float spawnx, float spawny)
     player->SetSpeed(1.0);
     player->SetBounceFactor(0.5);
     player->SetFriction(0.15);
-    player->Setflags(Actor::AF_CLIPBOUNCE);
+    player->SetClipBounce(true);
     player->DLight->RColor = 1.0;
     player->DLight->GColor = 0.2;
     player->DLight->BColor = 0.6;
