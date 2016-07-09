@@ -6,6 +6,7 @@
 #include "states.h"
 
 #define FRICTION_FACTOR 0.01
+#define COLLISION_OFFSET 0.01
 
 class YE_Map;
 

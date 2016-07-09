@@ -37,8 +37,6 @@ extern "C"
 #define SCALE_MAX 256.0
 #define SCALE_STEP 8.0
 
-#define COLLISION_OFFSET 0.06
-
 #define SCREEN_WIDTH_MIN 320
 #define SCREEN_HEIGHT_MIN 240
 #define SCREEN_WIDTH_DEF 800
