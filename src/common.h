@@ -8,7 +8,7 @@ extern "C"
 #include "glew/glew.h"
 }
 #else
-#include <glew/glew.h>
+#include <GL/glew.h>
 #endif
 #include <GL/gl.h>
 
