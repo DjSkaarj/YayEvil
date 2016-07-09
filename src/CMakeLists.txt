@@ -13,6 +13,8 @@ add_executable(yayevil
 	tiles.cpp
 )
 
+cotire(yayevil)
+
 target_link_libraries(yayevil
 	${SDL2_LIBRARY}
 	${OPENGL_LIBRARIES}

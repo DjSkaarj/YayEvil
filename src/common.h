@@ -1,11 +1,11 @@
 #ifndef COMMON_H_INCLUDED
 #define COMMON_H_INCLUDED
 
-#include "glew.h"
+#include <GL/glew.h>
 #include <GL/gl.h>
 
 #include <SDL2/SDL.h>
-#include "SDL_image.h"
+#include <SDL2/SDL_image.h>
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
