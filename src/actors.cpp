@@ -180,6 +180,7 @@ void Actor::CollisionRight()
 
 void Actor::Move(Vector2f vec)
 {
+    _Angle = vec.angle();
     _prevpos.x = _pos.x;
     _pos.x += vec.x;
 
