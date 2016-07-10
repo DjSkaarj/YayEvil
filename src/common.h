@@ -1,7 +1,15 @@
 #ifndef COMMON_H_INCLUDED
 #define COMMON_H_INCLUDED
 
-#include <GL/glew.h>
+#ifdef WINSIMPLE
+#define GLEW_STATIC
+extern "C"
+{
+#include "glew/glew.h"
+}
+#else
+#include <glew/glew.h>
+#endif
 #include <GL/gl.h>
 
 #include <SDL2/SDL.h>
