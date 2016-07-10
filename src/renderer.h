@@ -15,7 +15,8 @@ public:
 };
 
 extern YE_Map stmap;
-extern Actor *player;
+extern Actor *playerpawn;
+extern Player *player;
 extern std::map<std::string, GLuint> Textures;
 extern GLuint Lightbuffer;
 extern Font *font;

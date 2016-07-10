@@ -33,7 +33,7 @@ void YE_Renderer()
     half_height = tile_height/2;
 
     //move camera
-    cam->pos = player->pos();
+    cam->pos = player->GetActor()->pos();
 
     glLoadIdentity();
     glOrtho(0, tile_width, 0, tile_height, -1, 1);
@@ -63,7 +63,7 @@ void YE_Renderer()
     glEnable(GL_TEXTURE_2D);
     glColor3f(stmap.Rcolor, stmap.Gcolor, stmap.Bcolor);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    player->Draw();
+    player->GetActor()->Draw();
 
     //render lights
     //turn on FBO
@@ -75,8 +75,8 @@ void YE_Renderer()
     glBindTexture(GL_TEXTURE_2D, Textures["light.png"]);
 
     //render player's light
-    player->DLight->pos = player->pos();
-    player->DLight->Draw();
+    player->GetActor()->DLight->pos = player->GetActor()->pos();
+    player->GetActor()->DLight->Draw();
 
     //test cursor light
 
@@ -115,9 +115,8 @@ void YE_Renderer()
     glBlendFunc(GL_ONE, GL_ONE);
     menufont->DrawText(Vector2i(0, 0), ("Deltatime: " + NumberToString(deltatime) + " s").c_str());
     menufont->DrawText(Vector2i(0, 20), ("Tile size: " + NumberToString(tile_size)).c_str());
-    menufont->DrawText(Vector2i(0, 40), ("Y: " + NumberToString(player->pos().y)).c_str());
-    menufont->DrawText(Vector2i(0, 60), ("X: " + NumberToString(player->pos().x)).c_str());
-    menufont->DrawText(Vector2i(0, 80), ("Speed: " + NumberToString(player->vel().length())).c_str());
+    menufont->DrawText(Vector2i(0, 40), ("Y: " + NumberToString(player->GetActor()->pos().y)).c_str());
+    menufont->DrawText(Vector2i(0, 60), ("X: " + NumberToString(player->GetActor()->pos().x)).c_str());
 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
