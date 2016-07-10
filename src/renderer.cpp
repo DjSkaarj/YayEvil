@@ -118,6 +118,7 @@ void YE_Renderer()
     menufont->DrawText(Vector2i(0, 40), ("Y: " + NumberToString(player->pos().y)).c_str());
     menufont->DrawText(Vector2i(0, 60), ("X: " + NumberToString(player->pos().x)).c_str());
     menufont->DrawText(Vector2i(0, 80), ("Speed: " + NumberToString(player->vel().length())).c_str());
+    menufont->DrawText(Vector2i(0, 100), ("Mouse angle: " + NumberToString(RAD2NDEG(pmouse->GetAngle()))).c_str());
 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 

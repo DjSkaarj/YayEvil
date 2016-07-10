@@ -44,7 +44,7 @@ Font *menufont;
 float tile_size = 64.0;
 
 Actor *player = new Actor(0);
-Mouse *pmouse = new Mouse;
+Mouse *pmouse = new Mouse(player);
 Camera *cam = new Camera;
 
 void YE_Init (void)

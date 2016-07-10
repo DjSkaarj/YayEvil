@@ -1,6 +1,11 @@
 #include "mouse.h"
 #include "math.h"
 
+Mouse::Mouse(Actor *input)
+{
+    player = input;
+}
+
 void Mouse::HandleEvents()
 {
     switch(event.type)
@@ -17,6 +22,12 @@ void Mouse::HandleEvents()
             tile_size = clip(tile_size-SCALE_STEP, SCALE_MIN, SCALE_MAX);
         break;
     }
+}
+
+float Mouse::GetAngle()
+{
+    Vector2f worldpos = ScreenToWorld(pos);
+    return atan2(worldpos.y - player->pos().y, worldpos.x - player->pos().x);
 }
 
 void Cursor::Create(std::string image, float width, float height)
