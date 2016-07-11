@@ -45,7 +45,7 @@ float tile_size = 64.0;
 
 Actor *playerpawn = new Actor(0);
 Player *player = new Player;
-Mouse *pmouse = new Mouse(player->GetActor());
+Mouse *pmouse = new Mouse;
 Camera *cam = new Camera;
 
 void YE_Init (void)
