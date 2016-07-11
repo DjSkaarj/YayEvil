@@ -43,8 +43,9 @@ Font *menufont;
 
 float tile_size = 64.0;
 
-Actor *player = new Actor(0);
-Mouse *pmouse = new Mouse(player);
+Actor *playerpawn = new Actor(0);
+Player *player = new Player;
+Mouse *pmouse = new Mouse(player->GetActor());
 Camera *cam = new Camera;
 
 void YE_Init (void)
@@ -173,12 +174,12 @@ int YE_Events (void)
     Vector2i input(right - left, up - down);
 
     //set player velocity
-    Vector2f vel = player->vel();
+    Vector2f vel = player->GetActor()->vel();
 
     if (input)
-        vel = input.normalize() * player->Speed() * deltatime * SPEED_FACTOR;
+        vel = input.normalize() * player->GetActor()->Speed() * deltatime * SPEED_FACTOR;
 
-    player->SetVelocity(vel);
+    player->GetActor()->SetVelocity(vel);
 
     return 0;
 }
@@ -188,7 +189,7 @@ void YE_Update (void)
     for(Actor actor : stmap.Actors)
         actor.Update();
 
-    player->Update();
+    player->GetActor()->Update();
 
     YE_Renderer();
 

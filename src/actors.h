@@ -38,7 +38,8 @@ public:
         AF_NONE = 0,
         AF_CLIPBOUNCE = 1,
         AF_NOCLIP = 2,
-        AF_SOLID = 4
+        AF_SOLID = 4,
+        AF_INVENTORY = 8
     };
     enum Flags2
     {
@@ -120,7 +121,18 @@ template<typename T> void Actor::SetState()
     CurrentState->Enter(this);
 }
 
+class Player
+{
+public:
+    Player() {};
+    Actor* GetActor() { return actor; }
+
+    Actor *actor;
+    std::vector<Actor> Inventory;
+};
+
 void CreatePlayer(float spawnx, float spawny);
-extern Actor *player;
+extern Actor *playerpawn;
+extern Player *player;
 
 #endif // ACTORS_H_INCLUDED

@@ -180,6 +180,7 @@ void Actor::CollisionRight()
 
 void Actor::Move(Vector2f vec)
 {
+    _Angle = vec.angle();
     _prevpos.x = _pos.x;
     _pos.x += vec.x;
 
@@ -275,19 +276,21 @@ void Light::Draw()
 
 void CreatePlayer(float spawnx, float spawny)
 {
-    player->SetSolid(true);
-    player->SetDrawShadow(true);
-    player->Sethp(100);
-    player->Teleport(Vector2f(spawnx, spawny));
-    player->SetWidth(0.7);
-    player->SetHeight(0.7);
-    player->SetSpeed(1.0);
-    player->SetFriction(1.0);
-    //player->SetBounceFactor(0.5);
-    //player->SetClipBounce(true);
-    player->DLight->RColor = 1.0;
-    player->DLight->GColor = 0.2;
-    player->DLight->BColor = 0.6;
-    player->SetSprite(Textures["p_idle_01.png"]);
-    player->SetState<PlayerIdleState>();
+    player->actor = playerpawn;
+
+    playerpawn->SetSolid(true);
+    playerpawn->SetDrawShadow(true);
+    playerpawn->Sethp(100);
+    playerpawn->Teleport(Vector2f(spawnx, spawny));
+    playerpawn->SetWidth(0.7);
+    playerpawn->SetHeight(0.7);
+    playerpawn->SetSpeed(1.0);
+    playerpawn->SetFriction(1.0);
+    //playerpawn->SetBounceFactor(0.5);
+    //playerpawn->SetClipBounce(true);
+    playerpawn->DLight->RColor = 1.0;
+    playerpawn->DLight->GColor = 0.2;
+    playerpawn->DLight->BColor = 0.6;
+    playerpawn->SetSprite(Textures["p_idle_01.png"]);
+    playerpawn->SetState<PlayerIdleState>();
 }

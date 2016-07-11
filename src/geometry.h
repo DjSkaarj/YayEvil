@@ -83,7 +83,16 @@ struct Vector2i
     }
 
     Vector2f normalize() const;
-    Vector2i offset(int x, int y) const;
+
+    Vector2i offset(int bx, int by) const
+    {
+        return Vector2i(x+bx, y+by);
+    }
+
+    float angle() const
+    {
+        return atan2(y, x);
+    }
 };
 
 struct Vector2f
@@ -179,6 +188,16 @@ struct Vector2f
     }
 
     Vector2f normalize() const;
+
+    Vector2i offset(int bx, int by) const
+    {
+        return Vector2i(x+bx, y+by);
+    }
+
+    float angle() const
+    {
+        return atan2(y, x);
+    }
 };
 
 

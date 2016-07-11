@@ -261,8 +261,3 @@ Vector2f Vector2f::normalize() const
 {
     return *this / length();
 }
-
-Vector2i Vector2i::offset(int bx, int by) const
-{
-    return Vector2i(x+bx, y+by);
-}
