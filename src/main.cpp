@@ -133,7 +133,8 @@ void YE_Init (void)
 
     if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
     {
-        Log(1, "[OpenGL] Couldn't create framebuffer!");
+        GLenum error = glGetError();
+        Log(1, "[OpenGL] Couldn't create framebuffer! (GL error code: %d)", error);
         exit(1);
     }
 

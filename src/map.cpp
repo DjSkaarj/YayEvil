@@ -72,7 +72,7 @@ void YE_Map::SetTileTexture(Vector2i pos, GLuint x)
     Tiles[Index2d(pos)].Texture = x;
 }
 
-void YE_LoadMap (const char* filename)
+void YE_LoadMap (const char *filename)
 {
     FILE* level;
 

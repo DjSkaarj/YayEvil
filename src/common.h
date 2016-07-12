@@ -2,7 +2,6 @@
 #define COMMON_H_INCLUDED
 
 #ifdef WINSIMPLE
-#define GLEW_STATIC
 extern "C"
 {
 #include "glew/glew.h"

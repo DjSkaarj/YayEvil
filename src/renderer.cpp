@@ -2,6 +2,7 @@
 #include "geometry.h"
 #include "font.h"
 #include "math.h"
+#include "log.h"
 
 float tile_width, tile_height, half_width, half_height;
 //int index;
@@ -124,4 +125,13 @@ void YE_Renderer()
     pmouse->NormalCursor->Draw(pmouse->pos);
 
     glDisable(GL_BLEND);
+
+    GLenum error;
+    while (true)
+    {
+        error = glGetError();
+        if (error == GL_NO_ERROR)
+            break;
+        Log(1, "GL ERRORCODE %d", error);
+    }
 }
