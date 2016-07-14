@@ -1,6 +1,11 @@
 #ifndef COMMON_H_INCLUDED
 #define COMMON_H_INCLUDED
 
+#if _WIN32
+#define NOMINMAX
+#include "windows.h"
+#endif
+
 #ifdef WINSIMPLE
 extern "C"
 {
@@ -62,11 +67,14 @@ using std::min;
 using std::max;
 using std::move;
 using std::unique_ptr;
+using std::make_unique;
 
+#if __GNUC__
 template<typename T, typename... Args>
 std::unique_ptr<T> make_unique(Args&&... args)
 {
     return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
 }
+#endif
 
 #endif // COMMON_H_INCLUDED
