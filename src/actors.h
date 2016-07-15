@@ -121,6 +121,7 @@ private:
     void CollisionBottom();
     void CollisionLeft();
     void CollisionRight();
+	bool CheckActorCollision() const;
     bool CheckTop() const;
     bool CheckBottom() const;
     bool CheckLeft() const;

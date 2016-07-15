@@ -78,6 +78,16 @@ void Actor::UpdatePhysics()
     _vel = Vector2f(newvel.x * sign(_vel.x), newvel.y * sign(_vel.y));
 }
 
+bool Actor::CheckActorCollision() const
+{
+	for (Actor &actor : stmap.Actors)
+	{
+		if (this->BoundingBox().intersects(actor.BoundingBox()))
+			return true;
+	}
+	return false;
+}
+
 bool Actor::CheckTop() const
 {
     int bx1 = floorf(x1());
@@ -88,8 +98,9 @@ bool Actor::CheckTop() const
     {
         if(stmap.TileIsSolid(Vector2i(i, by)))
             return true;
+		CheckActorCollision();
     }
-    return false;
+	return false; // useless shit for successful compilation
 }
 
 bool Actor::CheckBottom() const
@@ -102,8 +113,9 @@ bool Actor::CheckBottom() const
     {
         if(stmap.TileIsSolid(Vector2i(i, by)))
             return true;
+		CheckActorCollision();
     }
-    return false;
+	return false;
 }
 
 bool Actor::CheckLeft() const
@@ -116,8 +128,9 @@ bool Actor::CheckLeft() const
     {
         if(stmap.TileIsSolid(Vector2i(bx, i)))
             return true;
+		CheckActorCollision();
     }
-    return false;
+	return false;
 }
 
 bool Actor::CheckRight() const
@@ -130,8 +143,9 @@ bool Actor::CheckRight() const
     {
         if(stmap.TileIsSolid(Vector2i(bx, i)))
             return true;
+		CheckActorCollision();
     }
-    return false;
+	return false;
 }
 
 void Actor::CollisionTop()

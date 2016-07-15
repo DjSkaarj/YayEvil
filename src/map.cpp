@@ -4,6 +4,7 @@
 #include "log.h"
 #include "math.h"
 #include "strings.h"
+#include "states.h"
 
 YE_Map::YE_Map()
 {
@@ -127,8 +128,17 @@ void YE_LoadMap (const char *filename)
         {
             float x = YE_ReadFloat();
             float y = YE_ReadFloat();
-            Actor actorbuff(Vector2f(x, y));
+			char name[255];
+			YE_ReadStringA(name, 255);
 
+            Actor actorbuff(Vector2f(x, y));
+			if (ActorTypes.find(name) == ActorTypes.end())
+			{
+				Log(0, "[Warning] [Map loader] Actor name '%s' isn't presented in YE! Skipping actor...");
+				break;
+			}
+			actorbuff.CurrentState = ActorTypes[name]->Clone();
+			actorbuff.SetName(name);
             stmap.Actors.push_back(actorbuff);
         }
 
@@ -185,7 +195,7 @@ void YE_LoadMap (const char *filename)
         else if(!strcmp(cmd, "#"))
         {}
 
-        else Log(0, "[Warning] [Map loader] '%s' is invalid map command", cmd);
+        else Log(0, "[Warning] [Map loader] '%s' is invalid map command! Skipping command...", cmd);
     }
     fclose(level);
     Log(0, "[Map loader] Finished parsing '%s'!", filename);

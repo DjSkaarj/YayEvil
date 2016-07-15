@@ -4,6 +4,9 @@
 #include "actors.h"
 #include "geometry.h"
 #include "tiles.h"
+#include "states.h"
+
+extern std::map<std::string, State*> ActorTypes;
 
 class YE_Map
 {
