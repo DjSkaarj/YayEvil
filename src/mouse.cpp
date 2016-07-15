@@ -1,3 +1,4 @@
+#include "common.h"
 #include "mouse.h"
 #include "math.h"
 
@@ -22,7 +23,6 @@ void Mouse::HandleEvents()
 void Cursor::Create(std::string image, float width, float height)
 {
     Image = Textures[image];
-
     Size = Vector2f(width, height);
 }
 

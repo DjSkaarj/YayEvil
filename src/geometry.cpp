@@ -1,3 +1,4 @@
+#include "common.h"
 #include "geometry.h"
 
 bool operator==(Vector2i a, Vector2i b)

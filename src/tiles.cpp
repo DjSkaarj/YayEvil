@@ -1,3 +1,4 @@
+#include "common.h"
 #include "tiles.h"
 #include "map.h"
 

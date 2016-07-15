@@ -1,3 +1,4 @@
+#include "common.h"
 #include "renderer.h"
 #include "geometry.h"
 #include "font.h"
@@ -5,9 +6,6 @@
 #include "log.h"
 
 float tile_width, tile_height, half_width, half_height;
-//int index;
-
-Light lol;
 
 RectF YE_VisibleWorld()
 {
@@ -79,11 +77,6 @@ void YE_Renderer()
     player->GetActor()->DLight->pos = player->GetActor()->pos();
     player->GetActor()->DLight->Draw();
 
-    //test cursor light
-
-    lol.pos = ScreenToWorld(pmouse->pos);
-    lol.Draw();
-
     //draw map lights
     for (Light &light : stmap.Lights)
     {
@@ -122,7 +115,7 @@ void YE_Renderer()
 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    pmouse->NormalCursor->Draw(pmouse->pos);
+	pmouse->GetCursor()->Draw(pmouse->pos);
 
     glDisable(GL_BLEND);
 

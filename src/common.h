@@ -1,6 +1,10 @@
 #ifndef COMMON_H_INCLUDED
 #define COMMON_H_INCLUDED
 
+#ifdef _MSC_VER
+#define _CRT_SECURE_NO_WARNINGS
+#endif
+
 #if _WIN32
 #define NOMINMAX
 #include "windows.h"
@@ -67,7 +71,6 @@ using std::min;
 using std::max;
 using std::move;
 using std::unique_ptr;
-using std::make_unique;
 
 #if __GNUC__
 template<typename T, typename... Args>
@@ -75,6 +78,8 @@ std::unique_ptr<T> make_unique(Args&&... args)
 {
     return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
 }
+#else
+using std::make_unique;
 #endif
 
 #endif // COMMON_H_INCLUDED

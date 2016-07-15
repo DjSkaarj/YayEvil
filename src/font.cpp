@@ -1,3 +1,4 @@
+#include "common.h"
 #include "font.h"
 
 // Create a new glyph from a texture.

@@ -4,17 +4,27 @@
 #include "common.h"
 #include "geometry.h"
 #include "states.h"
+#include "font.h"
 
-#define FRICTION_FACTOR 0.1
-#define COLLISION_OFFSET 0.06
+#define FRICTION_FACTOR 0.1F
+#define COLLISION_OFFSET 0.06F
+#define SHADOW_SCALEFACTOR 1.5f
+#define SHADOW_MINSIZE 1.1f
+#define INVENTORY_RADIUS 5
 
 class YE_Map;
+class Camera;
 
 extern bool YE_Shadows;
 extern int YE_ShadowQuality;
 extern float YE_ShadowIntensity;
 extern float YE_ShadowScaleA;
 extern YE_Map stmap;
+
+extern Font *font;
+extern Font *menufont;
+
+extern Camera *cam;
 
 extern float deltatime;
 
@@ -48,6 +58,7 @@ public:
     };
 
     Actor(Vector2f spawn);
+
     void Update();
     void Draw();
     void DrawSprite(float scale, float saturation, float alpha) const;
@@ -60,36 +71,46 @@ public:
     State *CurrentState;
     template<typename T> void SetState();
 
-    GETSET(int, flags)
-    GETSET(int, flags2)
+	GETSET(int, flags)
+	GETSET(int, flags2)
 
-    FGETSET(ClipBounce, AF_CLIPBOUNCE, flags)
-    FGETSET(NoClip, AF_NOCLIP, flags)
-    FGETSET(Solid, AF_SOLID, flags)
+	FGETSET(ClipBounce, AF_CLIPBOUNCE, flags)
+	FGETSET(NoClip, AF_NOCLIP, flags)
+	FGETSET(Solid, AF_SOLID, flags)
+	FGETSET(IfInventory, AF_INVENTORY, flags)
 
-    FGETSET(DrawShadow, AF2_DRAWSHADOW, flags2)
+	FGETSET(DrawShadow, AF2_DRAWSHADOW, flags2)
 
-    GETSET(float, Angle)
-    GETSET(float, Alpha)
-    GETSET(float, Speed)
-    GETSET(float, BounceFactor)
-    GETSET(float, Friction)
-    GETSET(float, Width)
-    GETSET(float, Height)
+	GETSET(float, Angle)
+	GETSET(float, Alpha)
+	GETSET(float, Speed)
+	GETSET(float, BounceFactor)
+	GETSET(float, Friction)
+	GETSET(Vector2f, Size)
 
-    GETSET(int, hp)
+	GETSET(int, hp)
 
-    GETTER(Vector2f, pos)
-    GETTER(Vector2f, prevpos)
-    GETTER(Vector2f, vel)
-    GETSET(GLuint, Sprite)
+	GETTER(Vector2f, pos)
+	GETTER(Vector2f, prevpos)
+	GETTER(Vector2f, vel)
+	GETSET(GLuint, Sprite)
+
+	GETSET(std::string, Name);
+
+	RectF BoundingBox() const {
+		return RectF(_pos.x - _Size.x,
+			_pos.x + _Size.x,
+			_pos.y - _Size.y,
+			_pos.y - _Size.y);
+	}
 
 private:
     int _flags, _flags2;
-    float _Angle, _Alpha, _Speed, _BounceFactor, _Friction, _Width, _Height;
+	float _Angle, _Alpha, _Speed, _BounceFactor, _Friction;
     int _hp;
-    Vector2f _pos, _prevpos, _vel;
+    Vector2f _Size, _pos, _prevpos, _vel;
     GLuint _Sprite;
+	std::string _Name;
 
     // physics
     void UpdatePhysics();
@@ -125,7 +146,15 @@ class Player
 {
 public:
     Player() {};
-    Actor* GetActor() { return actor; }
+    Actor* GetActor() const { return actor; }
+
+	RectF InvRect() const {
+		return RectF(GetActor()->pos().x - INVENTORY_RADIUS,
+			GetActor()->pos().x + INVENTORY_RADIUS,
+			GetActor()->pos().y - INVENTORY_RADIUS,
+			GetActor()->pos().y + INVENTORY_RADIUS);
+	}
+	void InventoryRadius() const;
 
     Actor *actor;
     std::vector<Actor> Inventory;

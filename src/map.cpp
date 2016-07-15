@@ -1,3 +1,4 @@
+#include "common.h"
 #include "map.h"
 
 #include "log.h"

@@ -2,6 +2,7 @@
 /* Yay Evil 2.0 */
 /*              */
 
+#include "common.h"
 #include "map.h"
 #include "math.h"
 #include "log.h"
@@ -47,6 +48,9 @@ Actor *playerpawn = new Actor(0);
 Player *player = new Player;
 Mouse *pmouse = new Mouse;
 Camera *cam = new Camera;
+
+Cursor NormalCursor;
+Cursor HelpCursor;
 
 void YE_Init (void)
 {
@@ -144,10 +148,18 @@ void YE_Init (void)
     YE_LoadTextures();
 
     SDL_ShowCursor(SDL_DISABLE);
-    pmouse->NormalCursor->Create("cursor.png", 30, 30);
+
+	NormalCursor.Create("cursor.png", 30, 30);
+	HelpCursor.Create("cursor_help.png", 30, 30);
 
     font = YE_LoadFont("fonts/YayEvil.ttf", 30).release();
     menufont = YE_LoadFont("fonts/Consola.ttf", 20).release();
+
+	/*DO NOT RELEASE*/
+	Actor *lol1 = new Actor(Vector2f(11.0f, 12.0f));
+	lol1->SetName("kek");
+
+	delete lol1;
 }
 
 int YE_Events (void)
@@ -187,7 +199,8 @@ int YE_Events (void)
 
 void YE_Update (void)
 {
-    for(Actor actor : stmap.Actors)
+	pmouse->CurrentCursor = &NormalCursor;
+    for(Actor &actor : stmap.Actors)
         actor.Update();
 
     player->GetActor()->Update();

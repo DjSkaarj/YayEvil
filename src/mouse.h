@@ -18,7 +18,7 @@ public:
     Vector2f Size;
     GLuint Image;
 
-    void Create(std::string image, float width, float height);
+	void Create(std::string image, float width, float height);
     void Draw(Vector2f pos);
 };
 
@@ -27,7 +27,8 @@ class Mouse
 public:
     Vector2f pos;
 
-    Cursor* NormalCursor = new Cursor;
+	Cursor *CurrentCursor;
+	Cursor* GetCursor() const { return CurrentCursor; }
     void HandleEvents();
 };
 
