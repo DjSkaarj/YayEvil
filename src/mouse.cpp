@@ -19,6 +19,12 @@ void Mouse::HandleEvents()
     }
 }
 
+float Mouse::GetAngle()
+{
+    Vector2f worldpos = ScreenToWorld(pos);
+    return atan2(worldpos.y - player->GetActor()->pos().y, worldpos.x - player->GetActor()->pos().x);
+}
+
 void Cursor::Create(std::string image, float width, float height)
 {
     Image = Textures[image];

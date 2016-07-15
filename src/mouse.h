@@ -11,6 +11,7 @@ extern SDL_Event event;
 extern float half_width, half_height;
 extern Camera *cam;
 extern float tile_size;
+extern Player *player;
 
 class Cursor
 {
@@ -29,6 +30,7 @@ public:
 
     Cursor* NormalCursor = new Cursor;
     void HandleEvents();
+    float GetAngle();
 };
 
 Vector2f ScreenToWorld(Vector2f pos);

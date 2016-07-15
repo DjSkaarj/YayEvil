@@ -118,7 +118,7 @@ void YE_Renderer()
     menufont->DrawText(Vector2i(0, 20), ("Tile size: " + NumberToString(tile_size)).c_str());
     menufont->DrawText(Vector2i(0, 40), ("Y: " + NumberToString(player->GetActor()->pos().y)).c_str());
     menufont->DrawText(Vector2i(0, 60), ("X: " + NumberToString(player->GetActor()->pos().x)).c_str());
-    menufont->DrawText(Vector2i(0, 80), ("Angle: " + NumberToString(player->GetActor()->Angle())).c_str());
+    menufont->DrawText(Vector2i(0, 80), ("Angle: " + NumberToString(RAD2NDEG(player->GetActor()->Angle()))).c_str());
 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
