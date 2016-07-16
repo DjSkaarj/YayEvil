@@ -5,6 +5,7 @@
 #include "map.h"
 #include "states.h"
 #include "mouse.h"
+#include "log.h"
 
 Actor::Actor(Vector2f spawn)
 {
@@ -244,8 +245,8 @@ void Actor::DrawSprite(float scale, float saturation, float alpha) const
 {
     glBindTexture(GL_TEXTURE_2D, _Sprite);
 
-	float width = whalf();
-	float height = hhalf();
+	float width = whalf() * scale;
+	float height = hhalf() * scale;
 
 	float x = _pos.x;
     float y = _pos.y;

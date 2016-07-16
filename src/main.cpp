@@ -154,12 +154,6 @@ void YE_Init (void)
 
     font = YE_LoadFont("fonts/YayEvil.ttf", 30).release();
     menufont = YE_LoadFont("fonts/Consola.ttf", 20).release();
-
-	/*DO NOT RELEASE*/
-	Actor *lol1 = new Actor(Vector2f(11.0f, 12.0f));
-	lol1->SetName("kek");
-
-	delete lol1;
 }
 
 int YE_Events (void)
