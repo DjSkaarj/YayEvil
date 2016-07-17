@@ -6,6 +6,7 @@
 #include "states.h"
 #include "mouse.h"
 #include "log.h"
+#include <cmath>
 
 Actor::Actor(Vector2f spawn)
 {
@@ -26,6 +27,7 @@ void Actor::Update()
 {
     UpdatePhysics();
     CurrentState->Update(this);
+	DLight->pos = _pos;
 }
 
 float Actor::x1() const
@@ -264,6 +266,31 @@ void Actor::DrawSprite(float scale, float saturation, float alpha) const
     glEnd();
 }
 
+void Actor::SetSprite(std::string name)
+{
+	_Sprite = Textures[name];
+}
+
+void Actor::SetSpriteRotation(std::string name)
+{
+	std::string newname = name + NumberToString(SpriteNumForAngle(_Angle));
+	if (Textures.find(newname) == Textures.end())
+	{
+		Log(0, "[Warning] %s doesn't have enough rotations!");
+		return;
+	}
+	_Sprite = Textures[newname];
+}
+
+int SpriteNumForAngle(float a)
+{
+	if (a == 0)
+		return 1;
+	if (a < 0)
+		return (1 + floorf(fabs(a) / (M_PI * 0.25)));
+	return (9 - floorf(a / (M_PI * 0.25)));
+}
+
 Light::Light()
 {
     Radius = 2.0;
@@ -304,7 +331,6 @@ void CreatePlayer(float spawnx, float spawny)
     playerpawn->DLight->RColor = 1.0;
     playerpawn->DLight->GColor = 0.2;
     playerpawn->DLight->BColor = 0.6;
-    playerpawn->SetSprite(Textures["p_idle_01.png"]);
     playerpawn->SetState<PlayerIdleState>();
 	//playerpawn->SetBounceFactor(0.5);
 	//playerpawn->SetClipBounce(true);

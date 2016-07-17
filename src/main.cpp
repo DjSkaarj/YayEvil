@@ -149,8 +149,8 @@ void YE_Init (void)
 
     SDL_ShowCursor(SDL_DISABLE);
 
-	NormalCursor.Create("cursor.png", 30, 30);
-	HelpCursor.Create("cursor_help.png", 30, 30);
+	NormalCursor.Create("cursor", 30, 30);
+	HelpCursor.Create("cursor_help", 30, 30);
 
     font = YE_LoadFont("fonts/YayEvil.ttf", 30).release();
     menufont = YE_LoadFont("fonts/Consola.ttf", 20).release();

@@ -3,7 +3,6 @@
 
 #include "common.h"
 #include "geometry.h"
-#include "states.h"
 #include "font.h"
 
 #define FRICTION_FACTOR 0.1F
@@ -14,6 +13,7 @@
 
 class YE_Map;
 class Camera;
+class State;
 
 extern bool YE_Shadows;
 extern int YE_ShadowQuality;
@@ -63,6 +63,9 @@ public:
     void Draw();
     void DrawSprite(float scale, float saturation, float alpha) const;
 
+	void SetSprite(std::string name);
+	void SetSpriteRotation(std::string name);
+
     void Teleport(Vector2f vec);
     void SetVelocity(Vector2f vec);
 
@@ -93,7 +96,7 @@ public:
 	GETTER(Vector2f, pos)
 	GETTER(Vector2f, prevpos)
 	GETTER(Vector2f, vel)
-	GETSET(GLuint, Sprite)
+	GETTER(GLuint, Sprite)
 
 	GETSET(std::string, Name);
 
@@ -142,6 +145,8 @@ template<typename T> void Actor::SetState()
     CurrentState = new T();
     CurrentState->Enter(this);
 }
+
+int SpriteNumForAngle(float a);
 
 class Player
 {

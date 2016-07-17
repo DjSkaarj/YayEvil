@@ -114,10 +114,13 @@ void YE_LoadMap (const char *filename)
                 char texture[255];
                 YE_ReadStringA(texture, 255);
                 YE_StrToLower(texture);
+				std::string s = texture;
+				s.erase(s.end() - 4, s.end());
+
                 int solid = YE_ReadInt();
 
                 stmap.SetTileSolid(vec, solid);
-                stmap.SetTileTexture(vec, Textures[texture]);
+                stmap.SetTileTexture(vec, Textures[s]);
 
                 if(YE_LogMap)
                     Log(0, "[Map loader] Registered new tile [%d,%d]: texture=%s solid=%d", x, y, texture, solid);
@@ -282,7 +285,9 @@ void YE_LoadTexturesDir(const char* dirpath)
                 char loadtex[255];
                 strcpy(loadtex, file.name);
                 YE_StrToLower(loadtex);
-                Textures.insert(std::pair<std::string, GLuint>((loadtex), texbuffer));
+				std::string s = loadtex;
+				s.erase(s.end() - 4, s.end());
+                Textures.insert(std::pair<std::string, GLuint>(s, texbuffer));
                 if(YE_LogTex)
                     Log(0, "[Texture loader] Loaded texture %s", file.name);
             }
