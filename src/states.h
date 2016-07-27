@@ -3,6 +3,9 @@
 
 #include "common.h"
 #include "actors.h"
+#include "map.h"
+
+extern YE_Map stmap;
 extern std::map<std::string, GLuint> Textures;
 
 class State
@@ -14,6 +17,15 @@ public:
     virtual void Update(Actor* actor) {}
     virtual void Exit(Actor* actor) {}
 	virtual State* Clone() { return new State(*this); }
+};
+
+class PlayerSpawnState : public State
+{
+public:
+	void Enter(Actor *actor);
+	void Update(Actor *actor);
+	void Exit(Actor *actor);
+	State* clone() { return new PlayerSpawnState(*this); }
 };
 
 class PlayerIdleState : public State

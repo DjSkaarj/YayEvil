@@ -268,6 +268,11 @@ void Actor::DrawSprite(float scale, float saturation, float alpha) const
 
 void Actor::SetSprite(std::string name)
 {
+	if (Textures.find(name) == Textures.end())
+	{
+		Log(0, "[Warning] SetSprite() [actor %s] failed: file %s doesn't exist!", name.c_str(), _Name.c_str());
+		return;
+	}
 	_Sprite = Textures[name];
 }
 
@@ -317,23 +322,10 @@ void Light::Draw()
     glEnd();
 }
 
-void CreatePlayer(float spawnx, float spawny)
+void CreatePlayer()
 {
     player->actor = playerpawn;
-
-    playerpawn->SetSolid(true);
-    playerpawn->SetDrawShadow(true);
-    playerpawn->Sethp(100);
-    playerpawn->Teleport(Vector2f(spawnx, spawny));
-	playerpawn->SetSize(Vector2f(0.7, 0.7));
-    playerpawn->SetSpeed(1.0);
-    playerpawn->SetFriction(1.0);
-    playerpawn->DLight->RColor = 1.0;
-    playerpawn->DLight->GColor = 0.2;
-    playerpawn->DLight->BColor = 0.6;
-    playerpawn->SetState<PlayerIdleState>();
-	//playerpawn->SetBounceFactor(0.5);
-	//playerpawn->SetClipBounce(true);
+    playerpawn->SetState<PlayerSpawnState>();
 }
 
 void Player::InventoryRadius() const

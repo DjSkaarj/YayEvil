@@ -154,6 +154,8 @@ void YE_Init (void)
 
     font = YE_LoadFont("fonts/YayEvil.ttf", 30).release();
     menufont = YE_LoadFont("fonts/Consola.ttf", 20).release();
+
+	InitActorTypes();
 }
 
 int YE_Events (void)
@@ -280,7 +282,7 @@ int main (int argc, char *argv[])
 
     char mapname[255] = "maps/";
     YE_LoadMap(strcat(mapname, lmap));
-    CreatePlayer(stmap.PlayerX, stmap.PlayerY);
+    CreatePlayer();
 
     while (true)
     {

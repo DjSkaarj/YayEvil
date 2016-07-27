@@ -166,7 +166,7 @@ public:
     std::vector<Actor> Inventory;
 };
 
-void CreatePlayer(float spawnx, float spawny);
+void CreatePlayer();
 extern Actor *playerpawn;
 extern Player *player;
 

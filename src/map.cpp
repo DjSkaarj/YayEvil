@@ -133,6 +133,8 @@ void YE_LoadMap (const char *filename)
             float y = YE_ReadFloat();
 			char name[255];
 			YE_ReadStringA(name, 255);
+			std::string s = name;
+			std::transform(s.begin(), s.end(), s.begin(), ::tolower);
 
             Actor actorbuff(Vector2f(x, y));
 			if (ActorTypes.find(name) == ActorTypes.end())
@@ -143,6 +145,9 @@ void YE_LoadMap (const char *filename)
 			actorbuff.CurrentState = ActorTypes[name]->Clone();
 			actorbuff.SetName(name);
             stmap.Actors.push_back(actorbuff);
+
+			if(YE_LogMap)
+			Log(0, "[Map loader] Parsed actor %s (%f; %f)", name, x, y);
         }
 
         else if(!strcmp(cmd, "light"))
