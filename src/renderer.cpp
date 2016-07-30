@@ -58,11 +58,19 @@ void YE_Renderer()
             YE_DrawAO(pos);
     }
 
-    //render player
+    //render actors
     glEnable(GL_TEXTURE_2D);
     glColor3f(stmap.Rcolor, stmap.Gcolor, stmap.Bcolor);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    player->GetActor()->Draw();
+
+	for (Actor &actor : stmap.Actors)
+	{
+		//if (actor.BoundingBox().intersects(YE_VisibleWorld()))
+		actor.Draw();
+	}
+
+	//render player
+	player->GetActor()->Draw();
 
     //render lights
     //turn on FBO

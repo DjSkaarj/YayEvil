@@ -19,6 +19,7 @@ Actor::Actor(Vector2f spawn)
     _Friction = 1.0;
     _BounceFactor = 0;
 	_Name = "New Actor";
+	_Size = Vector2f(1.0f, 1.0f);
 
     CurrentState = new State;
 }
@@ -227,6 +228,7 @@ void Actor::SetVelocity(Vector2f vec)
 
 void Actor::Draw()
 {
+	Log(0, "Drawing %s at %f %f", _Name.c_str(), _pos.x, _pos.y);
     if((_flags2 & AF2_DRAWSHADOW) && YE_Shadows)
     {
         float YE_ShadowScale = YE_ShadowScaleA * SHADOW_SCALEFACTOR;
@@ -281,7 +283,7 @@ void Actor::SetSpriteRotation(std::string name)
 	std::string newname = name + NumberToString(SpriteNumForAngle(_Angle));
 	if (Textures.find(newname) == Textures.end())
 	{
-		Log(0, "[Warning] %s doesn't have enough rotations!");
+		Log(0, "[Warning] %s doesn't have enough rotations!", name.c_str());
 		return;
 	}
 	_Sprite = Textures[newname];

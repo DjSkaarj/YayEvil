@@ -43,6 +43,7 @@ extern std::map<std::string, GLuint> Textures;
 extern std::vector<std::string> Maplist;
 
 void YE_LoadMap(const char *file);
+void YE_ParseLine();
 void YE_LoadTextures(void);
 GLuint YE_LoadImage(const char *filename);
 

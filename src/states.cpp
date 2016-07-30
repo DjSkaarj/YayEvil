@@ -2,6 +2,7 @@
 #include "states.h"
 #include "actors.h"
 #include "map.h"
+#include "log.h"
 
 std::map<std::string, State*> ActorTypes;
 
@@ -14,6 +15,7 @@ void InitActorTypes()
 
 void PlayerSpawnState::Enter(Actor *actor)
 {
+	actor->SetName("Player");
 	actor->SetSpriteRotation("p_idle");
 	actor->SetSolid(true);
 	actor->SetDrawShadow(true);
@@ -39,8 +41,7 @@ void PlayerIdleState::Enter(Actor *actor)
 
 void PlayerIdleState::Update(Actor *actor)
 {
-	//actor->SetSpriteRotation("p_idle");
-	actor->SetSprite("barre");
+	actor->SetSpriteRotation("p_idle");
 }
 
 void PlayerIdleState::Exit(Actor *actor)
@@ -57,11 +58,14 @@ void CacodemonSpawnState::Exit(Actor *actor)
 
 void BarrelSpawnState::Enter(Actor *actor)
 {
-	actor->SetSprite("barrel");
+	actor->SetSprite("p_idle");
+	actor->SetSize(Vector2f(0.7, 0.7));
 }
 
 void BarrelSpawnState::Update(Actor *actor)
-{}
+{
+
+}
 
 void BarrelSpawnState::Exit(Actor *actor)
 {}

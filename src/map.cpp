@@ -95,118 +95,122 @@ void YE_LoadMap (const char *filename)
 
     stmap.Tiles = new Tile[width*height];
 
-    while(YE_NextLine())
-    {
-        char cmd[255];
-        YE_ReadStringA(cmd, 255);
+	while (YE_NextLine()) YE_ParseLine();
 
-        if(!strcmp(cmd, "tile"))
-        {
-            int x = YE_ReadInt();
-            int y = YE_ReadInt();
-
-            Vector2i vec = Vector2i(x, y);
-
-            if(!stmap.TileInMap(vec))
-                Log(0, "[Map loader] Tile at [%d,%d] is outside of map[%d,%d]!", x, y, stmap.Size.x, stmap.Size.y);
-            else
-            {
-                char texture[255];
-                YE_ReadStringA(texture, 255);
-                YE_StrToLower(texture);
-				std::string s = texture;
-				s.erase(s.end() - 4, s.end());
-
-                int solid = YE_ReadInt();
-
-                stmap.SetTileSolid(vec, solid);
-                stmap.SetTileTexture(vec, Textures[s]);
-
-                if(YE_LogMap)
-                    Log(0, "[Map loader] Registered new tile [%d,%d]: texture=%s solid=%d", x, y, texture, solid);
-            }
-        }
-
-        else if(!strcmp(cmd, "actor"))
-        {
-            float x = YE_ReadFloat();
-            float y = YE_ReadFloat();
-			char name[255];
-			YE_ReadStringA(name, 255);
-			std::string s = name;
-			std::transform(s.begin(), s.end(), s.begin(), ::tolower);
-
-            Actor actorbuff(Vector2f(x, y));
-			if (ActorTypes.find(name) == ActorTypes.end())
-			{
-				Log(0, "[Warning] [Map loader] Actor name '%s' isn't presented in YE! Skipping actor...");
-				break;
-			}
-			actorbuff.CurrentState = ActorTypes[name]->Clone();
-			actorbuff.SetName(name);
-            stmap.Actors.push_back(actorbuff);
-
-			if(YE_LogMap)
-			Log(0, "[Map loader] Parsed actor %s (%f; %f)", name, x, y);
-        }
-
-        else if(!strcmp(cmd, "light"))
-        {
-            Light lightbuff;
-            lightbuff.pos.x = YE_ReadFloat();
-            lightbuff.pos.y = YE_ReadFloat();
-
-            lightbuff.Radius = YE_ReadFloat();
-            lightbuff.RColor = YE_ReadFloat();
-            lightbuff.GColor = YE_ReadFloat();
-            lightbuff.BColor = YE_ReadFloat();
-            stmap.Lights.push_back(lightbuff);
-            if(YE_LogMap)
-                Log(0, "[Map loader] Registered new light [%f,%f]: radius=%f color=%f|%f|%f", lightbuff.pos.x, lightbuff.pos.y, lightbuff.Radius, lightbuff.RColor, lightbuff.GColor, lightbuff.BColor);
-        }
-
-        else if(!strcmp(cmd, "globalcolor"))
-        {
-            stmap.Rcolor = std::min(1.0f, YE_ReadFloat());
-            stmap.Gcolor = std::min(1.0f, YE_ReadFloat());
-            stmap.Bcolor = std::min(1.0f, YE_ReadFloat());
-            if(YE_LogMap)
-                Log(0, "[Map loader] Set global color to: %f %f %f", stmap.Rcolor, stmap.Gcolor, stmap.Bcolor);
-        }
-
-        else if(!strcmp(cmd, "backgroundcolor"))
-        {
-            stmap.BGRcolor = std::min(1.0f, YE_ReadFloat());
-            stmap.BGGcolor = std::min(1.0f, YE_ReadFloat());
-            stmap.BGBcolor = std::min(1.0f, YE_ReadFloat());
-            if(YE_LogMap)
-                Log(0, "[Map loader] Set background color to: %f %f %f", stmap.BGRcolor, stmap.BGGcolor, stmap.BGBcolor);
-        }
-
-        else if(!strcmp(cmd, "ambientcolor"))
-        {
-            stmap.ARcolor = std::min(1.0f, YE_ReadFloat());
-            stmap.AGcolor = std::min(1.0f, YE_ReadFloat());
-            stmap.ABcolor = std::min(1.0f, YE_ReadFloat());
-            if(YE_LogMap)
-                Log(0, "[Map loader] Set ambient color to: %f %f %f", stmap.ARcolor, stmap.AGcolor, stmap.ABcolor);
-        }
-
-        else if(!strcmp(cmd, "playerstart"))
-        {
-            stmap.PlayerX = clip(YE_ReadFloat(), 0.0f, (float)stmap.Size.x);
-            stmap.PlayerY = clip(YE_ReadFloat(), 0.0f, (float)stmap.Size.y);
-            if(YE_LogMap)
-                Log(0, "[Map loader] Player spawn: %f %f", stmap.PlayerX, stmap.PlayerY);
-        }
-
-        else if(!strcmp(cmd, "#"))
-        {}
-
-        else Log(0, "[Warning] [Map loader] '%s' is invalid map command! Skipping command...", cmd);
-    }
     fclose(level);
     Log(0, "[Map loader] Finished parsing '%s'!", filename);
+}
+
+void YE_ParseLine()
+{
+	char cmd[255];
+	YE_ReadStringA(cmd, 255);
+
+	if (!strcmp(cmd, "tile"))
+	{
+		int x = YE_ReadInt();
+		int y = YE_ReadInt();
+
+		Vector2i vec = Vector2i(x, y);
+
+		if (!stmap.TileInMap(vec))
+			Log(0, "[Map loader] Tile at [%d,%d] is outside of map[%d,%d]!", x, y, stmap.Size.x, stmap.Size.y);
+		else
+		{
+			char texture[255];
+			YE_ReadStringA(texture, 255);
+			YE_StrToLower(texture);
+			std::string s = texture;
+			s.erase(s.end() - 4, s.end());
+
+			int solid = YE_ReadInt();
+
+			stmap.SetTileSolid(vec, solid);
+			stmap.SetTileTexture(vec, Textures[s]);
+
+			if (YE_LogMap)
+				Log(0, "[Map loader] Registered new tile [%d,%d]: texture=%s solid=%d", x, y, texture, solid);
+		}
+	}
+
+	else if (!strcmp(cmd, "actor"))
+	{
+		float x = YE_ReadFloat();
+		float y = YE_ReadFloat();
+		char name[255];
+		YE_ReadStringA(name, 255);
+		std::string s = name;
+		std::transform(s.begin(), s.end(), s.begin(), ::tolower);
+
+		Actor actorbuff(Vector2f(x, y));
+		if (ActorTypes.find(s) == ActorTypes.end())
+		{
+			Log(0, "[Map loader] [Warning] Actor name '%s' isn't presented in YE! Skipping actor...", name);
+			return;
+		}
+
+		actorbuff.CurrentState = ActorTypes[name]->Clone();
+		actorbuff.SetName(name);
+		stmap.Actors.push_back(actorbuff);
+
+		if (YE_LogMap)
+			Log(0, "[Map loader] Parsed actor %s (%f; %f)", name, x, y);
+	}
+
+	else if (!strcmp(cmd, "light"))
+	{
+		Light lightbuff;
+		lightbuff.pos.x = YE_ReadFloat();
+		lightbuff.pos.y = YE_ReadFloat();
+
+		lightbuff.Radius = YE_ReadFloat();
+		lightbuff.RColor = YE_ReadFloat();
+		lightbuff.GColor = YE_ReadFloat();
+		lightbuff.BColor = YE_ReadFloat();
+		stmap.Lights.push_back(lightbuff);
+		if (YE_LogMap)
+			Log(0, "[Map loader] Registered new light [%f,%f]: radius=%f color=%f|%f|%f", lightbuff.pos.x, lightbuff.pos.y, lightbuff.Radius, lightbuff.RColor, lightbuff.GColor, lightbuff.BColor);
+	}
+
+	else if (!strcmp(cmd, "globalcolor"))
+	{
+		stmap.Rcolor = std::min(1.0f, YE_ReadFloat());
+		stmap.Gcolor = std::min(1.0f, YE_ReadFloat());
+		stmap.Bcolor = std::min(1.0f, YE_ReadFloat());
+		if (YE_LogMap)
+			Log(0, "[Map loader] Set global color to: %f %f %f", stmap.Rcolor, stmap.Gcolor, stmap.Bcolor);
+	}
+
+	else if (!strcmp(cmd, "backgroundcolor"))
+	{
+		stmap.BGRcolor = std::min(1.0f, YE_ReadFloat());
+		stmap.BGGcolor = std::min(1.0f, YE_ReadFloat());
+		stmap.BGBcolor = std::min(1.0f, YE_ReadFloat());
+		if (YE_LogMap)
+			Log(0, "[Map loader] Set background color to: %f %f %f", stmap.BGRcolor, stmap.BGGcolor, stmap.BGBcolor);
+	}
+
+	else if (!strcmp(cmd, "ambientcolor"))
+	{
+		stmap.ARcolor = std::min(1.0f, YE_ReadFloat());
+		stmap.AGcolor = std::min(1.0f, YE_ReadFloat());
+		stmap.ABcolor = std::min(1.0f, YE_ReadFloat());
+		if (YE_LogMap)
+			Log(0, "[Map loader] Set ambient color to: %f %f %f", stmap.ARcolor, stmap.AGcolor, stmap.ABcolor);
+	}
+
+	else if (!strcmp(cmd, "playerstart"))
+	{
+		stmap.PlayerX = clip(YE_ReadFloat(), 0.0f, (float)stmap.Size.x);
+		stmap.PlayerY = clip(YE_ReadFloat(), 0.0f, (float)stmap.Size.y);
+		if (YE_LogMap)
+			Log(0, "[Map loader] Player spawn: %f %f", stmap.PlayerX, stmap.PlayerY);
+	}
+
+	else if (!strcmp(cmd, "#"))
+	{}
+
+	else Log(0, "[Map loader] [Warning] '%s' is invalid map command! Skipping command...", cmd);
 }
 
 GLuint YE_LoadImage(const char *filename)
@@ -214,7 +218,7 @@ GLuint YE_LoadImage(const char *filename)
     SDL_Surface *image = IMG_Load(filename);
     if (image == NULL)
     {
-        Log(1, "[YE_LoadImage] Failed to load %s: %s", filename, SDL_GetError());
+        Log(1, "[YE_LoadImage] [Warning] Failed to load %s: %s", filename, SDL_GetError());
         return 0;
     }
 
@@ -250,7 +254,7 @@ GLuint YE_LoadImage(const char *filename)
         break;
 
     default:
-        Log(1, "[YE_LoadImage] %s: unsupported image format", filename);
+        Log(1, "[YE_LoadImage] [Warning]  %s: unsupported image format", filename);
         SDL_FreeSurface(image);
         return 0;
     }
@@ -292,6 +296,7 @@ void YE_LoadTexturesDir(const char* dirpath)
                 YE_StrToLower(loadtex);
 				std::string s = loadtex;
 				s.erase(s.end() - 4, s.end());
+
                 Textures.insert(std::pair<std::string, GLuint>(s, texbuffer));
                 if(YE_LogTex)
                     Log(0, "[Texture loader] Loaded texture %s", file.name);
