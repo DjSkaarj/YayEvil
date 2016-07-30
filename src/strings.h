@@ -10,4 +10,6 @@ void YE_ReadStringA(char* buf, int maxsize);
 int YE_ReadInt();
 float YE_ReadFloat();
 
+std::string NumberToString(float number);
+
 #endif // STRINGS_H_INCLUDED

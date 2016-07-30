@@ -4,6 +4,7 @@
 #include "font.h"
 #include "math.h"
 #include "log.h"
+#include "strings.h"
 
 float tile_width, tile_height, half_width, half_height;
 

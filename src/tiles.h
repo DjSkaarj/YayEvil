@@ -9,7 +9,7 @@ extern std::map<std::string, GLuint> Textures;
 class Tile
 {
 public:
-    Tile();
+    Tile() {}
     void Draw(Vector2i pos);
 
     bool Solid;

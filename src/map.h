@@ -35,16 +35,10 @@ class YE_Map
 };
 
 extern YE_Map stmap;
-
 extern bool YE_LogMap;
-extern bool YE_LogTex;
-
-extern std::map<std::string, GLuint> Textures;
 extern std::vector<std::string> Maplist;
 
 void YE_LoadMap(const char *file);
 void YE_ParseLine();
-void YE_LoadTextures(void);
-GLuint YE_LoadImage(const char *filename);
 
 #endif // MAP_H_INCLUDED

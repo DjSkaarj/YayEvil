@@ -23,6 +23,4 @@ template <typename T> T sign(T a)
         return 0;
 }
 
-std::string NumberToString (float number);
-
 #endif // MATH_H_INCLUDED

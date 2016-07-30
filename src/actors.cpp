@@ -6,6 +6,8 @@
 #include "states.h"
 #include "mouse.h"
 #include "log.h"
+#include "strings.h"
+#include "textures.h"
 #include <cmath>
 
 Actor::Actor(Vector2f spawn)
@@ -270,12 +272,7 @@ void Actor::DrawSprite(float scale, float saturation, float alpha) const
 
 void Actor::SetSprite(std::string name)
 {
-	if (Textures.find(name) == Textures.end())
-	{
-		Log(0, "[Warning] SetSprite() [actor %s] failed: file %s doesn't exist!", name.c_str(), _Name.c_str());
-		return;
-	}
-	_Sprite = Textures[name];
+	_Sprite = GetTexture(name);
 }
 
 void Actor::SetSpriteRotation(std::string name)

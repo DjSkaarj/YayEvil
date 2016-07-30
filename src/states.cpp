@@ -66,7 +66,6 @@ void BarrelSpawnState::Enter(Actor *actor)
 
 void BarrelSpawnState::Update(Actor *actor)
 {
-
 }
 
 void BarrelSpawnState::Exit(Actor *actor)

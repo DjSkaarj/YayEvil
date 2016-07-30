@@ -11,6 +11,7 @@
 #include "fontloader.h"
 #include "mouse.h"
 #include "states.h"
+#include "textures.h"
 
 #define YE_Caption "Yay Evil 2.0 - COLLISION!"
 
