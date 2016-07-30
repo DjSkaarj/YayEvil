@@ -24,9 +24,7 @@ void PlayerSpawnState::Enter(Actor *actor)
 	actor->SetSize(Vector2f(0.7, 0.7));
 	actor->SetSpeed(1.0);
 	actor->SetFriction(1.0);
-	actor->DLight->RColor = 1.0;
-	actor->DLight->GColor = 0.2;
-	actor->DLight->BColor = 0.6;
+	actor->DLight->SetColor(1.0, 0.2, 0.6);
 	actor->SetState<PlayerIdleState>();
 }
 
@@ -58,8 +56,12 @@ void CacodemonSpawnState::Exit(Actor *actor)
 
 void BarrelSpawnState::Enter(Actor *actor)
 {
-	actor->SetSprite("p_idle");
-	actor->SetSize(Vector2f(0.7, 0.7));
+	actor->SetSprite("barrel");
+	actor->SetSize(Vector2f(0.4, 0.6));
+	actor->SetSolid(true);
+	actor->SetDrawShadow(true);
+	actor->DLight->Radius = 1.0;
+	actor->DLight->SetColor(0.2, 0.5, 0.2);
 }
 
 void BarrelSpawnState::Update(Actor *actor)

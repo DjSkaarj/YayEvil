@@ -150,6 +150,8 @@ void YE_ParseLine()
 		}
 
 		actorbuff.CurrentState = ActorTypes[name]->Clone();
+		actorbuff.CurrentState->Enter(&actorbuff);
+
 		actorbuff.SetName(name);
 		stmap.Actors.push_back(actorbuff);
 

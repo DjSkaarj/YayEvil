@@ -306,7 +306,7 @@ Light::Light()
     BColor = 1.0;
 }
 
-void Light::Draw()
+void Light::Draw() const
 {
     float x = pos.x;
     float y = pos.y;
@@ -322,6 +322,13 @@ void Light::Draw()
     glTexCoord2f(0.0, 1.0);
     glVertex2f(x + Radius, y - Radius);
     glEnd();
+}
+
+void Light::SetColor(float R, float G, float B)
+{
+	RColor = R;
+	GColor = G;
+	BColor = B;
 }
 
 void CreatePlayer()

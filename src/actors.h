@@ -32,7 +32,8 @@ class Light
 {
 public:
     Light();
-    void Draw();
+    void Draw() const;
+	void SetColor(float R, float G, float B);
 
     Vector2f pos;
     float Radius, RColor, GColor, BColor;

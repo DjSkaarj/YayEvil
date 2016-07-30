@@ -92,6 +92,13 @@ void YE_Renderer()
             light.Draw();
     }
 
+	//draw actor lights
+	for (Actor &actor : stmap.Actors)
+	{
+		if (actor.DLight->Rect().intersects(YE_VisibleWorld()));
+		actor.DLight->Draw();
+	}
+
     glColor3f(1.0f, 1.0f, 1.0f);
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
