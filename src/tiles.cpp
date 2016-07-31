@@ -2,6 +2,12 @@
 #include "tiles.h"
 #include "map.h"
 
+Tile::Tile()
+{
+	Solid = true;
+	Texture = 0;
+}
+
 void Tile::Draw(Vector2i pos)
 {
     glBindTexture(GL_TEXTURE_2D, Texture);
