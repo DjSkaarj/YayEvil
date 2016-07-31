@@ -4,6 +4,7 @@
 #include "common.h"
 #include "geometry.h"
 #include "font.h"
+#include "animation.h"
 
 #define FRICTION_FACTOR 0.1F
 #define COLLISION_OFFSET 0.06F
@@ -71,6 +72,7 @@ public:
     void SetVelocity(Vector2f vec);
 
     Light *DLight = new Light;
+	Animation Anim;
 
     State *CurrentState;
     template<typename T> void SetState();
@@ -99,7 +101,7 @@ public:
 	GETTER(Vector2f, vel)
 	GETTER(GLuint, Sprite)
 
-	GETSET(std::string, Name);
+	GETSET(std::string, Name)
 
 	RectF BoundingBox() const {
 		return RectF(_pos.x - _Size.x,

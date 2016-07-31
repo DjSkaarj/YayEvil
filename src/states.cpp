@@ -3,6 +3,7 @@
 #include "actors.h"
 #include "map.h"
 #include "log.h"
+#include "animation.h"
 
 std::map<std::string, State*> ActorTypes;
 
@@ -56,7 +57,7 @@ void CacodemonSpawnState::Exit(Actor *actor)
 
 void BarrelSpawnState::Enter(Actor *actor)
 {
-	actor->SetSprite("barrel");
+	actor->Anim = AnimBarrel;
 	actor->SetSize(Vector2f(0.4, 0.6));
 	actor->SetSolid(true);
 	actor->SetDrawShadow(true);
@@ -66,6 +67,8 @@ void BarrelSpawnState::Enter(Actor *actor)
 
 void BarrelSpawnState::Update(Actor *actor)
 {
+	actor->Anim.Update();
+	actor->SetSprite(actor->Anim.GetSprite());
 }
 
 void BarrelSpawnState::Exit(Actor *actor)

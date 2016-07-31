@@ -104,7 +104,7 @@ bool Actor::CheckTop() const
     {
         if(stmap.TileIsSolid(Vector2i(i, by)))
             return true;
-		CheckActorCollision();
+		//CheckActorCollision();
     }
 	return false; // useless shit for successful compilation
 }
@@ -119,7 +119,7 @@ bool Actor::CheckBottom() const
     {
         if(stmap.TileIsSolid(Vector2i(i, by)))
             return true;
-		CheckActorCollision();
+		//CheckActorCollision();
     }
 	return false;
 }
@@ -134,7 +134,7 @@ bool Actor::CheckLeft() const
     {
         if(stmap.TileIsSolid(Vector2i(bx, i)))
             return true;
-		CheckActorCollision();
+		//CheckActorCollision();
     }
 	return false;
 }
@@ -149,7 +149,7 @@ bool Actor::CheckRight() const
     {
         if(stmap.TileIsSolid(Vector2i(bx, i)))
             return true;
-		CheckActorCollision();
+		//CheckActorCollision();
     }
 	return false;
 }
@@ -230,7 +230,6 @@ void Actor::SetVelocity(Vector2f vec)
 
 void Actor::Draw()
 {
-	Log(0, "Drawing %s at %f %f", _Name.c_str(), _pos.x, _pos.y);
     if((_flags2 & AF2_DRAWSHADOW) && YE_Shadows)
     {
         float YE_ShadowScale = YE_ShadowScaleA * SHADOW_SCALEFACTOR;
