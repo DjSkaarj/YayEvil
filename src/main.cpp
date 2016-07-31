@@ -119,11 +119,9 @@ void YE_Init (void)
     glMatrixMode(GL_MODELVIEW);
     glOrtho(0, cam->res.x / tile_size, 0, cam->res.y / tile_size, -1, 1);
 
-    //create empty buffer
     glGenFramebuffers(1, &Lightbuffer);
     glBindFramebuffer(GL_FRAMEBUFFER, Lightbuffer);
 
-    //create texture that we are going to render to
     GLuint RenderTexture;
     glGenTextures(1, &RenderTexture);
     glBindTexture(GL_TEXTURE_2D, RenderTexture);
