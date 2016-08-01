@@ -20,7 +20,7 @@ class State;
 extern YE_Map stmap;
 
 extern IntCVar r_shadows;
-extern FloatCVar r_shadowquality;
+extern IntCVar r_shadowquality;
 extern FloatCVar r_shadowintensity;
 extern FloatCVar r_shadowscale;
 
