@@ -221,6 +221,7 @@ bool YE_CheckArg(const char *arg, char *argv[], int& num)
 void YE_Exit (void)
 {
 	YE_WriteConfig();
+	exit(1);
 }
 
 int main (int argc, char *argv[])
@@ -249,10 +250,8 @@ int main (int argc, char *argv[])
     while (true)
     {
 		if (YE_Events())
-		{
 			YE_Exit();
-			exit(1);
-		}
+
 		YE_Update();
     }
     return 0;
