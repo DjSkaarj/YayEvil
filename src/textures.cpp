@@ -2,12 +2,16 @@
 #include "log.h"
 #include "textures.h"
 #include "strings.h"
+#include "cvars.h"
+
+extern IntCVar l_textures;
 
 GLuint GetTexture(std::string name)
 {
 	if (Textures.find(name) == Textures.end())
 	{
 		Log(0, "[GetTexture] [Warning] Texture %s wasn't found, empty texture will be returned.", name.c_str());
+		Textures.erase(Textures.end());
 		return 0;
 	}
 	return Textures[name];
@@ -98,7 +102,7 @@ void YE_LoadTexturesDir(const char* dirpath)
 				s.erase(s.end() - 4, s.end());
 
 				Textures.insert(std::pair<std::string, GLuint>(s, texbuffer));
-				if (YE_LogTex)
+				if (l_textures)
 					Log(0, "[Texture loader] Loaded texture %s", file.name);
 			}
 		}

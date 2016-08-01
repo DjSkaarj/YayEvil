@@ -8,6 +8,7 @@
 #include "log.h"
 #include "strings.h"
 #include "textures.h"
+#include "cvars.h"
 #include <cmath>
 
 Actor::Actor(Vector2f spawn)
@@ -230,16 +231,16 @@ void Actor::SetVelocity(Vector2f vec)
 
 void Actor::Draw()
 {
-    if((_flags2 & AF2_DRAWSHADOW) && YE_Shadows)
+    if((_flags2 & AF2_DRAWSHADOW) && r_shadows)
     {
-        float YE_ShadowScale = YE_ShadowScaleA * SHADOW_SCALEFACTOR;
-        float alpha = YE_ShadowIntensity / YE_ShadowQuality;
+        float shadowscale = r_shadowscale * SHADOW_SCALEFACTOR;
+        float alpha = r_shadowintensity / r_shadowquality;
 
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        for (int i = 0; i < YE_ShadowQuality; i++)
-        {
-            float ssize = lerp(SHADOW_MINSIZE, YE_ShadowScale, float((i + 0.5) / YE_ShadowQuality));
-            DrawSprite(ssize, 0.0f, alpha);
+        for (int i = 0; i < r_shadowquality; i++)
+        {	
+            float ssize = lerp(SHADOW_MINSIZE, shadowscale, float((i + 0.5) / r_shadowquality));
+			DrawSprite(ssize, 0.0f, alpha);
         }
     }
 

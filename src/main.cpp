@@ -1,7 +1,3 @@
-/*              */
-/* Yay Evil 2.0 */
-/*              */
-
 #include "common.h"
 #include "map.h"
 #include "math.h"
@@ -12,21 +8,16 @@
 #include "mouse.h"
 #include "states.h"
 #include "textures.h"
+#include "cvars.h"
 
-#define YE_Caption "Yay Evil 2.0 - COLLISION!"
-
-int multisample = 0;
-bool fullscreen = 0;
-
-bool YE_LogMap = 0;
-bool YE_LogTex = 1;
-
-bool YE_Shadows = 1;
-int YE_ShadowQuality = 10;
-float YE_ShadowIntensity = 0.6;
-float YE_ShadowScaleA = 1.0;
+#define YE_Caption "Yay Evil 2.0 - ACTORS!"
 
 const char *lmap = "map01.ye";
+
+extern IntCVar w_width;
+extern IntCVar w_height;
+extern IntCVar w_fullscreen;
+extern IntCVar r_multisample;
 
 GLuint Lightbuffer = 0;
 
@@ -66,16 +57,20 @@ void YE_Init (void)
 
     atexit(SDL_Quit);
 
+	YE_InitCVars();
+	YE_ReadConfig();
     YE_InitFontLoader();
 
-    if (multisample)
+	cam->res = Vector2i(w_width, w_height);
+
+    if (r_multisample == false)
     {
         SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-        SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, multisample);
+        SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, r_multisample);
     }
 
     screen = SDL_CreateWindow(YE_Caption, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-                        cam->res.x, cam->res.y, SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN * (fullscreen));
+                        cam->res.x, cam->res.y, SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN * (w_fullscreen));
 
     if (screen == NULL)
     {
@@ -223,9 +218,10 @@ bool YE_CheckArg(const char *arg, char *argv[], int& num)
     return false;
 }
 
-//still useless
-void YE_CleanUp (void)
-{}
+void YE_Exit (void)
+{
+	YE_WriteConfig();
+}
 
 int main (int argc, char *argv[])
 {
@@ -244,39 +240,6 @@ int main (int argc, char *argv[])
         lmap = argv[p+1];
     }
 
-    if(YE_CheckArg("-w", argv, p))
-        cam->res.x = std::max(SCREEN_WIDTH_MIN, atoi(argv[p+1]));
-
-    if(YE_CheckArg("-h", argv, p))
-        cam->res.y = std::max(SCREEN_HEIGHT_MIN, atoi(argv[p+1]));
-
-    if(YE_CheckArg("-multisample", argv, p))
-        multisample = clip(atoi(argv[p+1]), 0, 1);
-
-    if(YE_CheckArg("-fullscreen", argv, p))
-        fullscreen = clip(atoi(argv[p+1]), 0, 1);
-
-    if(YE_CheckArg("-shadows", argv, p))
-        YE_Shadows = clip(atoi(argv[p+1]), 0, 1);
-
-    if(YE_CheckArg("-shadowquality", argv, p))
-        YE_ShadowQuality = clip(atoi(argv[p+1]), 1, 15);
-
-    if(YE_CheckArg("-shadowintensity", argv, p))
-        YE_ShadowIntensity = clip(atof(argv[p+1]), 0.1, 1.0);
-
-    if(YE_CheckArg("-shadowscale", argv, p))
-        YE_ShadowScaleA = clip(atof(argv[p+1]), 1.0, 3.0);
-
-    if(YE_CheckArg("-logmap", argv, p))
-        YE_LogMap = clip(atoi(argv[p+1]), 0, 1);
-
-    if(YE_CheckArg("-logtex", argv, p))
-        YE_LogTex = clip(atoi(argv[p+1]), 0, 1);
-
-    if(cam->res == 0)
-        cam->res = Vector2i(SCREEN_WIDTH_DEF, SCREEN_HEIGHT_DEF);
-
     YE_Init();
 
     char mapname[255] = "maps/";
@@ -285,11 +248,12 @@ int main (int argc, char *argv[])
 
     while (true)
     {
-        if(YE_Events())
-            exit(1);
-        YE_Update();
+		if (YE_Events())
+		{
+			YE_Exit();
+			exit(1);
+		}
+		YE_Update();
     }
-
-    YE_CleanUp();
     return 0;
 }

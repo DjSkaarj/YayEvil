@@ -5,6 +5,7 @@
 #include "math.h"
 #include "strings.h"
 #include "states.h"
+#include "cvars.h"
 
 YE_Map::YE_Map()
 {
@@ -128,7 +129,7 @@ void YE_ParseLine()
 			stmap.SetTileSolid(vec, solid);
 			stmap.SetTileTexture(vec, Textures[s]);
 
-			if (YE_LogMap)
+			if (l_map)
 				Log(0, "[Map loader] Registered new tile [%d,%d]: texture=%s solid=%d", x, y, texture, solid);
 		}
 	}
@@ -146,6 +147,7 @@ void YE_ParseLine()
 		if (ActorTypes.find(s) == ActorTypes.end())
 		{
 			Log(0, "[Map loader] [Warning] Actor name '%s' isn't presented in YE! Skipping actor...", name);
+			ActorTypes.erase(ActorTypes.end());
 			return;
 		}
 
@@ -155,7 +157,7 @@ void YE_ParseLine()
 		actorbuff.SetName(name);
 		stmap.Actors.push_back(actorbuff);
 
-		if (YE_LogMap)
+		if (l_map)
 			Log(0, "[Map loader] Parsed actor %s (%f; %f)", name, x, y);
 	}
 
@@ -170,7 +172,7 @@ void YE_ParseLine()
 		lightbuff.GColor = YE_ReadFloat();
 		lightbuff.BColor = YE_ReadFloat();
 		stmap.Lights.push_back(lightbuff);
-		if (YE_LogMap)
+		if (l_map)
 			Log(0, "[Map loader] Registered new light [%f,%f]: radius=%f color=%f|%f|%f", lightbuff.pos.x, lightbuff.pos.y, lightbuff.Radius, lightbuff.RColor, lightbuff.GColor, lightbuff.BColor);
 	}
 
@@ -179,7 +181,7 @@ void YE_ParseLine()
 		stmap.Rcolor = std::min(1.0f, YE_ReadFloat());
 		stmap.Gcolor = std::min(1.0f, YE_ReadFloat());
 		stmap.Bcolor = std::min(1.0f, YE_ReadFloat());
-		if (YE_LogMap)
+		if (l_map)
 			Log(0, "[Map loader] Set global color to: %f %f %f", stmap.Rcolor, stmap.Gcolor, stmap.Bcolor);
 	}
 
@@ -188,7 +190,7 @@ void YE_ParseLine()
 		stmap.BGRcolor = std::min(1.0f, YE_ReadFloat());
 		stmap.BGGcolor = std::min(1.0f, YE_ReadFloat());
 		stmap.BGBcolor = std::min(1.0f, YE_ReadFloat());
-		if (YE_LogMap)
+		if (l_map)
 			Log(0, "[Map loader] Set background color to: %f %f %f", stmap.BGRcolor, stmap.BGGcolor, stmap.BGBcolor);
 	}
 
@@ -197,7 +199,7 @@ void YE_ParseLine()
 		stmap.ARcolor = std::min(1.0f, YE_ReadFloat());
 		stmap.AGcolor = std::min(1.0f, YE_ReadFloat());
 		stmap.ABcolor = std::min(1.0f, YE_ReadFloat());
-		if (YE_LogMap)
+		if (l_map)
 			Log(0, "[Map loader] Set ambient color to: %f %f %f", stmap.ARcolor, stmap.AGcolor, stmap.ABcolor);
 	}
 
@@ -205,7 +207,7 @@ void YE_ParseLine()
 	{
 		stmap.PlayerX = clip(YE_ReadFloat(), 0.0f, (float)stmap.Size.x);
 		stmap.PlayerY = clip(YE_ReadFloat(), 0.0f, (float)stmap.Size.y);
-		if (YE_LogMap)
+		if (l_map)
 			Log(0, "[Map loader] Player spawn: %f %f", stmap.PlayerX, stmap.PlayerY);
 	}
 

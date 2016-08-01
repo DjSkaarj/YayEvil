@@ -5,6 +5,7 @@
 #include "geometry.h"
 #include "font.h"
 #include "animation.h"
+#include "cvars.h"
 
 #define FRICTION_FACTOR 0.1F
 #define COLLISION_OFFSET 0.06F
@@ -16,11 +17,12 @@ class YE_Map;
 class Camera;
 class State;
 
-extern bool YE_Shadows;
-extern int YE_ShadowQuality;
-extern float YE_ShadowIntensity;
-extern float YE_ShadowScaleA;
 extern YE_Map stmap;
+
+extern IntCVar r_shadows;
+extern FloatCVar r_shadowquality;
+extern FloatCVar r_shadowintensity;
+extern FloatCVar r_shadowscale;
 
 extern Font *font;
 extern Font *menufont;

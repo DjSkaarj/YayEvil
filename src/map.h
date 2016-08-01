@@ -6,6 +6,8 @@
 #include "tiles.h"
 #include "states.h"
 
+extern IntCVar l_map;
+
 extern std::map<std::string, State*> ActorTypes;
 
 class YE_Map
@@ -35,7 +37,6 @@ class YE_Map
 };
 
 extern YE_Map stmap;
-extern bool YE_LogMap;
 extern std::vector<std::string> Maplist;
 
 void YE_LoadMap(const char *file);

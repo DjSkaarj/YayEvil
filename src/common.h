@@ -31,6 +31,9 @@ extern "C"
 
 #include <algorithm>
 #include <iostream>
+#include <fstream>
+#include <limits>
+#include <float.h>
 #include <map>
 #include <memory>
 #include <unordered_map>
@@ -45,10 +48,14 @@ extern "C"
 #define SCALE_MAX 256.0
 #define SCALE_STEP 8.0
 
+//fixme later
+
 #define SCREEN_WIDTH_MIN 320
 #define SCREEN_HEIGHT_MIN 240
 #define SCREEN_WIDTH_DEF 800
 #define SCREEN_HEIGHT_DEF 600
+#define SCREEN_WIDTH_MAX 8192
+#define SCREEN_HEIGHT_MAX 4320
 
 #define AO_SIZE 0.25f
 #define AO_COLOR 0.2f

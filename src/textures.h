@@ -3,7 +3,6 @@
 
 #include "common.h"
 
-extern bool YE_LogTex;
 extern std::map<std::string, GLuint> Textures;
 
 GLuint GetTexture(std::string name);
