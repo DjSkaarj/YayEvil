@@ -163,7 +163,7 @@ FLAG_CVAR(w_fullscreen, 0)
 
 FLAG_CVAR(r_multisample, 0)
 FLAG_CVAR(r_shadows, 1)
-INT_CVAR(r_shadowquality, 10.0f, 1.0f, 15.0f)
+INT_CVAR(r_shadowquality, 10, 1, 15)
 FLOAT_CVAR(r_shadowintensity, 0.6f, 0.1f, 1.0f)
 FLOAT_CVAR(r_shadowscale, 1.0f, 1.0f, 3.0f)
 
