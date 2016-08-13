@@ -69,6 +69,7 @@ void YE_WriteConfig()
 
 bool CheckCVar(std::string name)
 {
+	std::transform(name.begin(), name.end(), name.begin(), ::tolower);
 	if (CVarsByName.find(name) == CVarsByName.end())
 	{
 		Log(0, "[Config] [Warning] Unknown CVar %s!", name.c_str());

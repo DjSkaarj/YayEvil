@@ -23,6 +23,7 @@ Actor::Actor(Vector2f spawn)
     _BounceFactor = 0;
 	_Name = "New Actor";
 	_Size = Vector2f(1.0f, 1.0f);
+	_z = 0;
 
     CurrentState = new State;
 }

@@ -57,6 +57,7 @@ void CacodemonSpawnState::Exit(Actor *actor)
 
 void BarrelSpawnState::Enter(Actor *actor)
 {
+	actor->Setz(1);
 	actor->Anim = AnimBarrel;
 	actor->SetSize(Vector2f(0.4, 0.6));
 	actor->SetSolid(true);

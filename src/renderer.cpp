@@ -8,6 +8,16 @@
 
 float tile_width, tile_height, half_width, half_height;
 
+bool SortByY_Predicate(const Actor *lhs, const Actor *rhs)
+{
+	return lhs->pos().y > rhs->pos().y;
+}
+
+bool SortByZ_Predicate(const Actor *lhs, const Actor *rhs)
+{
+	return lhs->z() < rhs->z();
+}
+
 RectF YE_VisibleWorld()
 {
     return RectF(cam->pos.x - half_width,
@@ -63,15 +73,27 @@ void YE_Renderer()
     glEnable(GL_TEXTURE_2D);
     glColor3f(stmap.Rcolor, stmap.Gcolor, stmap.Bcolor);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	
+	std::vector<Actor*> ActorsToRender;
 
+	//add only visible actors to renderlist
 	for (Actor &actor : stmap.Actors)
 	{
-		//if (actor.BoundingBox().intersects(YE_VisibleWorld()))
-		actor.Draw();
+		if (actor.BoundingBox().intersects(YE_VisibleWorld()))
+			ActorsToRender.push_back(&actor);
 	}
 
-	//render player
-	player->GetActor()->Draw();
+	//add player to renderlist
+	ActorsToRender.push_back(playerpawn);
+
+	//sort actor by Y
+	std::sort(ActorsToRender.begin(), ActorsToRender.end(), SortByY_Predicate);
+
+	//sort actors by Z index
+	std::sort(ActorsToRender.begin(), ActorsToRender.end(), SortByZ_Predicate);
+
+	for (auto &i : ActorsToRender)
+		i->Draw();
 
     //render lights
     //turn on FBO

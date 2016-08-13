@@ -104,6 +104,7 @@ public:
 	GETTER(GLuint, Sprite)
 
 	GETSET(std::string, Name)
+	GETSET(int, z)
 
 	RectF BoundingBox() const {
 		return RectF(_pos.x - _Size.x,
@@ -116,6 +117,7 @@ private:
     int _flags, _flags2;
 	float _Angle, _Alpha, _Speed, _BounceFactor, _Friction;
     int _hp;
+	int _z;
     Vector2f _Size, _pos, _prevpos, _vel;
     GLuint _Sprite;
 	std::string _Name;
